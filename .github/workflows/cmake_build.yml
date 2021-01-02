@@ -45,5 +45,5 @@ jobs:
           find . | grep gcda
           lcov --directory . --capture --gcov-tool /usr/bin/gcov-${{ matrix.version }} --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
-          locv --list coverage.info
+          lcov --list coverage.info
           bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage report"
