@@ -407,7 +407,7 @@ void NUBASE::Data::setDecayMode(const int table_year) const
 
   // Format changed after 2003 table
   const size_t startCharacter =
-      (table_year == 3) ? NUBASE::LinePosition::START_DECAYSTRING_03 : NUBASE::LinePosition::START_DECAYSTRING;
+      (table_year == 2003) ? NUBASE::LinePosition::START_DECAYSTRING_03 : NUBASE::LinePosition::START_DECAYSTRING;
 
   if (full_data.size() >= startCharacter)
     {

@@ -22,9 +22,36 @@
 #include <utility>
 
 
+void MassTable::setFilePaths(const int tableYear) const noexcept
+{
+  switch (tableYear)
+    {
+      default:
+      case 2003:
+        NUBASE_masstable = MassTable::getAbsolutePath() / "2003" / "nubtab03.asc";
+        AME_masstable    = MassTable::getAbsolutePath() / "2003" / "mass.mas03";
+        AME_reaction_1   = MassTable::getAbsolutePath() / "2003" / "rct1.mas03";
+        AME_reaction_2   = MassTable::getAbsolutePath() / "2003" / "rct2.mas03";
+        break;
+      case 2012:
+        NUBASE_masstable = MassTable::getAbsolutePath() / "2012" / "nubase.mas12";
+        AME_masstable    = MassTable::getAbsolutePath() / "2012" / "mass.mas12";
+        AME_reaction_1   = MassTable::getAbsolutePath() / "2012" / "rct1.mas12";
+        AME_reaction_2   = MassTable::getAbsolutePath() / "2012" / "rct2.mas12";
+        break;
+      case 2016:
+        NUBASE_masstable = MassTable::getAbsolutePath() / "2016" / "nubase2016.txt";
+        AME_masstable    = MassTable::getAbsolutePath() / "2016" / "mass16.txt";
+        AME_reaction_1   = MassTable::getAbsolutePath() / "2016" / "rct1.mas16";
+        AME_reaction_2   = MassTable::getAbsolutePath() / "2016" / "rct2.mas16";
+        break;
+    }
+}
+
+
 bool MassTable::populateInternalMassTable()
 {
-  setFilePaths(table_year);
+  setFilePaths(year);
 
   // Read mass table
   if (!readNUBASE(NUBASE_masstable))
@@ -266,12 +293,12 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
   data.setHalfLife();
 
   // Discovery year was added after 2003
-  if (table_year != 3)
+  if (year != 2003)
     {
       data.setYear();
     }
 
-  data.setDecayMode(table_year);
+  data.setDecayMode(year);
 
   if (data.decay == "stable")
     {
@@ -355,33 +382,6 @@ bool MassTable::mergeData()
 }
 
 
-void MassTable::setFilePaths(const int tableYear) const noexcept
-{
-  switch (tableYear)
-    {
-      default:
-      case 3:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2003" / "nubtab03.asc";
-        AME_masstable    = MassTable::getAbsolutePath() / "2003" / "mass.mas03";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2003" / "rct1.mas03";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2003" / "rct2.mas03";
-        break;
-      case 12:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2012" / "nubase.mas12";
-        AME_masstable    = MassTable::getAbsolutePath() / "2012" / "mass.mas12";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2012" / "rct1.mas12";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2012" / "rct2.mas12";
-        break;
-      case 16:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2016" / "nubase2016.txt";
-        AME_masstable    = MassTable::getAbsolutePath() / "2016" / "mass16.txt";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2016" / "rct1.mas16";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2016" / "rct2.mas16";
-        break;
-    }
-}
-
-
 bool MassTable::outputTableToCSV() const
 {
   auto outfile = NUBASE_masstable;
@@ -409,7 +409,7 @@ bool MassTable::outputTableToCSV() const
 
 bool MassTable::outputTableToJSON() const
 {
-  const std::filesystem::path outfile{ "test_output.json" };
+  const std::filesystem::path outfile = fmt::format("masstable_{}.json", year);
 
   fmt::print("New file: {}\n", outfile);
   std::ofstream out(outfile);

@@ -20,7 +20,16 @@
 class MassTable
 {
 public:
-  MassTable() { pnSide.fill(false); }
+  explicit MassTable(const int _year) : year(_year)
+  {
+    pnSide.fill(false);
+
+    // If a bad year is given, default to the latest
+    if (!validateYear())
+      {
+        year = valid_years.back();
+      }
+  }
 
   MassTable(const MassTable&)     = default;
   MassTable(MassTable&&) noexcept = default;
@@ -31,21 +40,13 @@ public:
 
   ~MassTable() = default;
 
-  // Tables sizes (ground state only)
-  // 2003 = 3179
-  // 2012 = 3379
-  // 2016 = 3436
-  /// Which years data should be drawn (after 2000 is assumed)
-  static constexpr int TABLE_YEAR{ 3 };
-  // We reserve space for the isotope vector
-  static constexpr int TABLE_SIZE{ 4096 };
+  /// What years do we have data for
+  const std::array<int, 3> valid_years{ 2003, 2012, 2016 };
+  /// Which year's table should we read
+  mutable int year{};
+
   /// The max Z value of any isotope
   static constexpr int MAX_Z{ 118 };
-  /// Don't let the relative error drop below a certain value
-  static constexpr double min_relative_error{ 1.0e-7 };
-
-  /// Which year's table should we read
-  mutable int table_year{ TABLE_YEAR };
   /// Keep track of when we have gone from proton -> neutron rich
   mutable std::array<bool, MAX_Z + 1> pnSide{};
 
@@ -62,6 +63,58 @@ public:
   mutable std::vector<Isotope> fullDataTable;
   mutable std::vector<NUBASE::Data> nubaseDataTable;
   mutable std::vector<AME::Data> ameDataTable;
+
+  // Get the location of this source file
+  // This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/options.hpp
+  // Only the directory separator will be different, depending on OS
+  // We want to replace "include/nuclear-data-reader/options.hpp" with "data/", using the appropriate separator
+  inline static const std::filesystem::path datapath = std::filesystem::absolute(
+      std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
+
+  /**
+   * Find the absolute path to the location of the data files,
+   * indepdent of the filesystem.
+   *
+   * \param Nothing
+   *
+   * \return The absolute path to the data_files directory
+   */
+  [[nodiscard]] inline static std::filesystem::path getAbsolutePath() { return datapath; }
+
+  /**
+   * Set the year of the table who's data will be read
+   *
+   * \param The year table to use
+   *
+   * \return[TRUE] A valid year has been requested and thus set
+   * \return[FALSE] An invalid year has been requested so no change has been made
+   */
+  [[nodiscard]] inline bool setTableYear(const int _year) const noexcept
+  {
+    const int original_year = year;
+    year                    = _year;
+
+    if (!validateYear())
+      {
+        year = original_year;
+        return false;
+      }
+
+    return true;
+  }
+
+  /**
+   * Check that the table year that has been set is when a table was actually released.
+   *
+   * \param Nothing
+   *
+   * \return[TRUE] A valid year
+   * \return[FALSE] An invalid year
+   */
+  [[nodiscard]] inline bool validateYear() const
+  {
+    return (std::find(valid_years.cbegin(), valid_years.cend(), year) != valid_years.end());
+  }
 
   /**
    *
@@ -120,15 +173,6 @@ public:
   std::vector<AME::Data>::iterator getMatchingIsotope(const std::string& line, const int reactionFile) const;
 
   /**
-   * Set the year of the table whos data will be read
-   *
-   * \param The year table to use
-   *
-   * \return Nothing
-   */
-  inline void setTableYear(const int year) const noexcept { table_year = year; }
-
-  /**
    * Fill the main container with the data that will be used to create the chart
    *
    * \param Nothing
@@ -147,23 +191,6 @@ public:
   void setFilePaths(const int tableYear) const noexcept;
 
   /**
-   * Find the absolute path to the location of the data files,
-   * indepdent of the filesystem.
-   *
-   * \param Nothing
-   *
-   * \return The absolute path to the data_files directory
-   */
-  [[nodiscard]] inline static std::filesystem::path getAbsolutePath() { return datapath; }
-
-  // Get the location of this source file
-  // This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/options.hpp
-  // Only the directory separator will be different, depending on OS
-  // We want to replace "include/nuclear-data-reader/options.hpp" with "data/", using the appropriate separator
-  inline static const std::filesystem::path datapath = std::filesystem::absolute(
-      std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
-
-  /**
    * Read the AME datafile for isotopic values
    *
    * \param The absolute path to the data file
@@ -172,6 +199,9 @@ public:
    */
   bool readAME(const std::filesystem::path& ameTable) const;
 
+  /**
+   *
+   */
   bool readAMEReactionFile(const std::filesystem::path& reactionFile, const int fileNumber) const;
 
   /**
