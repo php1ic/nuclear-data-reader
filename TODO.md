@@ -4,7 +4,7 @@ Additions are encouraged, you can either contact the author or implement the cha
 
 ## Known Bugs
 
-- [#1](https://github.com/php1ic/inch/issues/14) The 2012 and 2016 nubase files added isospin, but in a way that can overlap with the spin parity values and the error on half-life.
+- The 2012 and 2016 nubase files added isospin, but in a way that can overlap with the spin parity values and the error on half-life.
 Two examples are:
 
 ```
@@ -30,7 +30,7 @@ Currently I'm inclined to simply remove them from the line rather than extract a
 ## Things that need to be looked at (Not quite bugs)
 
 
-- [#11](https://github.com/php1ic/inch/issues/11) The population of the member [Nuclide::jpi](src/nuclide.cpp#L87) needs to be looked at in relation to isotopes that have many different values/possibilities
+- The population of the member [Nuclide::jpi](src/nuclide.cpp#L87) needs to be looked at in relation to isotopes that have many different values/possibilities
 
 ## Possible improvements/alterations (in no particular order)
 
