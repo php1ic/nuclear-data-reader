@@ -38,7 +38,7 @@ jobs:
       - name: Test
         run: cd ../Build && ctest -j2 -V
       - name: Coverage
-        if: ${{ matrix.type == 'Debug' && matix.compiler == 'g++' }}
+        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         run: |
           cd ../Build
           lcov --directory . --capture --output-file coverage.info
