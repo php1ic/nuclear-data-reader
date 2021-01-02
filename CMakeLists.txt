@@ -64,7 +64,6 @@ add_external_libraries(project_options)
 # Configurable header file to store project version number
 add_subdirectory(include/${PROJECT_NAME})
 
-# Locate all of the source files apart from main.cpp
 # Keep list alphabetical
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(SOURCES
