@@ -8,7 +8,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/gh/php1ic/nuclear-data-reader/branch/master/graph/badge.svg)](https://codecov.io/gh/php1ic/nuclear-data-reader)
 [![CodeFactor](https://www.codefactor.io/repository/github/php1ic/nuclear-data-reader/badge)](https://www.codefactor.io/repository/github/php1ic/nuclear-data-reader)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/12ec340c7c694de58f3fc431b5861bcb)](https://www.codacy.com/manual/php1ic/nuclear-data-reader?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=php1ic/nuclear-data-reader&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5043f510e8cf44efac2b40ea96bcf469)](https://www.codacy.com/gh/php1ic/nuclear-data-reader/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=php1ic/nuclear-data-reader&amp;utm_campaign=Badge_Grade)
 
 ---
 
