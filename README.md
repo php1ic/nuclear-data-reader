@@ -12,12 +12,9 @@
 
 ---
 
-| OS      | Config                                      | Build Status                                                                                                                                                                     |   Compiler Version |
-|---------|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------:|
-| Linux   | [Gitlab](.gitlab-ci.yml)                    | [![Pipeline Status](https://gitlab.com/php1ic/nuclear-data-reader/badges/master/pipeline.svg)](https://gitlab.com/php1ic/nuclear-data-reader/pipelines)                          |     gcc10, clang10 |
-|         | [CircleCI](.circleci/config.yml)            | [![CircleCI](https://circleci.com/gh/php1ic/nuclear-data-reader/tree/master.svg?style=svg)](https://circleci.com/gh/php1ic/nuclear-data-reader/tree/master)                      |       gcc9, clang9 |
-|         | [Github](.github/workflows/cmake_build.yml) | [![BuildAndTest](https://github.com/php1ic/nuclear-data-reader/workflows/BuildAndTest/badge.svg)](https://github.com/php1ic/nuclear-data-reader/actions)                         |       gcc9, clang9 |
-| Windows | [Appveyor](appveyor.yml)                    | [![Build status](https://ci.appveyor.com/api/projects/status/8q5tr9o3htxmqsbq/branch/master?svg=true)](https://ci.appveyor.com/project/php1ic/nuclear-data-reader/branch/master) | MSVC2017, MSVC2019 |
+| OS | Config                                      | Build Status                                                                                                                                             | Compiler Version |
+|----|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------:|
+|    | [Github](.github/workflows/cmake_build.yml) | [![BuildAndTest](https://github.com/php1ic/nuclear-data-reader/workflows/BuildAndTest/badge.svg)](https://github.com/php1ic/nuclear-data-reader/actions) |     gcc9, clang9 |
 
 
 ## Introduction
@@ -54,8 +51,7 @@ The below is enough to get you started.
 ```
 $ git clone https://github.com/php1ic/nuclear-data-reader.git
 $ cd nuclear-data-reader
-$ git submodule init
-$ git submodule update --recursive
+$ git submodule update --init --recursive
 ```
 
 
