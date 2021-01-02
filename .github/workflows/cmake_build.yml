@@ -30,9 +30,9 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
         # We currently compile against C++17 so default gcc and clang on ubuntu-latest are too old
       - name: Install dependencies
-        run: sudo apt update && sudo apt install -y ninja-build clang gcc-${{ matrix.version }} g++-${{ matrix.version }} clang-${{ matrix.version }}
+        run: sudo apt update && sudo apt install -y ninja-build ccache clang gcc-${{ matrix.version }} g++-${{ matrix.version }} clang-${{ matrix.version }}
       - name: Configure
-        run: cmake -GNinja -H. -B../Build -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }}-${{ matrix.version }} -DCMAKE_BUILD_TYPE=${{ matrix.type }}
+        run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }}-${{ matrix.version }} -DCMAKE_BUILD_TYPE=${{ matrix.type }}
       - name: Build
         run: cmake --build ../Build
       - name: Test
