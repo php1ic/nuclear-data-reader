@@ -1,0 +1,32 @@
+# With the move to cmake, many of these could be removed, but lets leave them in
+
+# The build directory and everything it contains
+**/[Bb]uild
+
+# Certain tools work better if the compilation database is in the project root
+# but we don't want to track it
+compile_commands.json
+
+# We want the version config file, but not the file it creates
+!include/nuclear-data-reader/version.hpp.in
+include/nuclear-data-reader/version.hpp
+# We want the doxygen config file
+!docs/Doxyfile.in
+
+# emacs related files
+*~
+**/.cache
+**/.ccls-cache
+*.tmp
+.projectile
+.dir-locals.el
+
+# Qt Creator files
+CMakeLists.txt.user
+
+# Catch all
+callgrind.out.*
+TAGS
+core*
+*.swp
+**/.clangd

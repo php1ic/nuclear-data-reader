@@ -1,0 +1,9 @@
+---
+exclude_paths:
+  - '**.md'
+  - '.github/**'
+  - '.circleci/**'
+  - '.travis.yml'
+  - '.gitlab-ci.yml'
+  - 'appveyor.yml'
+  - 'codecov.yml'

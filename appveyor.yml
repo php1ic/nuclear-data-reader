@@ -1,0 +1,44 @@
+# version string format -- This will be overwritten later anyway
+version: "{build}"
+
+skip_commits:
+  files:
+    - '*.md'
+    - .gitlab-ci.yml
+    - .circleci/*
+    - .github/*
+    - data/*
+    - scripts/*
+
+os:
+  - Visual Studio 2017
+  - Visual Studio 2019
+
+install:
+  - git submodule init
+  - git submodule update --recursive
+
+# Win32 and x64 are CMake-compatible solution platform names.
+# This allows us to pass %PLATFORM% to CMake -A.
+platform:
+  - x64
+
+# build Configurations, i.e. Debug, Release, etc.
+configuration:
+  - Debug
+  - Release
+
+# cmake will autodetect the compiler, but we set the arch
+before_build:
+  - cmake -H. -B../Build -DNDR_UNIT_TESTS=ON -A%PLATFORM%
+
+# build with MSBuild
+build:
+  project: ../Build/$(APPVEYOR_PROJECT_NAME).sln  # path to Visual Studio solution or project
+  parallel: true                                  # enable MSBuild parallel builds
+  verbosity: normal                               # MSBuild verbosity level {quiet|minimal|normal|detailed}
+
+# Run Unit test
+test_script:
+  - cd ../Build
+  - ctest -j2 -V -C %CONFIGURATION%

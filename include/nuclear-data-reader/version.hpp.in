@@ -1,0 +1,9 @@
+#ifndef VERSION_HPP
+#define VERSION_HPP
+
+#define NDR_VERSION "@nuclear-data-reader_VERSION@"
+#define NDR_VERSION_MAJOR @nuclear-data-reader_VERSION_MAJOR@
+#define NDR_VERSION_MINOR @nuclear-data-reader_VERSION_MINOR@
+#define NDR_VERSION_PATCH @nuclear-data-reader_VERSION_PATCH@
+
+#endif // VERSION_HPP

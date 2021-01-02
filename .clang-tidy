@@ -1,0 +1,21 @@
+---
+Checks: '*,
+-fuchsia-*,
+-cppcoreguidelines-avoid-magic-numbers,
+-cppcoreguidelines-macro-usage,
+-llvm-header-guard,
+-llvmlibc-*,
+-abseil-*,
+-google-runtime-references,
+-misc-non-private-member-variables-in-classes,
+-modernize-use-trailing-return-type,
+-readability-avoid-const-params-in-decls,
+-readability-convert-member-functions-to-static,
+-readability-magic-numbers,
+-readability-qualified-auto,
+-llvm-qualified-auto'
+WarningsAsErrors: ''
+HeaderFilterRegex: '*inch/(src/|include/inch)'
+AnalyzeTemporaryDtors: false
+FormatStyle: none
+...

@@ -1,0 +1,89 @@
+# Make sure the submodules are pulled in
+# Set the compiler versions
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GCC_VERSION: 10
+  CLANG_VERSION: 10
+
+# Only trigger a build if any of the below files change
+.fileignore_template: &CI_Ignore
+  only:
+    changes:
+      - CMakelists.txt
+      - cmake/*.cmake
+      - .gitlab-ci.yml
+      - src/*.cpp
+      - include/nuclear-data-reader/*.hpp
+      - tests/*
+
+# Which packages are required for GCC compilation
+.gcc_install_template: &GCCPackages
+  - apt -y install gcc g++ gcc-$GCC_VERSION g++-$GCC_VERSION
+
+# Which pacakges are required for clang compilation
+.clang_install_template: &ClangPackages
+  - apt -y install clang clang-$CLANG_VERSION libstdc++-$CLANG_VERSION-dev
+
+# Specify "rolling" rather than "latest"
+# We need gcc >=8 and clang >=7 for std::filesystem
+image: ubuntu:rolling
+
+# List the stages to be run
+stages:
+  - BuildAndTest
+
+# Install common packages for all stages
+before_script:
+  - apt update && apt -y install cmake ninja-build
+
+# GCC - Debug
+gcc-Debug:
+  stage: BuildAndTest
+  <<: *CI_Ignore
+  tags:
+    - linux
+  script:
+    - *GCCPackages
+    - cmake -H. -B../build -GNinja -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/g++-$GCC_VERSION -DCMAKE_BUILD_TYPE=Debug
+    - cmake --build ../build
+    - cd ../build
+    - ctest -j2 -V
+
+# GCC - Release
+gcc-Release:
+  stage: BuildAndTest
+  <<: *CI_Ignore
+  tags:
+    - linux
+  script:
+    - *GCCPackages
+    - cmake -H. -B../build -GNinja -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/g++-$GCC_VERSION -DCMAKE_BUILD_TYPE=Release
+    - cmake --build ../build
+    - cd ../build
+    - ctest -j2 -V
+
+# Clang - Debug
+clang-Debug:
+  stage: BuildAndTest
+  <<: *CI_Ignore
+  tags:
+    - linux
+  script:
+    - *ClangPackages
+    - cmake -H. -B../build -GNinja -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/clang++-$CLANG_VERSION -DCMAKE_BUILD_TYPE=Debug
+    - cmake --build ../build
+    - cd ../build
+    - ctest -j2 -V
+
+# Clang - Release
+clang-Release:
+  stage: BuildAndTest
+  <<: *CI_Ignore
+  tags:
+    - linux
+  script:
+    - *ClangPackages
+    - cmake -H. -B../build -GNinja -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/clang++-$CLANG_VERSION -DCMAKE_BUILD_TYPE=Release
+    - cmake --build ../build
+    - cd ../build
+    - ctest -j2 -V
