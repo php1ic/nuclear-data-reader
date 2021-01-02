@@ -34,7 +34,7 @@ void MassTable::setFilePaths() const
         AME_reaction_2   = MassTable::getAbsolutePath() / "2003" / "rct2.mas03";
         break;
       case 2012:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2012" / "nubase.mas12";
+        NUBASE_masstable = MassTable::getAbsolutePath() / "2012" / "nubtab12.asc";
         AME_masstable    = MassTable::getAbsolutePath() / "2012" / "mass.mas12";
         AME_reaction_1   = MassTable::getAbsolutePath() / "2012" / "rct1.mas12";
         AME_reaction_2   = MassTable::getAbsolutePath() / "2012" / "rct2.mas12";
@@ -42,8 +42,8 @@ void MassTable::setFilePaths() const
       case 2016:
         NUBASE_masstable = MassTable::getAbsolutePath() / "2016" / "nubase2016.txt";
         AME_masstable    = MassTable::getAbsolutePath() / "2016" / "mass16.txt";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2016" / "rct1.mas16";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2016" / "rct2.mas16";
+        AME_reaction_1   = MassTable::getAbsolutePath() / "2016" / "rct1-16.txt";
+        AME_reaction_2   = MassTable::getAbsolutePath() / "2016" / "rct2-16.txt";
         break;
     }
 }
