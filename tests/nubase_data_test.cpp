@@ -209,10 +209,10 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                                 "       95 00Ch07t   IT=100");
 
 
-  gs03_isotope.setDecayMode(3);
+  gs03_isotope.setDecayMode(2003);
   REQUIRE_THAT(gs03_isotope.decay, Catch::Matches("B-"));
 
-  isomer03_isotope.setDecayMode(3);
+  isomer03_isotope.setDecayMode(2003);
   REQUIRE_THAT(isomer03_isotope.decay, Catch::Matches("IT"));
 }
 

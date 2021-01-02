@@ -117,7 +117,12 @@ public:
   }
 
   /**
+   * Combine the data from NUBASE and AME into a single instance by looking for common A & Z values
    *
+   * \param Nothing
+   *
+   * \return[TRUE] Successful merge
+   * \return[FALSE] TBD
    */
   bool mergeData();
 
@@ -184,11 +189,11 @@ public:
   /**
    * Use the given year to set the absolute file paths of all data files
    *
-   * \param The year of the table so data files can be set
+   * \param Nothing
    *
    * \return Nothing
    */
-  void setFilePaths(const int tableYear) const noexcept;
+  void setFilePaths() const;
 
   /**
    * Read the AME datafile for isotopic values

@@ -22,7 +22,7 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
 TEST_CASE("Try to read non-existant file", "[MassTable]")
 {
   MassTable table(2003);
-  table.setFilePaths(2003);
+  table.setFilePaths();
 
   SECTION("NUBASE") { REQUIRE_FALSE(table.readNUBASE("doesnot.exist")); }
   SECTION("AME") { REQUIRE_FALSE(table.readAME("doesnot.exist")); }

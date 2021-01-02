@@ -22,9 +22,9 @@
 #include <utility>
 
 
-void MassTable::setFilePaths(const int tableYear) const noexcept
+void MassTable::setFilePaths() const
 {
-  switch (tableYear)
+  switch (year)
     {
       default:
       case 2003:
@@ -51,7 +51,7 @@ void MassTable::setFilePaths(const int tableYear) const noexcept
 
 bool MassTable::populateInternalMassTable()
 {
-  setFilePaths(year);
+  setFilePaths();
 
   // Read mass table
   if (!readNUBASE(NUBASE_masstable))
@@ -359,13 +359,11 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 
 bool MassTable::mergeData()
 {
-  if (ameDataTable.size() == nubaseDataTable.size())
+  if (ameDataTable.size() != nubaseDataTable.size())
     {
-      fmt::print(":) Tables are equal size\n");
-    }
-  else
-    {
-      fmt::print(":( Tables have different sizes\n");
+      fmt::print("**WARNING** The AME data ({}) has a different number of isotopes to NUBASE ({})\n",
+                 ameDataTable.size(),
+                 nubaseDataTable.size());
     }
 
   for (const auto& nubase_data : nubaseDataTable)
