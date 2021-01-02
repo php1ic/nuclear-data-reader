@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: sudo apt update && sudo apt install -y ninja-build ccache clang lcov gcc-${{ matrix.version }} g++-${{ matrix.version }} clang-${{ matrix.version }}
       - name: Configure
-        run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }}-${{ matrix.version }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON -DCOVERAGE_COMMAND=/usr/bin/gcov-${{ matrix.version }}
+        run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }}-${{ matrix.version }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
       - name: Build
         run: cmake --build ../Build
       - name: Test
@@ -41,6 +41,8 @@ jobs:
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         run: |
           cd ../Build
+          lcov --version
+          find . | grep gcda
           lcov --directory . --capture --gcov-tool /usr/bin/gcov-${{ matrix.version }} --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
           locv --list coverage.info
