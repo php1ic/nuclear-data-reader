@@ -326,13 +326,7 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 
   while (std::getline(file, line))
     {
-      // Sorry to these authors, but the format for the data from your paper is particularly annoying, so is skipped
-      //
-      // 2012 Theoretical but don't contain a '#' and give no ME value (26 times)
-      // 168 0630W  168Eu                                                        >300ns                  12Ku26i  2012
-      // B- ?;B-n ?
-      //
-      if (line.find("non-exist") != std::string::npos || line.find("12Ku26i") != std::string::npos)
+      if (line.find("non-exist") != std::string::npos)
         {
           continue;
         }
@@ -357,7 +351,7 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 }
 
 
-bool MassTable::mergeData()
+bool MassTable::mergeData(const int verbosity) const
 {
   if (ameDataTable.size() != nubaseDataTable.size())
     {
@@ -366,14 +360,21 @@ bool MassTable::mergeData()
                  nubaseDataTable.size());
     }
 
-  for (const auto& nubase_data : nubaseDataTable)
+  for (const auto& nubase : nubaseDataTable)
     {
-      const auto ame_data =
-          std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase_data](const auto n) -> bool {
-            return (n.A == nubase_data.A && n.Z == nubase_data.Z);
-          });
+      const auto ame = std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase](const auto n) -> bool {
+        return (n.A == nubase.A && n.Z == nubase.Z);
+      });
 
-      fullDataTable.emplace_back(Isotope(*ame_data, nubase_data));
+      if (ame != ameDataTable.end())
+        {
+          // Isotope(AME, NUBASE))
+          fullDataTable.emplace_back(Isotope(*ame, nubase));
+        }
+      else if (verbosity > 0)
+        {
+          fmt::print("{} {}\n", nubase.A, nubase.Z);
+        }
     }
 
   return true;

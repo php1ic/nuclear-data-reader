@@ -119,12 +119,12 @@ public:
   /**
    * Combine the data from NUBASE and AME into a single instance by looking for common A & Z values
    *
-   * \param Nothing
+   * \param How much info to print to screen if thinks don't go perfectly
    *
    * \return[TRUE] Successful merge
    * \return[FALSE] TBD
    */
-  bool mergeData();
+  bool mergeData(const int verbosity = 0) const;
 
   /**
    * Read a single line of the NUBASE data table for isotopic information

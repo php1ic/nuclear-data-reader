@@ -28,8 +28,8 @@ std::string Isotope::writeAsJSON(const bool human_readable) const
                      "\"Symbol\":\"{4}\",{0}"
                      "\"Decay\":\"{5}\",{0}"
                      "\"Experimental\":{6},{0}"
-                     "\"NubaseMassExcess\":{7:.4f},{0}"
-                     "\"ErrorNubaseMassExcess\":{8:.4f},{0}"
+                     "\"NubaseMassExcess\":{7},{0}"
+                     "\"ErrorNubaseMassExcess\":{8},{0}"
                      "\"AMEMassExcess\":{9},{0}"
                      "\"ErrorAMEMassExcess\":{10},{0}"
                      "\"HalfLife\":{11:.3e},{0}"
@@ -72,8 +72,8 @@ std::string Isotope::writeAsJSON(const bool human_readable) const
                      nubase.symbol,
                      nubase.decay,
                      nubase.exp,
-                     nubase.mass_excess,
-                     nubase.dmass_excess,
+                     Converter::FloatToNdp(nubase.mass_excess, NDP),
+                     Converter::FloatToNdp(nubase.dmass_excess, NDP),
                      Converter::FloatToNdp(ame.mass_excess, NDP),
                      Converter::FloatToNdp(ame.dmass_excess, NDP),
                      nubase.hl.count(),
