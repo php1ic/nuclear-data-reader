@@ -175,7 +175,8 @@ public:
    * \return[PASS] The iterator to the appropriate isotope
    * \return[FAIL] The end() iterator
    */
-  std::vector<AME::Data>::iterator getMatchingIsotope(const std::string& line, const int reactionFile) const;
+  [[nodiscard]] std::vector<AME::Data>::iterator getMatchingIsotope(const std::string& line,
+                                                                    const int reactionFile) const;
 
   /**
    * Fill the main container with the data that will be used to create the chart
@@ -202,12 +203,18 @@ public:
    *
    * \return Nothing
    */
-  bool readAME(const std::filesystem::path& ameTable) const;
+  [[nodiscard]] bool readAME(const std::filesystem::path& ameTable) const;
 
   /**
+   * Read the the AME reaction data files for values
    *
+   * \param The absolute path to the reaction data file
+   * \param Which number reaction file are we reading
+   *
+   * \return[TRUE] The file has been read without issue
+   * \return[FALSE] There has been some issue with the reading of the file
    */
-  bool readAMEReactionFile(const std::filesystem::path& reactionFile, const int fileNumber) const;
+  [[nodiscard]] bool readAMEReactionFile(const std::filesystem::path& reactionFile, const int fileNumber) const;
 
   /**
    * Read the NUBASE datafile for isotopic values
