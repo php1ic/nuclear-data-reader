@@ -4,13 +4,8 @@ on: #[push, pull_request]
   push:
     paths-ignore:
       - '*.md'
-      - 'appveyor.yml'
-      - '.gitlab-ci.yml'
-      - '.travis.yml'
-      - '.circleci/**'
       - 'docs/**'
-      - 'data_files/**'
-      - 'images/**'
+      - 'data/**'
       - 'scripts/**'
 
 jobs:
