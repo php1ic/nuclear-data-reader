@@ -97,4 +97,4 @@ endif()
 
 # Setup an install target
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
-install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
+install(DIRECTORY include/${PROJECT_NAME} DESTINATION include FILES_MATCHING PATTERN "*.hpp")
