@@ -62,3 +62,17 @@ TEST_CASE("Z -> Symbol", "[Converter]")
     REQUIRE_THAT(Converter::ZToSymbol(120), Catch::Matches("Xy"));
   }
 }
+
+
+TEST_CASE("Floating point comparison", "[Converter]")
+{
+  REQUIRE(Converter::almost_equal(0.1, 0.1, 1));
+  REQUIRE_FALSE(Converter::almost_equal(0.12, 0.11, 1));
+}
+
+
+TEST_CASE("Float -> string", "[Converter]")
+{
+  REQUIRE_THAT(Converter::FloatToNdp(1.234, 3), Catch::Matches("1.234"));
+  REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Matches("null"));
+}
