@@ -37,13 +37,15 @@ jobs:
         run: cmake --build ../Build
       - name: Test
         run: cd ../Build && ctest -j2 -V
-      - name: Coverage
+      - name: Generate coverage report
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         run: |
           cd ../Build
-          lcov --version
-          find . | grep gcda
           lcov --directory . --capture --gcov-tool /usr/bin/gcov-${{ matrix.version }} --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
           lcov --list coverage.info
-          bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage report"
+      - name: Upload coverage report to codecov
+        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
+        uses: codecov/codecov-action@v1
+        with:
+          file: ../Build/coverage.info
