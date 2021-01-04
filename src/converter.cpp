@@ -29,9 +29,8 @@ int Converter::StringToInt(const std::string& var)
 
 std::string Converter::ZToSymbol(const int Z)
 {
-  const auto it = std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [Z](const std::pair<std::string, int>& element) {
-    return element.second == Z;
-  });
+  const auto it =
+      std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [Z](const auto& element) { return element.second == Z; });
 
   return [&]() {
     if (it == symbolZmap.end())
@@ -47,10 +46,8 @@ std::string Converter::ZToSymbol(const int Z)
 
 int Converter::SymbolToZ(std::string_view symbol)
 {
-  const auto it =
-      std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [symbol](const std::pair<std::string, int>& element) {
-        return element.first == symbol;
-      });
+  const auto it = std::find_if(
+      symbolZmap.cbegin(), symbolZmap.cend(), [symbol](const auto& element) { return element.first == symbol; });
 
   return [&]() {
     if (it == symbolZmap.end())
