@@ -74,3 +74,43 @@ TEST_CASE("Read a line from the AME mass table as a whole", "[MassTable]")
   REQUIRE(data.atomic_mass == Approx(13585.452));
   REQUIRE(data.datomic_mass == Approx(226.862));
 }
+
+TEST_CASE("Match up isotopes", "[MassTable]")
+{
+  SECTION("No existing mass table")
+  {
+    MassTable table(2012);
+    const auto it = table.getMatchingIsotope("", 1);
+    REQUIRE(it == table.ameDataTable.end());
+  }
+
+  SECTION("Basic mass table with matching isotope")
+  {
+    const std::string reaction_line{ " 238 U   92   11280.01    1.18  13723#    196#     4269.75    2.94   1144.20    "
+                                     "1.22 -10182#    359#    -5635.64    1.19" };
+    MassTable table(2012);
+    AME::Data ame("");
+    ame.A = 238;
+    ame.Z = 92;
+    table.ameDataTable.emplace_back(ame);
+
+    const auto it = table.getMatchingIsotope(reaction_line, 1);
+
+    REQUIRE(it != table.ameDataTable.end());
+  }
+
+  SECTION("Basic mass table with no matching isotope")
+  {
+    const std::string reaction_line{ " 138 Gd  64   22868#    446#     3545#    196#     3304#    277#   -20838#    "
+                                     "627#     4959#    200#   -22845#    627#" };
+    MassTable table(2012);
+    AME::Data ame("");
+    ame.A = 1;
+    ame.Z = 1;
+    table.ameDataTable.emplace_back(ame);
+
+    const auto it = table.getMatchingIsotope(reaction_line, 1);
+
+    REQUIRE(it == table.ameDataTable.end());
+  }
+}
