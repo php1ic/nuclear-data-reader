@@ -97,6 +97,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
     const auto it = table.getMatchingIsotope(reaction_line, 1);
 
     REQUIRE(it != table.ameDataTable.end());
+    REQUIRE(it->full_data.size() == 125);
   }
 
   SECTION("Basic mass table with no matching isotope")

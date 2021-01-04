@@ -118,7 +118,7 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
 
   // Look for the correct isotope in the existing data table
   auto isotope = std::find_if(
-      ameDataTable.begin(), ameDataTable.end(), [A, Z](const auto n) -> bool { return (n.A == A && n.Z == Z); });
+      ameDataTable.begin(), ameDataTable.end(), [A, Z](const auto& ame) -> bool { return (ame.A == A && ame.Z == Z); });
 
   // Get out if it doesn't exist
   if (isotope == ameDataTable.end())
