@@ -90,6 +90,9 @@ AME::Data MassTable::parseAMEMassFormat(const std::string& line) const
   data.setMassExcess();
   data.setMassExcessError();
 
+  data.setBindingEnergyPerA();
+  data.setBindingEnergyPerAError();
+
   data.setBetaDecayEnergy();
   data.setBetaDecayEnergyError();
 
