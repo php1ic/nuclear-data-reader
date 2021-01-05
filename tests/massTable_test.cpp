@@ -75,6 +75,7 @@ TEST_CASE("Read a line from the AME mass table as a whole", "[MassTable]")
   REQUIRE(data.datomic_mass == Approx(226.862));
 }
 
+
 TEST_CASE("Match up isotopes", "[MassTable]")
 {
   SECTION("No existing mass table")
@@ -114,4 +115,74 @@ TEST_CASE("Match up isotopes", "[MassTable]")
 
     REQUIRE(it == table.ameDataTable.end());
   }
+}
+
+
+TEST_CASE("Read a line from the first AME reaction file as a whole", "[MassTable]")
+{
+  MassTable table(2003);
+  AME::Data ame("");
+  ame.A = 1;
+  ame.Z = 6;
+  table.ameDataTable.emplace_back(ame);
+
+  const std::string reaction_line{ " 152 Tb  65   15756.30   40.69  10504.87   40.49   3153.38   41.32  -7115.94   "
+                                   "42.43  -3354.08   40.02 -10036.92   40.17" };
+
+  REQUIRE_FALSE(table.parseAMEReactionOneFormat(reaction_line));
+
+  table.ameDataTable.back().A = 152;
+  table.ameDataTable.back().Z = 65;
+
+  REQUIRE(table.parseAMEReactionOneFormat(reaction_line));
+
+  const auto data = table.ameDataTable.back();
+
+  REQUIRE(data.s_2n == Approx(15756.30));
+  REQUIRE(data.ds_2n == Approx(40.69));
+  REQUIRE(data.s_2p == Approx(10504.87));
+  REQUIRE(data.ds_2p == Approx(40.49));
+  REQUIRE(data.q_a == Approx(3153.38));
+  REQUIRE(data.dq_a == Approx(41.32));
+  REQUIRE(data.q_2bm == Approx(-7115.94));
+  REQUIRE(data.dq_2bm == Approx(42.43));
+  REQUIRE(data.q_ep == Approx(-3354.08));
+  REQUIRE(data.dq_ep == Approx(40.02));
+  REQUIRE(data.q_bm_n == Approx(-10036.92));
+  REQUIRE(data.dq_bm_n == Approx(40.17));
+}
+
+
+TEST_CASE("Read a line from the second AME reaction file as a whole", "[MassTable]")
+{
+  MassTable table(2003);
+  AME::Data ame("");
+  ame.A = 1;
+  ame.Z = 6;
+  table.ameDataTable.emplace_back(ame);
+
+  const std::string reaction_line{ " 136 I   53    3780.98   49.91   8960.63  102.43   6537.65   72.59  13771.00   "
+                                   "50.83   8309.36   55.39   5089.71   55.83" };
+
+  REQUIRE_FALSE(table.parseAMEReactionTwoFormat(reaction_line));
+
+  table.ameDataTable.back().A = 136;
+  table.ameDataTable.back().Z = 53;
+
+  REQUIRE(table.parseAMEReactionTwoFormat(reaction_line));
+
+  const auto data = table.ameDataTable.back();
+
+  REQUIRE(data.s_n == Approx(3780.98));
+  REQUIRE(data.ds_n == Approx(49.91));
+  REQUIRE(data.s_p == Approx(8960.63));
+  REQUIRE(data.ds_p == Approx(102.43));
+  REQUIRE(data.q_4bm == Approx(6537.65));
+  REQUIRE(data.dq_4bm == Approx(72.59));
+  REQUIRE(data.q_da == Approx(13771.00));
+  REQUIRE(data.dq_da == Approx(50.83));
+  REQUIRE(data.q_pa == Approx(8309.36));
+  REQUIRE(data.dq_pa == Approx(55.39));
+  REQUIRE(data.q_na == Approx(5089.71));
+  REQUIRE(data.dq_na == Approx(55.83));
 }

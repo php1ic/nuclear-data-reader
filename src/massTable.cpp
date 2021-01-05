@@ -171,7 +171,7 @@ bool MassTable::parseAMEReactionTwoFormat(const std::string& line) const
 
 bool MassTable::parseAMEReactionOneFormat(const std::string& line) const
 {
-  auto isotope = getMatchingIsotope(line, 2);
+  auto isotope = getMatchingIsotope(line, 1);
 
   if (isotope == ameDataTable.end())
     {
