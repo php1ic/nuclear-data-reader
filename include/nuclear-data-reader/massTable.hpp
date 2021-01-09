@@ -65,9 +65,9 @@ public:
   mutable std::vector<AME::Data> ameDataTable;
 
   // Get the location of this source file
-  // This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/options.hpp
+  // This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/massTable.hpp
   // Only the directory separator will be different, depending on OS
-  // We want to replace "include/nuclear-data-reader/options.hpp" with "data/", using the appropriate separator
+  // We want to replace "include/nuclear-data-reader/massTable.hpp" with "data/", using the appropriate separator
   inline static const std::filesystem::path datapath = std::filesystem::absolute(
       std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
 
