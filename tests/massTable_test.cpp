@@ -1,15 +1,47 @@
+#define CATCH_CONFIG_ENABLE_CHRONO_STRINGMAKER
+
 #include "nuclear-data-reader/massTable.hpp"
 
 #include <catch2/catch.hpp>
 
 
+TEST_CASE("Construct an instance", "[MassTable]")
+{
+  SECTION("Construct with a valid year")
+  {
+    const MassTable table(2003);
+    REQUIRE(table.year == 2003);
+  }
+
+  SECTION("Construct with an invalid year")
+  {
+    const MassTable table(1999);
+    REQUIRE(table.year == table.valid_years.back());
+  }
+}
+
+
 TEST_CASE("Alter the table year", "[MassTable]")
 {
-  const MassTable table(2003);
-  REQUIRE(table.year == 2003);
+  SECTION("A valid year is given")
+  {
+    const MassTable table(2003);
 
-  REQUIRE(table.setTableYear(2012));
-  REQUIRE(table.year == 2012);
+    REQUIRE(table.setTableYear(2012));
+    REQUIRE(table.year == 2012);
+
+    REQUIRE(table.setTableYear(2016));
+    REQUIRE(table.year == 2016);
+  }
+
+  SECTION("An invalid year is given so the original isn't changed")
+  {
+    const MassTable table(2012);
+    REQUIRE(table.year == 2012);
+
+    REQUIRE_FALSE(table.setTableYear(2000));
+    REQUIRE(table.year == 2012);
+  }
 }
 
 
@@ -185,4 +217,46 @@ TEST_CASE("Read a line from the second AME reaction file as a whole", "[MassTabl
   REQUIRE(data.dq_pa == Approx(55.39));
   REQUIRE(data.q_na == Approx(5089.71));
   REQUIRE(data.dq_na == Approx(55.83));
+}
+
+
+TEST_CASE("Read the NUBASE format", "[MassTable]")
+{
+  SECTION("2003 ground-state isotope")
+  {
+    MassTable table(2003);
+
+    const std::string line{
+      "189 0810   189Tl  -24602       11                              2.3    m 0.2    (1/2+)        99           B+=100"
+    };
+
+    const auto nubase = table.parseNUBASEFormat(line);
+
+    REQUIRE(nubase.A == 189);
+    REQUIRE(nubase.Z == 81);
+    REQUIRE(nubase.N == 108);
+    REQUIRE_THAT(nubase.symbol, Catch::Matches("Tl"));
+    REQUIRE(nubase.level == 0);
+    REQUIRE(nubase.mass_excess == Approx(-24602.0));
+    REQUIRE(nubase.dmass_excess == Approx(11.0));
+    REQUIRE_THAT(nubase.halflife_unit, Catch::Matches("m"));
+    REQUIRE(nubase.hl == Converter::minutes{ 2.3 });
+    REQUIRE(nubase.hl_error == Converter::minutes{ 0.2 });
+    REQUIRE(nubase.J == Approx(0.5));
+    REQUIRE(nubase.J_exp == 0);
+    REQUIRE(nubase.J_tent == 1);
+    REQUIRE_FALSE(nubase.decay.compare("B+"));
+  }
+
+  SECTION("2012 ground-state isotope")
+  {
+    MassTable table(2012);
+
+    const std::string line{ "028 0130   28Al   -16850.53     0.12                           2.2414 m 0.0012 3+         "
+                            "   01          1934 B-=100" };
+
+    const auto nubase = table.parseNUBASEFormat(line);
+
+    REQUIRE(nubase.year == 1934);
+  }
 }

@@ -182,8 +182,8 @@ TEST_CASE("Read half-life error", "[NUBASEData]")
   NUBASE::Data gs03_isotope("140 0560   140Ba  -83271        8                             12.752  d 0.003  0+         "
                             "   98           B-=100");
 
-  gs03_isotope.setHalfLifeErrorValue();
-  auto hl_error = Converter::seconds{ 0.003 };
+  gs03_isotope.setHalfLife();
+  auto hl_error = Converter::days{ 0.003 };
 
   REQUIRE(gs03_isotope.hl_error == hl_error);
 }

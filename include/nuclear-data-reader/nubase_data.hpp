@@ -198,19 +198,6 @@ namespace NUBASE
     }
 
     /**
-     * Extract the half life value from the data file
-     *
-     * \param Nothing
-     *
-     * \return Nothing
-     */
-    inline void setHalfLifeErrorValue() const
-    {
-      hl_error = Converter::seconds{ Converter::StringToDouble(
-          full_data, NUBASE::LinePosition::START_HALFLIFEERROR, NUBASE::LinePosition::END_HALFLIFEERROR) };
-    }
-
-    /**
      * Extract the units of the half life value from the data file
      *
      * \param Nothing

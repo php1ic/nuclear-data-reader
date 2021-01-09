@@ -271,7 +271,7 @@ bool MassTable::readAMEReactionFile(const std::filesystem::path& reactionFile, c
 
 NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 {
-  NUBASE::Data data = NUBASE::Data(line);
+  NUBASE::Data data(line);
 
   data.setExperimental();
 

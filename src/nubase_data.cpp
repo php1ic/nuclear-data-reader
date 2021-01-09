@@ -297,17 +297,22 @@ void NUBASE::Data::setHalfLife() const
   // If noUnits assume unknown so very short half life
   if (lifetime == noUnit)
     {
-      hl = Converter::seconds{ 1.0e-24 };
+      hl       = Converter::seconds{ 1.0e-24 };
+      hl_error = Converter::seconds{ 1.0 };
     }
   // If stable set to very long
   else if (lifetime.find("stbl") != std::string::npos)
     {
-      hl = Converter::seconds{ 1.0e24 };
+      hl       = Converter::seconds{ 1.0e24 };
+      hl_error = Converter::seconds{ 1.0 };
     }
   else
     {
       const double hl_double = Converter::StringToDouble(
           lifetime, 0, NUBASE::LinePosition::END_HALFLIFEVALUE - NUBASE::LinePosition::START_HALFLIFEVALUE);
+
+      const double hl_error_double = Converter::StringToDouble(
+          full_data, NUBASE::LinePosition::START_HALFLIFEERROR, NUBASE::LinePosition::END_HALFLIFEERROR);
 
       setHalfLifeUnit();
 
@@ -318,83 +323,103 @@ void NUBASE::Data::setHalfLife() const
 
       if (halflife_unit == "ys")
         {
-          hl = Converter::attoseconds{ 1.0e-6 * hl_double };
+          hl       = Converter::attoseconds{ 1.0e-6 * hl_double };
+          hl_error = Converter::attoseconds{ 1.0e-6 * hl_error_double };
         }
       else if (halflife_unit == "zs")
         {
-          hl = Converter::attoseconds{ 1.0e-3 * hl_double };
+          hl       = Converter::attoseconds{ 1.0e-3 * hl_double };
+          hl_error = Converter::attoseconds{ 1.0e-3 * hl_error_double };
         }
       else if (halflife_unit == "as")
         {
-          hl = Converter::attoseconds{ hl_double };
+          hl       = Converter::attoseconds{ hl_double };
+          hl_error = Converter::attoseconds{ hl_error_double };
         }
       else if (halflife_unit == "ps")
         {
-          hl = Converter::picoseconds{ hl_double };
+          hl       = Converter::picoseconds{ hl_double };
+          hl_error = Converter::picoseconds{ hl_error_double };
         }
       else if (halflife_unit == "ns")
         {
-          hl = Converter::nanoseconds{ hl_double };
+          hl       = Converter::nanoseconds{ hl_double };
+          hl_error = Converter::nanoseconds{ hl_error_double };
         }
       else if (halflife_unit == "us")
         {
-          hl = Converter::microseconds{ hl_double };
+          hl       = Converter::microseconds{ hl_double };
+          hl_error = Converter::microseconds{ hl_error_double };
         }
       else if (halflife_unit == "ms")
         {
-          hl = Converter::milliseconds{ hl_double };
+          hl       = Converter::milliseconds{ hl_double };
+          hl_error = Converter::milliseconds{ hl_error_double };
         }
       else if (halflife_unit == "s")
         {
-          hl = Converter::seconds{ hl_double };
+          hl       = Converter::seconds{ hl_double };
+          hl_error = Converter::seconds{ hl_error_double };
         }
       else if (halflife_unit == "m")
         {
-          hl = Converter::minutes{ hl_double };
+          hl       = Converter::minutes{ hl_double };
+          hl_error = Converter::minutes{ hl_error_double };
         }
       else if (halflife_unit == "h")
         {
-          hl = Converter::hours{ hl_double };
+          hl       = Converter::hours{ hl_double };
+          hl_error = Converter::hours{ hl_error_double };
         }
       else if (halflife_unit == "d")
         {
-          hl = Converter::days{ hl_double };
+          hl       = Converter::days{ hl_double };
+          hl_error = Converter::days{ hl_error_double };
         }
       else if (halflife_unit == "y")
         {
-          hl = Converter::years{ hl_double };
+          hl       = Converter::years{ hl_double };
+          hl_error = Converter::years{ hl_error_double };
         }
       else if (halflife_unit == "ky")
         {
-          hl = Converter::kiloyears{ hl_double };
+          hl       = Converter::kiloyears{ hl_double };
+          hl_error = Converter::kiloyears{ hl_error_double };
         }
       else if (halflife_unit == "My")
         {
-          hl = Converter::millionyears{ hl_double };
+          hl       = Converter::millionyears{ hl_double };
+          hl_error = Converter::millionyears{ hl_error_double };
         }
       else if (halflife_unit == "Gy")
         {
-          hl = Converter::billionyears{ hl_double };
+          hl       = Converter::billionyears{ hl_double };
+          hl_error = Converter::billionyears{ hl_error_double };
         }
       else if (halflife_unit == "Ty")
         {
-          hl = Converter::billionyears{ 1.0e3 * hl_double };
+          hl       = Converter::billionyears{ 1.0e3 * hl_double };
+          hl_error = Converter::billionyears{ 1.0e3 * hl_error_double };
         }
       else if (halflife_unit == "Py")
         {
-          hl = Converter::billionyears{ 1.0e6 * hl_double };
+          hl       = Converter::billionyears{ 1.0e6 * hl_double };
+          hl_error = Converter::billionyears{ 1.0e6 * hl_error_double };
         }
       else if (halflife_unit == "Ey")
         {
-          hl = Converter::billionyears{ 1.0e9 * hl_double };
+          hl       = Converter::billionyears{ 1.0e9 * hl_double };
+          hl_error = Converter::billionyears{ 1.0e9 * hl_error_double };
         }
       else if (halflife_unit == "Zy")
         {
-          hl = Converter::billionyears{ 1.0e12 * hl_double };
+          hl       = Converter::billionyears{ 1.0e12 * hl_double };
+          hl_error = Converter::billionyears{ 1.0e12 * hl_error_double };
         }
       else if (halflife_unit == "Yy")
         {
-          hl = Converter::billionyears{ 1.0e15 * hl_double };
+          hl       = Converter::billionyears{ 1.0e15 * hl_double };
+          hl_error = Converter::billionyears{ 1.0e15 * hl_error_double };
         }
     }
 }
