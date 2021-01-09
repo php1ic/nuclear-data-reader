@@ -49,7 +49,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           file: ../Build/coverage.info
-      - name: Upload coverage report to codact
+      - name: Upload coverage report to codacy
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         uses: codacy/codacy-coverage-reporter-action@master
         with:
