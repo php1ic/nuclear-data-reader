@@ -51,10 +51,10 @@ jobs:
           file: ../Build/coverage.info
       - name: Upload coverage report to codacy
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
-        uses: codacy/codacy-coverage-reporter-action@master
-        run :
-          pwd
-          ls
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: ./Build/coverage.info
+        # uses: codacy/codacy-coverage-reporter-action@master
+        # with:
+        #   project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        #   coverage-reports: ./Build/coverage.info
+        run: |
+          export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r ../Build/coverage.info
