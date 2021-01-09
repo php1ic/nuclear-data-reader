@@ -248,6 +248,48 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     REQUIRE_FALSE(nubase.decay.compare("B+"));
   }
 
+  SECTION("2003 first isomeric state")
+  {
+    MassTable table(2003);
+
+    const std::string line{ "018 0091   18Fxm    1995.1      0.5    1121.36    0.15       234     ns        5+" };
+
+    const auto nubase = table.parseNUBASEFormat(line);
+
+    REQUIRE(nubase.A == 18);
+    REQUIRE(nubase.Z == 9);
+    REQUIRE(nubase.N == 9);
+    REQUIRE_THAT(nubase.symbol, Catch::Matches("F"));
+    REQUIRE(nubase.level == 1);
+  }
+
+  SECTION("2003 stable ground state")
+  {
+    MassTable table(2003);
+
+    const std::string line{ "124 0500   124Sn  -88236.8      1.4                          stbl       >100Py 0+         "
+                            "   97 52Ka41t   IS=5.79 5;2B- ?" };
+
+    const auto nubase = table.parseNUBASEFormat(line);
+
+    REQUIRE(nubase.A == 124);
+    REQUIRE(nubase.Z == 50);
+    REQUIRE(nubase.N == 74);
+    REQUIRE_THAT(nubase.symbol, Catch::Matches("Sn"));
+    REQUIRE(nubase.level == 0);
+    REQUIRE(nubase.mass_excess == Approx(-88236.8));
+    REQUIRE(nubase.dmass_excess == Approx(1.4));
+    REQUIRE_THAT(nubase.halflife_unit, Catch::Matches(""));
+    REQUIRE(nubase.hl == Converter::seconds{ 1.0e24 });
+    REQUIRE(nubase.hl_error == Converter::seconds{ 1.0 });
+    REQUIRE(nubase.J == Approx(0.0));
+    REQUIRE(nubase.J_exp == 0);
+    REQUIRE(nubase.J_tent == 0);
+    REQUIRE_FALSE(nubase.decay.compare("stable"));
+    REQUIRE(table.pnSide.at(50));
+  }
+
+
   SECTION("2012 ground-state isotope")
   {
     MassTable table(2012);
