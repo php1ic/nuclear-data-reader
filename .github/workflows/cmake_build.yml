@@ -52,6 +52,9 @@ jobs:
       - name: Upload coverage report to codacy
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         uses: codacy/codacy-coverage-reporter-action@master
+        run :
+          pwd
+          ls
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: ../Build/coverage.info
+          coverage-reports: ./Build/coverage.info
