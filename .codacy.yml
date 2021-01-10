@@ -3,3 +3,4 @@ exclude_paths:
   - '**.md'
   - '.github/**'
   - 'codecov.yml'
+  - 'tests/**'
