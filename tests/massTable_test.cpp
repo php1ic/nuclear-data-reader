@@ -89,6 +89,15 @@ TEST_CASE("Try to read non-existant file", "[MassTable]")
 }
 
 
+TEST_CASE("Read the AME mass file", "[MassTable]")
+{
+  const MassTable table(2003);
+  table.setFilePaths();
+
+  REQUIRE(table.readAME(table.AME_masstable));
+}
+
+
 TEST_CASE("Validate the requested table year", "[MassTable]")
 {
   SECTION("Construction is correct")
