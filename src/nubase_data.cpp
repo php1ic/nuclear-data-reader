@@ -311,8 +311,13 @@ void NUBASE::Data::setHalfLife() const
       const double hl_double = Converter::StringToDouble(
           lifetime, 0, NUBASE::LinePosition::END_HALFLIFEVALUE - NUBASE::LinePosition::START_HALFLIFEVALUE);
 
-      const double hl_error_double = Converter::StringToDouble(
-          full_data, NUBASE::LinePosition::START_HALFLIFEERROR, NUBASE::LinePosition::END_HALFLIFEERROR);
+      // FIXME: Formatting is not consitent, extracting the error should be refactored into it's own method
+      auto hle =
+          full_data.substr(NUBASE::LinePosition::START_HALFLIFEERROR,
+                           (NUBASE::LinePosition::END_HALFLIFEERROR - NUBASE::LinePosition::START_HALFLIFEERROR));
+      std::replace(hle.begin(), hle.end(), '>', ' ');
+      std::replace(hle.begin(), hle.end(), '<', ' ');
+      const double hl_error_double = Converter::StringToDouble(hle, 0, hle.size());
 
       setHalfLifeUnit();
 

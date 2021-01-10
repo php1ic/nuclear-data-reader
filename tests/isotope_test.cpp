@@ -5,8 +5,10 @@
 #include <catch2/catch.hpp>
 
 
-TEST_CASE("", "[Isotope]")
+TEST_CASE("No argument construction", "[Isotope]")
 {
+  const Isotope iso;
+  REQUIRE(iso.NDP == 4);
 }
 
 
