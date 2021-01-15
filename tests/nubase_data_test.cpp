@@ -191,12 +191,195 @@ TEST_CASE("Read half-life error", "[NUBASEData]")
 
 TEST_CASE("Read and set half-life to double", "[NUBASEData]")
 {
-  NUBASE::Data gs03_isotope("056 0230   56V    -46080      200                            216     ms 4      (1+)       "
-                            "   99 03Ma02tj  B-=100;B-n ?");
+  SECTION("yoctoseconds")
+  {
+    NUBASE::Data data("012 0080   12O     32048       18                            580     ys 30     0+            00 "
+                      "95Kr03t   2p=60 30;B+ ?");
 
-  gs03_isotope.setHalfLife();
-  auto halflife = Converter::milliseconds{ 216 };
-  REQUIRE(gs03_isotope.hl == halflife);
+    data.setHalfLife();
+    auto halflife = Converter::attoseconds{ 580 * 1.0e-6 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("zeptoseconds")
+  {
+    NUBASE::Data data("010 0020   10He    48810       70                              2.7   zs 1.8    0+            99 "
+                      "94Os04t   2n=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::attoseconds{ 2.7 * 1.0e-3 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("attoseconds")
+  {
+    NUBASE::Data data("008 0040   8Be      4941.67     0.04                          67     as 17     0+            99 "
+                      "          A=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::attoseconds{ 67 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("picoseconds")
+  {
+    NUBASE::Data data("016 0050   16B     37080       60                           <190     ps        0-            99 "
+                      "          n ?");
+
+    data.setHalfLife();
+    auto halflife = Converter::picoseconds{ 190 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("nanoseconds")
+  {
+    NUBASE::Data data("208 0821   208Pbm -16853.5      2.3    4895       2          500     ns 10     10+           86 "
+                      "98Pf02t   IT=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::nanoseconds{ 500 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("microseconds")
+  {
+    NUBASE::Data data("220 0900   220Th   14669       22                              9.7   us 0.6    0+            97 "
+                      "          A=100;EC=2e-7#");
+
+    data.setHalfLife();
+    auto halflife = Converter::microseconds{ 9.7 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("milliseconds")
+  {
+    NUBASE::Data data("056 0230   56V    -46080      200                            216     ms 4      (1+)       "
+                      "   99 03Ma02tj  B-=100;B-n ?");
+
+    data.setHalfLife();
+    auto halflife = Converter::milliseconds{ 216 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("seconds")
+  {
+    NUBASE::Data data("180 0780   180Pt  -34436       11                             52      s 3      0+            94 "
+                      "          B+~100;A~0.3");
+
+    data.setHalfLife();
+    auto halflife = Converter::seconds{ 52 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("hours")
+  {
+    NUBASE::Data data("076 0350   76Br   -70289        9                             16.2    h 0.2    1-            95 "
+                      "          B+=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::hours{ 16.2 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("years")
+  {
+    NUBASE::Data data("207 0830   207Bi  -20054.4      2.4                           32.9    y 1.4    9/2-          94 "
+                      "          B+=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::years{ 32.9 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("kilo years")
+  {
+    NUBASE::Data data("208 0830   208Bi  -18870.0      2.4                          368     ky 4      (5)+          86 "
+                      "          B+=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::kiloyears{ 368 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Mega years")
+  {
+    NUBASE::Data data("129 0530   129I   -88503        3                             15.7   My 0.4    7/2+          96 "
+                      "          B-=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::millionyears{ 15.7 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Giga years")
+  {
+    NUBASE::Data data("187 0750   187Re  -41215.7      1.4                           41.2   Gy 0.2    5/2+          91 "
+                      "01Ga01t   IS=62.60 2;B-=100;A<0.0001");
+
+    data.setHalfLife();
+    auto halflife = Converter::billionyears{ 41.2 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Tera years")
+  {
+    NUBASE::Data data("115 0490   115In  -89537        4                            441     Ty 25     9/2+          99 "
+                      "          IS=95.71 5;B-=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::billionyears{ 441 * 1.0e3 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Peta years")
+  {
+    NUBASE::Data data("174 0720   174Hf  -55846.6      2.8                            2.0   Py 0.4    0+            99 "
+                      "          IS=0.16 1;A=100;2B+ ?");
+
+    data.setHalfLife();
+    auto halflife = Converter::billionyears{ 2.0 * 1.0e6 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Exa years")
+  {
+    NUBASE::Data data("150 0600   150Nd  -73690        3                              6.7   Ey 0.7    0+            96 "
+                      "97De40td  IS=5.6 2;2B-=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::billionyears{ 6.7 * 1.0e9 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Zetta years")
+  {
+    NUBASE::Data data("076 0320   76Ge   -73213.0      1.7                            1.58  Zy 0.17   0+            95 "
+                      "01Kl11t   IS=7.61 38;2B-=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::billionyears{ 1.58 * 1.0e12 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Yotta years")
+  {
+    NUBASE::Data data("128 0520   128Te  -88992.1      1.7                            2.2   Yy 0.3    0+            01 "
+                      "96Ta04t   IS=31.74 8;2B-=100");
+
+    data.setHalfLife();
+    auto halflife = Converter::billionyears{ 2.2 * 1.0e15 };
+    REQUIRE(data.hl == halflife);
+  }
+
+  SECTION("Lifetimes that aren't times")
+  {
+    NUBASE::Data data("003 0030   3Li     28670#    2000#                      RN   p-unst                          98 "
+                      "          p ?");
+
+    data.setHalfLife();
+    auto halflife = Converter::seconds{ 1.0e-24 };
+    REQUIRE(data.hl == halflife);
+  }
 }
 
 
