@@ -384,29 +384,29 @@ bool MassTable::mergeData(const int verbosity) const
 }
 
 
-bool MassTable::outputTableToCSV() const
-{
-  auto outfile = NUBASE_masstable;
-  outfile.replace_extension(".csv");
-
-  fmt::print("New file: {}\n", outfile);
-  std::ofstream out(outfile);
-
-  if (!out.is_open())
-    {
-      fmt::print("\n***ERROR***: {} couldn't be opened", outfile);
-      return false;
-    }
-
-  // fmt::print(out, "{}\n", Isotope::CSVHeader());
-  // for (const auto& isotope : theTable)
-  //  {
-  //    fmt::print(out, "{}\n", isotope.writeAsCSV());
-  //  }
-  out.close();
-
-  return true;
-}
+// bool MassTable::outputTableToCSV() const
+//{
+//  auto outfile = NUBASE_masstable;
+//  outfile.replace_extension(".csv");
+//
+//  fmt::print("New file: {}\n", outfile);
+//  std::ofstream out(outfile);
+//
+//  if (!out.is_open())
+//    {
+//      fmt::print("\n***ERROR***: {} couldn't be opened", outfile);
+//      return false;
+//    }
+//
+//  // fmt::print(out, "{}\n", Isotope::CSVHeader());
+//  // for (const auto& isotope : theTable)
+//  //  {
+//  //    fmt::print(out, "{}\n", isotope.writeAsCSV());
+//  //  }
+//  out.close();
+//
+//  return true;
+//}
 
 
 bool MassTable::outputTableToJSON() const

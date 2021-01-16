@@ -232,7 +232,7 @@ public:
    *
    * \return Nothing
    */
-  bool outputTableToCSV() const;
+  // bool outputTableToCSV() const;
 
   /**
    * Convert ... singular file format to json
