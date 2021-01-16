@@ -385,18 +385,50 @@ TEST_CASE("Read and set half-life to double", "[NUBASEData]")
 
 TEST_CASE("Read the major decay mode", "[NUBASEData]")
 {
-  NUBASE::Data gs03_isotope("229 0880   229Ra   32563       19                              4.0    m 0.2    5/2(+)     "
-                            "   90           B-=100");
+  SECTION("Simple decay mode scenarios")
+  {
+    NUBASE::Data gs03_isotope(
+        "229 0880   229Ra   32563       19                              4.0    m 0.2    5/2(+)     "
+        "   90           B-=100");
 
-  NUBASE::Data isomer03_isotope("076 0371   76Rbm  -60162.9      1.9     316.93    0.08         3.050 us 0.007  (4+)   "
-                                "       95 00Ch07t   IT=100");
+    NUBASE::Data isomer03_isotope(
+        "076 0371   76Rbm  -60162.9      1.9     316.93    0.08         3.050 us 0.007  (4+)   "
+        "       95 00Ch07t   IT=100");
 
 
-  gs03_isotope.setDecayMode(2003);
-  REQUIRE_THAT(gs03_isotope.decay, Catch::Matches("B-"));
+    gs03_isotope.setDecayMode(2003);
+    REQUIRE_THAT(gs03_isotope.decay, Catch::Matches("B-"));
 
-  isomer03_isotope.setDecayMode(2003);
-  REQUIRE_THAT(isomer03_isotope.decay, Catch::Matches("IT"));
+    isomer03_isotope.setDecayMode(2003);
+    REQUIRE_THAT(isomer03_isotope.decay, Catch::Matches("IT"));
+  }
+
+  SECTION("Convert guess into unkown")
+  {
+    NUBASE::Data data{ "223 0830   223Bi   32140#     400#                             1#     s >300ns 9/2-#         "
+                       "11 10Al24i  2009 B- ?;B-n ?" };
+
+    data.setDecayMode(2003);
+    REQUIRE_THAT(data.decay, Catch::Matches("unknown"));
+  }
+
+  SECTION("Convert e+ -> B+")
+  {
+    NUBASE::Data data{ "119 0540   119Xe  -78794       10                              5.8    m 0.3    5/2(+)        "
+                       "00 90Ne.Aj   e+=79 5;EC=21 5" };
+
+    data.setDecayMode(2003);
+    REQUIRE_FALSE(data.decay.compare("B+"));
+  }
+
+  SECTION("Remove unwanted characters")
+  {
+    NUBASE::Data data{ "168 0711   168Lum -56880      100       180     110     BD*    6.7    m 0.4    3+            "
+                       "94           B+>95;IT<5" };
+
+    data.setDecayMode(2003);
+    REQUIRE_FALSE(data.decay.compare("B+"));
+  }
 }
 
 
