@@ -131,6 +131,23 @@ public:
    */
   [[nodiscard]] static int StringToInt(const std::string& var);
 
+  /**
+   * Extract the part of the string <fullString> from <start> to <end>
+   * if it's all spaces or contains the '*' character return an empty string
+   * Otherwise, return the substring
+   *
+   * \param The string to extract the value from
+   * \param The first character position
+   * \param The final character position
+   *
+   * \return The substring as desccribed above
+   */
+  [[nodiscard]] static std::string NumberAsString(const std::string& fullString, const int start, const int end)
+  {
+    const auto number = fullString.substr(start, end - start);
+    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
+                                                                                                           : number;
+  }
 
   /**
    * Convert the part of the string <fullString> from <start> to <end>
@@ -144,10 +161,8 @@ public:
    */
   [[nodiscard]] static inline int StringToInt(const std::string& fullString, const int start, const int end)
   {
-    const std::string number = fullString.substr(start, end - start);
-    const bool invalid = std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos;
-
-    return invalid ? std::numeric_limits<int>::max() : std::stoi(number);
+    const auto number = NumberAsString(fullString, start, end);
+    return number.empty() ? std::numeric_limits<int>::max() : std::stoi(number);
   }
 
   /**
@@ -162,10 +177,8 @@ public:
    */
   [[nodiscard]] static inline double StringToDouble(const std::string& fullString, const int start, const int end)
   {
-    const std::string number = fullString.substr(start, end - start);
-    const bool invalid = std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos;
-
-    return invalid ? std::numeric_limits<double>::max() : std::stod(number);
+    const auto number = NumberAsString(fullString, start, end);
+    return number.empty() ? std::numeric_limits<double>::max() : std::stod(number);
   }
 
   /**

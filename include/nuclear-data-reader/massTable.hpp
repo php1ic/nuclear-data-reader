@@ -41,7 +41,7 @@ public:
   ~MassTable() = default;
 
   /// What years do we have data for
-  const std::array<int, 3> valid_years{ 2003, 2012, 2016 };
+  static constexpr std::array<int, 3> valid_years{ 2003, 2012, 2016 };
   /// Which year's table should we read
   mutable int year{};
 
