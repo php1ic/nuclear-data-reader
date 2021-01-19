@@ -238,9 +238,7 @@ bool MassTable::readAME(const std::filesystem::path& ameTable) const
   std::string line;
   while (std::getline(file, line))
     {
-      auto nuclide = parseAMEMassFormat(line);
-
-      ameDataTable.emplace_back(nuclide);
+      ameDataTable.emplace_back(parseAMEMassFormat(line));
     }
 
   file.close();
