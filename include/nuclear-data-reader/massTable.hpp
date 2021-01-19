@@ -196,6 +196,18 @@ public:
    */
   void setFilePaths() const;
 
+
+  /**
+   * Check the file is open and advance the read location past the AME header
+   *
+   * \param The filename that is being read
+   * \param The open file reader object to advance
+   *
+   * \return[TRUE] Everything went OK
+   * \return[FALSE] Something went wrong so don' try to keep reading from the open file
+   */
+  [[nodiscard]] bool skipAMEHeader(const std::filesystem::path& filename, std::ifstream& file) const;
+
   /**
    * Read the AME datafile for isotopic values
    *

@@ -200,15 +200,11 @@ bool MassTable::parseAMEReactionOneFormat(const std::string& line) const
 }
 
 
-bool MassTable::readAME(const std::filesystem::path& ameTable) const
+bool MassTable::skipAMEHeader(const std::filesystem::path& filename, std::ifstream& file) const
 {
-  fmt::print("Reading {} for AME mass excess values <--", ameTable);
-
-  std::ifstream file(ameTable, std::ios::binary);
-
   if (!file.is_open())
     {
-      fmt::print("\n***ERROR***: {} couldn't be opened, does it exist?\n\n", ameTable);
+      fmt::print("\n***ERROR***: {} couldn't be opened, do you have permission?\n\n", filename);
       return false;
     }
 
@@ -216,6 +212,27 @@ bool MassTable::readAME(const std::filesystem::path& ameTable) const
   for (int i = 0; i < AME::HEADER_LENGTH; ++i)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+    }
+
+  return true;
+}
+
+
+bool MassTable::readAME(const std::filesystem::path& ameTable) const
+{
+  fmt::print("Reading {} for AME mass excess values <--", ameTable);
+
+  if (!std::filesystem::exists(ameTable))
+    {
+      fmt::print("\n***ERROR***: {} does not exist?\n\n", ameTable);
+      return false;
+    }
+
+  std::ifstream file(ameTable, std::ios::binary);
+
+  if (!skipAMEHeader(ameTable, file))
+    {
+      return false;
     }
 
   std::string line;
@@ -237,18 +254,17 @@ bool MassTable::readAMEReactionFile(const std::filesystem::path& reactionFile, c
 {
   fmt::print("Reading {} for reaction data <--", reactionFile);
 
-  std::ifstream file(reactionFile, std::ios::binary);
-
-  if (!file.is_open())
+  if (!std::filesystem::exists(reactionFile))
     {
-      fmt::print("\n***ERROR***: {} couldn't be opened, does it exist?\n\n", reactionFile);
+      fmt::print("\n***ERROR***: {} does not exist?\n\n", reactionFile);
       return false;
     }
 
-  // Skip the header of the file
-  for (int i = 0; i < AME::HEADER_LENGTH; ++i)
+  std::ifstream file(reactionFile, std::ios::binary);
+
+  if (!skipAMEHeader(reactionFile, file))
     {
-      file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+      return false;
     }
 
   std::string line;
