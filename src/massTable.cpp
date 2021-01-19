@@ -256,11 +256,17 @@ bool MassTable::readAMEReactionFile(const std::filesystem::path& reactionFile, c
     {
       if (fileNumber == 1)
         {
-          parseAMEReactionOneFormat(line);
+          if (!parseAMEReactionOneFormat(line))
+            {
+              fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
+            }
         }
       else if (fileNumber == 2)
         {
-          parseAMEReactionTwoFormat(line);
+          if (!parseAMEReactionTwoFormat(line))
+            {
+              fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
+            }
         }
     }
 

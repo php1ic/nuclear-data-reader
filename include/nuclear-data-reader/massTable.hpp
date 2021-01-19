@@ -124,7 +124,7 @@ public:
    * \return[TRUE] Successful merge
    * \return[FALSE] TBD
    */
-  bool mergeData(const int verbosity = 0) const;
+  [[nodiscard]] bool mergeData(const int verbosity = 0) const;
 
   /**
    * Read a single line of the NUBASE data table for isotopic information
@@ -133,7 +133,7 @@ public:
    *
    * \return A populated instance of NUBASE::Data with details from the line that was passed in
    */
-  NUBASE::Data parseNUBASEFormat(const std::string& line) const;
+  [[nodiscard]] NUBASE::Data parseNUBASEFormat(const std::string& line) const;
 
   /**
    * Read a single line of the AME data table for isotopic information
@@ -142,7 +142,7 @@ public:
    *
    * \return A populated instance of AME::Data
    */
-  AME::Data parseAMEMassFormat(const std::string& line) const;
+  [[nodiscard]] AME::Data parseAMEMassFormat(const std::string& line) const;
 
   /**
    * Read a single line of the first AME reaction file (rct1) and update the appropriate instance of the isotope in the
@@ -153,7 +153,7 @@ public:
    * \return[TRUE] The line as been read correctly
    * \return[FALSE] The line has not been read correctly
    */
-  bool parseAMEReactionOneFormat(const std::string& line) const;
+  [[nodiscard]] bool parseAMEReactionOneFormat(const std::string& line) const;
 
   /**
    * Read a single line of the first AME reaction file (rct2) and update the appropriate instance of the isotope in the
@@ -164,7 +164,7 @@ public:
    * \return[TRUE] The line as been read correctly
    * \return[FALSE] The line has not been read correctly
    */
-  bool parseAMEReactionTwoFormat(const std::string& line) const;
+  [[nodiscard]] bool parseAMEReactionTwoFormat(const std::string& line) const;
 
   /**
    * Having read the reaction file, find the matching isotope in the mass table so we can update the values
@@ -223,7 +223,7 @@ public:
    *
    * \return Nothing
    */
-  bool readNUBASE(const std::filesystem::path& nubaseTable);
+  [[nodiscard]] bool readNUBASE(const std::filesystem::path& nubaseTable);
 
   /**
    * Convert ... singular file format to csv
@@ -232,7 +232,7 @@ public:
    *
    * \return Nothing
    */
-  // bool outputTableToCSV() const;
+  // [[nodiscard]] bool outputTableToCSV() const;
 
   /**
    * Convert ... singular file format to json
@@ -241,7 +241,7 @@ public:
    *
    * \return Nothing
    */
-  bool outputTableToJSON() const;
+  [[nodiscard]] bool outputTableToJSON() const;
 };
 
 #endif // MASSTABLE_HPP

@@ -111,11 +111,13 @@ TEST_CASE("Read the AME mass file", "[MassTable]")
 
 TEST_CASE("Read the AME reaction files", "[MassTable]")
 {
-  const MassTable table(2003);
-  table.setFilePaths();
-
-  REQUIRE(table.readAMEReactionFile(table.AME_reaction_1, 1));
-  REQUIRE(table.readAMEReactionFile(table.AME_reaction_2, 2));
+  SECTION("The AME mass table has not been read")
+  {
+    MassTable table(2003);
+    table.setFilePaths();
+    REQUIRE(table.readAMEReactionFile(table.AME_reaction_1, 1));
+    REQUIRE(table.readAMEReactionFile(table.AME_reaction_2, 2));
+  }
 }
 
 
@@ -140,6 +142,13 @@ TEST_CASE("Validate the requested table year", "[MassTable]")
     MassTable table(1999);
     REQUIRE(table.year == table.valid_years.back());
   }
+}
+
+
+TEST_CASE("Populate the internal mass table", "[MassTable]")
+{
+  MassTable table(2003);
+  REQUIRE(table.populateInternalMassTable());
 }
 
 
