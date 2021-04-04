@@ -45,6 +45,12 @@ void MassTable::setFilePaths() const
         AME_reaction_1   = MassTable::getAbsolutePath() / "2016" / "rct1-16.txt";
         AME_reaction_2   = MassTable::getAbsolutePath() / "2016" / "rct2-16.txt";
         break;
+      case 2020:
+        NUBASE_masstable = MassTable::getAbsolutePath() / "2020" / "nubase_1.mas20";
+        AME_masstable    = MassTable::getAbsolutePath() / "2020" / "mass.mas20";
+        AME_reaction_1   = MassTable::getAbsolutePath() / "2020" / "rct1.mas20";
+        AME_reaction_2   = MassTable::getAbsolutePath() / "2020" / "rct2.mas20";
+        break;
     }
 }
 
