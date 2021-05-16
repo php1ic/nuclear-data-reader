@@ -87,7 +87,7 @@ bool MassTable::populateInternalMassTable()
 
 AME::Data MassTable::parseAMEMassFormat(const std::string& line) const
 {
-  AME::Data data(line);
+  AME::Data data(line, year);
 
   data.setA();
   data.setZ();
@@ -118,9 +118,11 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
       return ameDataTable.end();
     }
 
+  const AME::Data data(line, year);
+
   // A & Z are in the same place for both reaction files, but lets not assume they will be forever
-  const int A = (reactionFile == 1) ? AME::Data::getReaction_1_A(line) : AME::Data::getReaction_2_A(line);
-  const int Z = (reactionFile == 1) ? AME::Data::getReaction_1_Z(line) : AME::Data::getReaction_2_Z(line);
+  const int A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
+  const int Z = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
 
   // Look for the correct isotope in the existing data table
   auto isotope = std::find_if(
@@ -214,10 +216,12 @@ bool MassTable::skipAMEHeader(const std::filesystem::path& filename, std::ifstre
       return false;
     }
 
+  const AME::Data data("", year);
+
   // Skip the header of the file
-  for (int i = 0; i < AME::HEADER_LENGTH; ++i)
+  for (int i = 0; i < data.position.HEADER; ++i)
     {
-      file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
     }
 
   return true;

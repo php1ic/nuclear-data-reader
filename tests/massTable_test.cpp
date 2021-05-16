@@ -189,7 +189,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
     const std::string reaction_line{ " 238 U   92   11280.01    1.18  13723#    196#     4269.75    2.94   1144.20    "
                                      "1.22 -10182#    359#    -5635.64    1.19" };
     MassTable table(2012);
-    AME::Data ame("");
+    AME::Data ame("", 2012);
     ame.A = 238;
     ame.Z = 92;
     table.ameDataTable.emplace_back(ame);
@@ -205,7 +205,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
     const std::string reaction_line{ " 138 Gd  64   22868#    446#     3545#    196#     3304#    277#   -20838#    "
                                      "627#     4959#    200#   -22845#    627#" };
     MassTable table(2012);
-    AME::Data ame("");
+    AME::Data ame("", 2012);
     ame.A = 1;
     ame.Z = 1;
     table.ameDataTable.emplace_back(ame);
@@ -220,7 +220,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
 TEST_CASE("Read a line from the first AME reaction file as a whole", "[MassTable]")
 {
   MassTable table(2003);
-  AME::Data ame("");
+  AME::Data ame("", 2003);
   ame.A = 1;
   ame.Z = 6;
   table.ameDataTable.emplace_back(ame);
@@ -255,7 +255,7 @@ TEST_CASE("Read a line from the first AME reaction file as a whole", "[MassTable
 TEST_CASE("Read a line from the second AME reaction file as a whole", "[MassTable]")
 {
   MassTable table(2003);
-  AME::Data ame("");
+  AME::Data ame("", 2003);
   ame.A = 1;
   ame.Z = 6;
   table.ameDataTable.emplace_back(ame);

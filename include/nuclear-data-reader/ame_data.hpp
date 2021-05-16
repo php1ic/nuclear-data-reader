@@ -20,8 +20,7 @@ namespace AME
   class Data
   {
   public:
-    explicit Data(std::string line) : full_data(std::move(line)) {}
-    Data() = default;
+    Data(std::string line, const int _year) : position(_year), full_data(std::move(line)) {}
 
     Data(const Data&) = default;
     Data(Data&&)      = default;
@@ -30,6 +29,8 @@ namespace AME
     Data& operator=(Data&&) = default;
 
     ~Data() = default;
+
+    LinePosition position;
 
     /// Is the isotope experimental or extrapolated/theoretical
     mutable int exp{ 0 };
@@ -129,35 +130,32 @@ namespace AME
      *
      * \return Nothing
      */
-    inline void setA() const
+    inline void setA() const { A = Converter::StringToInt(full_data, position.START_A, position.END_A); }
+
+    /**
+     *
+     */
+    [[nodiscard]] inline int getReaction_1_A(const std::string& line) const
     {
-      A = Converter::StringToInt(full_data, AME::LinePosition::START_A, AME::LinePosition::END_A);
+      return Converter::StringToInt(line, position.START_R1_A, position.END_R1_A);
+    }
+
+    [[nodiscard]] inline int getReaction_2_A(const std::string& line) const
+    {
+      return Converter::StringToInt(line, position.START_R2_A, position.END_R2_A);
     }
 
     /**
      *
      */
-    [[nodiscard]] inline static int getReaction_1_A(const std::string& line)
+    [[nodiscard]] inline int getReaction_1_Z(const std::string& line) const
     {
-      return Converter::StringToInt(line, AME::LinePosition::START_R1_A, AME::LinePosition::END_R1_A);
+      return Converter::StringToInt(line, position.START_R1_Z, position.END_R1_Z);
     }
 
-    [[nodiscard]] inline static int getReaction_2_A(const std::string& line)
+    [[nodiscard]] inline int getReaction_2_Z(const std::string& line) const
     {
-      return Converter::StringToInt(line, AME::LinePosition::START_R2_A, AME::LinePosition::END_R2_A);
-    }
-
-    /**
-     *
-     */
-    [[nodiscard]] inline static int getReaction_1_Z(const std::string& line)
-    {
-      return Converter::StringToInt(line, AME::LinePosition::START_R1_Z, AME::LinePosition::END_R1_Z);
-    }
-
-    [[nodiscard]] inline static int getReaction_2_Z(const std::string& line)
-    {
-      return Converter::StringToInt(line, AME::LinePosition::START_R2_Z, AME::LinePosition::END_R2_Z);
+      return Converter::StringToInt(line, position.START_R2_Z, position.END_R2_Z);
     }
 
     /**
@@ -167,10 +165,7 @@ namespace AME
      *
      * \return Nothing
      */
-    inline void setZ() const
-    {
-      Z = Converter::StringToInt(full_data, AME::LinePosition::START_Z, AME::LinePosition::END_Z);
-    }
+    inline void setZ() const { Z = Converter::StringToInt(full_data, position.START_Z, position.END_Z); }
 
     /**
      * Extract the mass excess from a AME formatted line
@@ -181,7 +176,7 @@ namespace AME
      */
     inline void setMassExcess() const
     {
-      mass_excess = Converter::StringToDouble(full_data, AME::LinePosition::START_ME, AME::LinePosition::END_ME);
+      mass_excess = Converter::StringToDouble(full_data, position.START_ME, position.END_ME);
     }
 
     /**
@@ -193,7 +188,7 @@ namespace AME
      */
     inline void setMassExcessError() const
     {
-      dmass_excess = Converter::StringToDouble(full_data, AME::LinePosition::START_DME, AME::LinePosition::END_DME);
+      dmass_excess = Converter::StringToDouble(full_data, position.START_DME, position.END_DME);
     }
 
     /**
@@ -233,8 +228,7 @@ namespace AME
      */
     inline void setBindingEnergyPerA() const
     {
-      binding_energy_per_A =
-          Converter::StringToDouble(full_data, AME::LinePosition::START_BE_PER_A, AME::LinePosition::END_BE_PER_A);
+      binding_energy_per_A = Converter::StringToDouble(full_data, position.START_BE_PER_A, position.END_BE_PER_A);
     }
 
     /**
@@ -246,8 +240,7 @@ namespace AME
      */
     inline void setBindingEnergyPerAError() const
     {
-      dbinding_energy_per_A =
-          Converter::StringToDouble(full_data, AME::LinePosition::START_DBE_PER_A, AME::LinePosition::END_DBE_PER_A);
+      dbinding_energy_per_A = Converter::StringToDouble(full_data, position.START_DBE_PER_A, position.END_DBE_PER_A);
     }
 
     /**
@@ -259,8 +252,8 @@ namespace AME
      */
     inline void setBetaDecayEnergy() const
     {
-      beta_decay_energy = Converter::StringToDouble(
-          full_data, AME::LinePosition::START_BETA_DECAY_ENERGY, AME::LinePosition::END_BETA_DECAY_ENERGY);
+      beta_decay_energy =
+          Converter::StringToDouble(full_data, position.START_BETA_DECAY_ENERGY, position.END_BETA_DECAY_ENERGY);
     }
 
     /**
@@ -272,8 +265,8 @@ namespace AME
      */
     inline void setBetaDecayEnergyError() const
     {
-      dbeta_decay_energy = Converter::StringToDouble(
-          full_data, AME::LinePosition::START_DBETA_DECAY_ENERGY, AME::LinePosition::END_DBETA_DECAY_ENERGY);
+      dbeta_decay_energy =
+          Converter::StringToDouble(full_data, position.START_DBETA_DECAY_ENERGY, position.END_DBETA_DECAY_ENERGY);
     }
 
     /**
@@ -285,8 +278,7 @@ namespace AME
      */
     inline void setAtomicMass() const
     {
-      atomic_mass =
-          Converter::StringToDouble(full_data, AME::LinePosition::START_MICRO_U, AME::LinePosition::END_MICRO_U);
+      atomic_mass = Converter::StringToDouble(full_data, position.START_MICRO_U, position.END_MICRO_U);
     }
 
     /**
@@ -298,8 +290,7 @@ namespace AME
      */
     inline void setAtomicMassError() const
     {
-      datomic_mass =
-          Converter::StringToDouble(full_data, AME::LinePosition::START_MICRO_DU, AME::LinePosition::END_MICRO_DU);
+      datomic_mass = Converter::StringToDouble(full_data, position.START_MICRO_DU, position.END_MICRO_DU);
     }
 
     /**
@@ -311,7 +302,7 @@ namespace AME
      */
     inline void setTwoNeutronSeparationEnergy() const
     {
-      s_2n = Converter::StringToDouble(full_data, AME::LinePosition::START_S2N, AME::LinePosition::END_S2N);
+      s_2n = Converter::StringToDouble(full_data, position.START_S2N, position.END_S2N);
     }
 
     /**
@@ -323,7 +314,7 @@ namespace AME
      */
     inline void setTwoNeutronSeparationEnergyError() const
     {
-      ds_2n = Converter::StringToDouble(full_data, AME::LinePosition::START_DS2N, AME::LinePosition::END_DS2N);
+      ds_2n = Converter::StringToDouble(full_data, position.START_DS2N, position.END_DS2N);
     }
 
     /**
@@ -335,7 +326,7 @@ namespace AME
      */
     inline void setTwoProtonSeparationEnergy() const
     {
-      s_2p = Converter::StringToDouble(full_data, AME::LinePosition::START_S2P, AME::LinePosition::END_S2P);
+      s_2p = Converter::StringToDouble(full_data, position.START_S2P, position.END_S2P);
     }
 
     /**
@@ -347,7 +338,7 @@ namespace AME
      */
     inline void setTwoProtonSeparationEnergyError() const
     {
-      ds_2p = Converter::StringToDouble(full_data, AME::LinePosition::START_DS2P, AME::LinePosition::END_DS2P);
+      ds_2p = Converter::StringToDouble(full_data, position.START_DS2P, position.END_DS2P);
     }
 
     /**
@@ -359,7 +350,7 @@ namespace AME
      */
     inline void setQAlphaEnergy() const
     {
-      q_a = Converter::StringToDouble(full_data, AME::LinePosition::START_QA, AME::LinePosition::END_QA);
+      q_a = Converter::StringToDouble(full_data, position.START_QA, position.END_QA);
     }
 
     /**
@@ -371,7 +362,7 @@ namespace AME
      */
     inline void setQAlphaEnergyError() const
     {
-      dq_a = Converter::StringToDouble(full_data, AME::LinePosition::START_DQA, AME::LinePosition::END_DQA);
+      dq_a = Converter::StringToDouble(full_data, position.START_DQA, position.END_DQA);
     }
 
     /**
@@ -383,7 +374,7 @@ namespace AME
      */
     inline void setQDoubleBetaMinusEnergy() const
     {
-      q_2bm = Converter::StringToDouble(full_data, AME::LinePosition::START_Q2B, AME::LinePosition::END_Q2B);
+      q_2bm = Converter::StringToDouble(full_data, position.START_Q2B, position.END_Q2B);
     }
 
     /**
@@ -395,7 +386,7 @@ namespace AME
      */
     inline void setQDoubleBetaMinusEnergyError() const
     {
-      dq_2bm = Converter::StringToDouble(full_data, AME::LinePosition::START_DQ2B, AME::LinePosition::END_DQ2B);
+      dq_2bm = Converter::StringToDouble(full_data, position.START_DQ2B, position.END_DQ2B);
     }
 
     /**
@@ -407,7 +398,7 @@ namespace AME
      */
     inline void setQEpsilonPEnergy() const
     {
-      q_ep = Converter::StringToDouble(full_data, AME::LinePosition::START_QEP, AME::LinePosition::END_QEP);
+      q_ep = Converter::StringToDouble(full_data, position.START_QEP, position.END_QEP);
     }
 
     /**
@@ -419,7 +410,7 @@ namespace AME
      */
     inline void setQEpsilonPEnergyError() const
     {
-      dq_ep = Converter::StringToDouble(full_data, AME::LinePosition::START_DQEP, AME::LinePosition::END_DQEP);
+      dq_ep = Converter::StringToDouble(full_data, position.START_DQEP, position.END_DQEP);
     }
 
     /**
@@ -431,7 +422,7 @@ namespace AME
      */
     inline void setQBetaMinusNEnergy() const
     {
-      q_bm_n = Converter::StringToDouble(full_data, AME::LinePosition::START_QBN, AME::LinePosition::END_QBN);
+      q_bm_n = Converter::StringToDouble(full_data, position.START_QBN, position.END_QBN);
     }
 
     /**
@@ -443,7 +434,7 @@ namespace AME
      */
     inline void setQBetaMinusNEnergyError() const
     {
-      dq_bm_n = Converter::StringToDouble(full_data, AME::LinePosition::START_DQBN, AME::LinePosition::END_DQBN);
+      dq_bm_n = Converter::StringToDouble(full_data, position.START_DQBN, position.END_DQBN);
     }
 
     /**
@@ -455,7 +446,7 @@ namespace AME
      */
     inline void setOneNeutronSeparationEnergy() const
     {
-      s_n = Converter::StringToDouble(full_data, AME::LinePosition::START_SN, AME::LinePosition::END_SN);
+      s_n = Converter::StringToDouble(full_data, position.START_SN, position.END_SN);
     }
 
     /**
@@ -467,7 +458,7 @@ namespace AME
      */
     inline void setOneNeutronSeparationEnergyError() const
     {
-      ds_n = Converter::StringToDouble(full_data, AME::LinePosition::START_DSN, AME::LinePosition::END_DSN);
+      ds_n = Converter::StringToDouble(full_data, position.START_DSN, position.END_DSN);
     }
 
     /**
@@ -479,7 +470,7 @@ namespace AME
      */
     inline void setOneProtonSeparationEnergy() const
     {
-      s_p = Converter::StringToDouble(full_data, AME::LinePosition::START_SP, AME::LinePosition::END_SP);
+      s_p = Converter::StringToDouble(full_data, position.START_SP, position.END_SP);
     }
 
     /**
@@ -491,7 +482,7 @@ namespace AME
      */
     inline void setOneProtonSeparationEnergyError() const
     {
-      ds_p = Converter::StringToDouble(full_data, AME::LinePosition::START_DSP, AME::LinePosition::END_DSP);
+      ds_p = Converter::StringToDouble(full_data, position.START_DSP, position.END_DSP);
     }
 
     /**
@@ -503,7 +494,7 @@ namespace AME
      */
     inline void setQQuadrupleBetaMinusEnergy() const
     {
-      q_4bm = Converter::StringToDouble(full_data, AME::LinePosition::START_Q4B, AME::LinePosition::END_Q4B);
+      q_4bm = Converter::StringToDouble(full_data, position.START_Q4B, position.END_Q4B);
     }
 
     /**
@@ -515,7 +506,7 @@ namespace AME
      */
     inline void setQQuadrupleBetaMinusEnergyError() const
     {
-      dq_4bm = Converter::StringToDouble(full_data, AME::LinePosition::START_DQ4B, AME::LinePosition::END_DQ4B);
+      dq_4bm = Converter::StringToDouble(full_data, position.START_DQ4B, position.END_DQ4B);
     }
 
     /**
@@ -527,7 +518,7 @@ namespace AME
      */
     inline void setQDAlphaEnergy() const
     {
-      q_da = Converter::StringToDouble(full_data, AME::LinePosition::START_QDA, AME::LinePosition::END_QDA);
+      q_da = Converter::StringToDouble(full_data, position.START_QDA, position.END_QDA);
     }
 
     /**
@@ -539,7 +530,7 @@ namespace AME
      */
     inline void setQDAlphaEnergyError() const
     {
-      dq_da = Converter::StringToDouble(full_data, AME::LinePosition::START_DQDA, AME::LinePosition::END_DQDA);
+      dq_da = Converter::StringToDouble(full_data, position.START_DQDA, position.END_DQDA);
     }
 
     /**
@@ -551,7 +542,7 @@ namespace AME
      */
     inline void setQPAlphaEnergy() const
     {
-      q_pa = Converter::StringToDouble(full_data, AME::LinePosition::START_QPA, AME::LinePosition::END_QPA);
+      q_pa = Converter::StringToDouble(full_data, position.START_QPA, position.END_QPA);
     }
 
     /**
@@ -563,7 +554,7 @@ namespace AME
      */
     inline void setQPAlphaEnergyError() const
     {
-      dq_pa = Converter::StringToDouble(full_data, AME::LinePosition::START_DQPA, AME::LinePosition::END_DQPA);
+      dq_pa = Converter::StringToDouble(full_data, position.START_DQPA, position.END_DQPA);
     }
 
     /**
@@ -575,7 +566,7 @@ namespace AME
      */
     inline void setQNAlphaEnergy() const
     {
-      q_na = Converter::StringToDouble(full_data, AME::LinePosition::START_QNA, AME::LinePosition::END_QNA);
+      q_na = Converter::StringToDouble(full_data, position.START_QNA, position.END_QNA);
     }
 
     /**
@@ -587,7 +578,7 @@ namespace AME
      */
     inline void setQNAlphaEnergyError() const
     {
-      dq_na = Converter::StringToDouble(full_data, AME::LinePosition::START_DQNA, AME::LinePosition::END_DQNA);
+      dq_na = Converter::StringToDouble(full_data, position.START_DQNA, position.END_DQNA);
     }
   };
 } // namespace AME

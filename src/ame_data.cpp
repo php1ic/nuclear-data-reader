@@ -31,5 +31,5 @@ void AME::Data::setExperimental() const
       std::replace(full_data.begin(), full_data.end(), '#', ' ');
     }
 
-  exp = (measured > AME::LinePosition::END_DME) ? 0 : 1;
+  exp = (measured > position.END_DME) ? 0 : 1;
 }
