@@ -7,13 +7,6 @@
 #include <fmt/format.h>
 
 
-TEST_CASE("No argument construction", "[Isotope]")
-{
-  const Isotope iso;
-  REQUIRE(iso.NDP == 4);
-}
-
-
 TEST_CASE("A json item is correctly output", "[Isotope]")
 {
   MassTable table(2003);

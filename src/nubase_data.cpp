@@ -30,13 +30,13 @@ void NUBASE::Data::setSpinParity() const
   // Do this prior to replacing all '#' with ' '
   // As a general rule, the first value of spin and/or parity will be taken
 
-  // The information starts at character NUBASE::LinePosition::START_SPIN(79), so if the line is not at least that
+  // The information starts at character position.START_SPIN(79), so if the line is not at least that
   // size set values to 'unknown' and get out.
   // OR
   // The isotope can have no spin/parity, but a decay method, in which case we
   // pass the above condition but there is no need to do any processing. Set
   // the values to unknown and get out.
-  if (full_data.size() <= NUBASE::LinePosition::START_SPIN || full_data.at(NUBASE::LinePosition::START_SPIN) == ' ')
+  if (full_data.size() <= position.START_SPIN || full_data.at(position.START_SPIN) == ' ')
     {
       J  = 100.0;
       pi = pi_exp = J_exp = J_tent = 2;
@@ -45,8 +45,7 @@ void NUBASE::Data::setSpinParity() const
     }
 
   // Easiest to extract values by stripping away bits after use
-  std::string jpi = full_data.substr(NUBASE::LinePosition::START_SPIN,
-                                     (NUBASE::LinePosition::END_SPIN - NUBASE::LinePosition::START_SPIN));
+  std::string jpi = full_data.substr(position.START_SPIN, (position.END_SPIN - position.START_SPIN));
 
   // Some values are set as words (high, low, mix, spmix, fsmix, am)
   // Don't want this so set to 'unknown' and get out.
@@ -224,7 +223,7 @@ void NUBASE::Data::setSpinParity() const
 void NUBASE::Data::setExperimental() const
 {
   // Member exp has false(experiment) or true(theory/extrapolation) value
-  // Will use mass excess for criteria, the last digit is char NUBASE::LinePosition::END_DME (38)
+  // Will use mass excess for criteria, the last digit is char position.END_DME (38)
   // so if there is a '#' but it's after this we will still say experimental
   const auto measured = full_data.find_first_of('#');
 
@@ -233,7 +232,7 @@ void NUBASE::Data::setExperimental() const
       std::replace(full_data.begin(), full_data.end(), '#', ' ');
     }
 
-  exp = (measured > NUBASE::LinePosition::END_DME) ? 1 : 0;
+  exp = (measured > position.END_DME) ? 1 : 0;
 }
 
 
@@ -275,10 +274,9 @@ void NUBASE::Data::setHalfLife() const
   // Line length is not always as long as the half life position
   // Create a temporary string with either the half life or a know value
   std::string lifetime =
-      (full_data.size() < (NUBASE::LinePosition::START_HALFLIFEVALUE - 1))
+      (full_data.size() < (position.START_HALFLIFEVALUE - 1))
           ? noUnit
-          : full_data.substr(NUBASE::LinePosition::START_HALFLIFEVALUE,
-                             (NUBASE::LinePosition::END_HALFLIFEVALUE - NUBASE::LinePosition::START_HALFLIFEVALUE));
+          : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
   // Certain string mean we should not try and parse them as half lives
   // If they are found, convert to our know value
@@ -308,13 +306,12 @@ void NUBASE::Data::setHalfLife() const
     }
   else
     {
-      const double hl_double = Converter::StringToDouble(
-          lifetime, 0, NUBASE::LinePosition::END_HALFLIFEVALUE - NUBASE::LinePosition::START_HALFLIFEVALUE);
+      const double hl_double =
+          Converter::StringToDouble(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
 
       // FIXME: Formatting is not consitent, extracting the error should be refactored into it's own method
       auto hle =
-          full_data.substr(NUBASE::LinePosition::START_HALFLIFEERROR,
-                           (NUBASE::LinePosition::END_HALFLIFEERROR - NUBASE::LinePosition::START_HALFLIFEERROR));
+          full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
       std::replace(hle.begin(), hle.end(), '>', ' ');
       std::replace(hle.begin(), hle.end(), '<', ' ');
       const double hl_error_double = Converter::StringToDouble(hle, 0, hle.size());
@@ -436,8 +433,7 @@ void NUBASE::Data::setDecayMode(const int table_year) const
   std::string Decay{ "isomer?" };
 
   // Format changed after 2003 table
-  const size_t startCharacter =
-      (table_year == 2003) ? NUBASE::LinePosition::START_DECAYSTRING_03 : NUBASE::LinePosition::START_DECAYSTRING;
+  const size_t startCharacter = (table_year == 2003) ? position.START_DECAYSTRING_03 : position.START_DECAYSTRING;
 
   if (full_data.size() >= startCharacter)
     {

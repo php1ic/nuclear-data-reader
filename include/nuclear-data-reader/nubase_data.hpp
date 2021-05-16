@@ -24,8 +24,7 @@ namespace NUBASE
   class Data
   {
   public:
-    explicit Data(std::string line) : full_data(std::move(line)) {}
-    Data() = default;
+    Data(std::string line, const int _year) : position(_year), full_data(std::move(line)) {}
 
     Data(const Data&) = default;
     Data(Data&&)      = default;
@@ -34,6 +33,8 @@ namespace NUBASE
     Data& operator=(Data&&) = default;
 
     ~Data() = default;
+
+    LinePosition position;
 
     /// Is the isotope experimental or extrapolated/theoretical
     mutable int exp{ 0 };
@@ -117,10 +118,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setA() const
-    {
-      A = Converter::StringToInt(full_data, NUBASE::LinePosition::START_A, NUBASE::LinePosition::END_A);
-    }
+    inline void setA() const { A = Converter::StringToInt(full_data, position.START_A, position.END_A); }
 
     /**
      * Extract the proton number from the data file
@@ -129,10 +127,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setZ() const
-    {
-      Z = Converter::StringToInt(full_data, NUBASE::LinePosition::START_Z, NUBASE::LinePosition::END_Z);
-    }
+    inline void setZ() const { Z = Converter::StringToInt(full_data, position.START_Z, position.END_Z); }
 
     /**
      * Extract the mass-excess from the NUBASE data file
@@ -143,7 +138,7 @@ namespace NUBASE
      */
     inline void setMassExcess() const
     {
-      mass_excess = Converter::StringToDouble(full_data, NUBASE::LinePosition::START_ME, NUBASE::LinePosition::END_ME);
+      mass_excess = Converter::StringToDouble(full_data, position.START_ME, position.END_ME);
     }
 
     /**
@@ -155,8 +150,7 @@ namespace NUBASE
      */
     inline void setMassExcessError() const
     {
-      dmass_excess =
-          Converter::StringToDouble(full_data, NUBASE::LinePosition::START_DME, NUBASE::LinePosition::END_DME);
+      dmass_excess = Converter::StringToDouble(full_data, position.START_DME, position.END_DME);
     }
 
     /**
@@ -179,8 +173,7 @@ namespace NUBASE
     {
       // Some isotopes have no value for the year so we need to watch for that.
       // Leave it as the default if no year is given
-      const auto value = full_data.substr(NUBASE::LinePosition::START_YEAR,
-                                          NUBASE::LinePosition::END_YEAR - NUBASE::LinePosition::START_YEAR);
+      const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
       year             = std::isspace(value.front()) != 0 ? 1900 : Converter::StringToInt(value);
     }
 
@@ -194,7 +187,7 @@ namespace NUBASE
     inline void setHalfLifeValue() const
     {
       hl = Converter::seconds{ Converter::StringToDouble(
-          full_data, NUBASE::LinePosition::START_HALFLIFEVALUE, NUBASE::LinePosition::END_HALFLIFEVALUE) };
+          full_data, position.START_HALFLIFEVALUE, position.END_HALFLIFEVALUE) };
     }
 
     /**
@@ -207,8 +200,7 @@ namespace NUBASE
     inline void setHalfLifeUnit() const
     {
       halflife_unit =
-          full_data.substr(NUBASE::LinePosition::START_HALFLIFEUNIT,
-                           NUBASE::LinePosition::END_HALFLIFEUNIT - NUBASE::LinePosition::START_HALFLIFEUNIT);
+          full_data.substr(position.START_HALFLIFEUNIT, position.END_HALFLIFEUNIT - position.START_HALFLIFEUNIT);
 
       // Trim leading white space
       halflife_unit.erase(halflife_unit.begin(), std::find_if(halflife_unit.begin(), halflife_unit.end(), [](int ch) {
@@ -253,7 +245,7 @@ namespace NUBASE
      */
     inline void setState() const
     {
-      level = Converter::StringToInt(full_data, NUBASE::LinePosition::START_STATE, NUBASE::LinePosition::END_STATE);
+      level = Converter::StringToInt(full_data, position.START_STATE, position.END_STATE);
     }
 
     /**
@@ -265,8 +257,7 @@ namespace NUBASE
      */
     inline void setIsomerEnergy(double& energy) const
     {
-      energy =
-          Converter::StringToDouble(full_data, NUBASE::LinePosition::START_ISOMER, NUBASE::LinePosition::END_ISOMER);
+      energy = Converter::StringToDouble(full_data, position.START_ISOMER, position.END_ISOMER);
     }
 
     /**
@@ -278,8 +269,7 @@ namespace NUBASE
      */
     inline void setIsomerEnergyError(double& error) const
     {
-      error =
-          Converter::StringToDouble(full_data, NUBASE::LinePosition::START_DISOMER, NUBASE::LinePosition::END_DISOMER);
+      error = Converter::StringToDouble(full_data, position.START_DISOMER, position.END_DISOMER);
     }
 
     /**

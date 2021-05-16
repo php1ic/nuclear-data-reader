@@ -29,7 +29,6 @@ class Isotope
 {
 public:
   Isotope(AME::Data _ame, NUBASE::Data _nubase) : ame(std::move(_ame)), nubase(std::move(_nubase)) {}
-  Isotope() = default;
 
   Isotope(const Isotope&) = default;
   Isotope(Isotope&&)      = default;
