@@ -219,7 +219,7 @@ bool MassTable::skipAMEHeader(const std::filesystem::path& filename, std::ifstre
   const AME::Data data("", year);
 
   // Skip the header of the file
-  for (int i = 0; i < data.position.HEADER; ++i)
+  for (int i = 0; i < data.mass_position.HEADER; ++i)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
     }
