@@ -1,6 +1,8 @@
 #ifndef AME_MASS_POSITION_HPP
 #define AME_MASS_POSITION_HPP
 
+#include <limits>
+
 namespace AME
 {
   struct MassPosition
@@ -10,7 +12,7 @@ namespace AME
       if (_year < 2020)
         {
           HEADER                   = 39;
-          FOOTER                   = 0;
+          FOOTER                   = std::numeric_limits<int>::max();
           START_A                  = 16;
           END_A                    = 19;
           START_Z                  = 11;
@@ -35,7 +37,7 @@ namespace AME
       else
         {
           HEADER                   = 36;
-          FOOTER                   = 0;
+          FOOTER                   = std::numeric_limits<int>::max();
           START_A                  = 16;
           END_A                    = 19;
           START_Z                  = 11;

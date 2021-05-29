@@ -29,6 +29,8 @@ public:
       {
         year = valid_years.back();
       }
+
+    line_length = (year < 2020) ? 125 : 144;
   }
 
   MassTable(const MassTable&)     = default;
@@ -44,6 +46,8 @@ public:
   static constexpr std::array<int, 4> valid_years{ 2003, 2012, 2016, 2020 };
   /// Which year's table should we read
   mutable int year{};
+  /// We expand the line to ensure it's long enough when reading the 3 AME files
+  mutable int line_length{};
 
   /// The max Z value of any isotope
   static constexpr int MAX_Z{ 118 };
@@ -196,18 +200,6 @@ public:
    */
   void setFilePaths() const;
 
-
-  /**
-   * Check the file is open and advance the read location past the AME header
-   *
-   * \param The filename that is being read
-   * \param The open file reader object to advance
-   *
-   * \return[TRUE] Everything went OK
-   * \return[FALSE] Something went wrong so don' try to keep reading from the open file
-   */
-  [[nodiscard]] bool skipAMEHeader(const std::filesystem::path& filename, std::ifstream& file) const;
-
   /**
    * Read the AME datafile for isotopic values
    *
@@ -215,7 +207,7 @@ public:
    *
    * \return Nothing
    */
-  [[nodiscard]] bool readAME(const std::filesystem::path& ameTable) const;
+  [[nodiscard]] bool readAMEMassFile(const std::filesystem::path& ameTable) const;
 
   /**
    * Read the the AME reaction data files for values
@@ -226,7 +218,8 @@ public:
    * \return[TRUE] The file has been read without issue
    * \return[FALSE] There has been some issue with the reading of the file
    */
-  [[nodiscard]] bool readAMEReactionFile(const std::filesystem::path& reactionFile, const int fileNumber) const;
+  [[nodiscard]] bool readAMEReactionFileOne(const std::filesystem::path& reactionFile) const;
+  [[nodiscard]] bool readAMEReactionFileTwo(const std::filesystem::path& reactionFile) const;
 
   /**
    * Read the NUBASE datafile for isotopic values

@@ -1,6 +1,8 @@
 #ifndef AME_REACTION2_POSITION_HPP
 #define AME_REACTION2_POSITION_HPP
 
+#include <limits>
+
 namespace AME
 {
   struct Reaction2Position
@@ -10,7 +12,7 @@ namespace AME
       if (_year < 2020)
         {
           R2_HEADER  = 39;
-          R2_FOOTER  = 0;
+          R2_FOOTER  = std::numeric_limits<int>::max();
           START_R2_A = 1;
           END_R2_A   = 4;
           START_R2_Z = 8;
@@ -42,8 +44,8 @@ namespace AME
         }
       else
         {
-          R2_HEADER  = 37;
-          R2_FOOTER  = 3645;
+          R2_HEADER  = 38;
+          R2_FOOTER  = 3644;
           START_R2_A = 1;
           END_R2_A   = 4;
           START_R2_Z = 8;

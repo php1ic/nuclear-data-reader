@@ -1,6 +1,8 @@
 #ifndef NUBASE_LINE_POSITION_HPP
 #define NUBASE_LINE_POSITION_HPP
 
+#include <limits>
+
 namespace NUBASE
 {
   struct LinePosition
@@ -11,7 +13,7 @@ namespace NUBASE
       if (_year < 2020)
         {
           HEADER              = 0;
-          FOOTER              = 0;
+          FOOTER              = std::numeric_limits<int>::max();
           START_A             = 0;
           END_A               = 3;
           START_Z             = 4;
@@ -49,7 +51,7 @@ namespace NUBASE
       else
         {
           HEADER              = 25;
-          FOOTER              = 0;
+          FOOTER              = std::numeric_limits<int>::max();
           START_A             = 0;
           END_A               = 3;
           START_Z             = 4;

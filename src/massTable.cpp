@@ -66,17 +66,17 @@ bool MassTable::populateInternalMassTable()
       return false;
     }
 
-  if (!readAME(AME_masstable))
+  if (!readAMEMassFile(AME_masstable))
     {
       fmt::print("Values from AME were not read.\n");
     }
 
-  if (!readAMEReactionFile(AME_reaction_1, 1))
+  if (!readAMEReactionFileOne(AME_reaction_1))
     {
       fmt::print("Reaction values from first file not read.\n");
     }
 
-  if (!readAMEReactionFile(AME_reaction_2, 2))
+  if (!readAMEReactionFileTwo(AME_reaction_2))
     {
       fmt::print("Reaction values from first file not read.\n");
     }
@@ -138,7 +138,7 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
   // As we don't construct a AME::Data instance we need to make sure we are reading the correct line/data
   isotope->full_data = line;
   // Make sure the line is the correct length so accessing line locations doesn't cause a crash
-  isotope->full_data.resize(125, ' ');
+  isotope->full_data.resize(line_length, ' ');
   // Strip '#' characters (May not be needed)
   isotope->setExperimental();
 
@@ -208,27 +208,7 @@ bool MassTable::parseAMEReactionOneFormat(const std::string& line) const
 }
 
 
-bool MassTable::skipAMEHeader(const std::filesystem::path& filename, std::ifstream& file) const
-{
-  if (!file.is_open())
-    {
-      fmt::print("\n***ERROR***: {} couldn't be opened, do you have permission?\n\n", filename);
-      return false;
-    }
-
-  const AME::Data data("", year);
-
-  // Skip the header of the file
-  for (int i = 0; i < data.mass_position.HEADER; ++i)
-    {
-      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
-    }
-
-  return true;
-}
-
-
-bool MassTable::readAME(const std::filesystem::path& ameTable) const
+bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
 {
   fmt::print("Reading {} for AME mass excess values <--", ameTable);
 
@@ -240,15 +220,18 @@ bool MassTable::readAME(const std::filesystem::path& ameTable) const
 
   std::ifstream file(ameTable, std::ios::binary);
 
-  if (!skipAMEHeader(ameTable, file))
+  const AME::Data data("", year);
+  int l = 0;
+  for (l = 0; l < data.mass_position.HEADER; ++l)
     {
-      return false;
+      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line))
+  while (std::getline(file, line) && l < data.mass_position.FOOTER)
     {
       ameDataTable.emplace_back(parseAMEMassFormat(line));
+      ++l;
     }
 
   file.close();
@@ -258,7 +241,7 @@ bool MassTable::readAME(const std::filesystem::path& ameTable) const
 }
 
 
-bool MassTable::readAMEReactionFile(const std::filesystem::path& reactionFile, const int fileNumber) const
+bool MassTable::readAMEReactionFileOne(const std::filesystem::path& reactionFile) const
 {
   fmt::print("Reading {} for reaction data <--", reactionFile);
 
@@ -270,27 +253,60 @@ bool MassTable::readAMEReactionFile(const std::filesystem::path& reactionFile, c
 
   std::ifstream file(reactionFile, std::ios::binary);
 
-  if (!skipAMEHeader(reactionFile, file))
+  const AME::Data data("", year);
+  int l = 0;
+  for (l = 0; l < data.r1_position.R1_HEADER; ++l)
     {
-      return false;
+      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line))
+  while (std::getline(file, line) && l < data.r1_position.R1_FOOTER)
     {
-      if (fileNumber == 1)
+      ++l;
+      if (!parseAMEReactionOneFormat(line))
         {
-          if (!parseAMEReactionOneFormat(line))
-            {
-              fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
-            }
+          fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
         }
-      else if (fileNumber == 2)
+    }
+
+  fmt::print("--> done\n");
+  return true;
+}
+
+
+bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile) const
+{
+  fmt::print("Reading {} for reaction data <--", reactionFile);
+
+  if (!std::filesystem::exists(reactionFile))
+    {
+      fmt::print("\n***ERROR***: {} does not exist?\n\n", reactionFile);
+      return false;
+    }
+
+  std::ifstream file(reactionFile, std::ios::binary);
+
+  const AME::Data data("", year);
+  int l = 0;
+  for (l = 0; l < data.r2_position.R2_HEADER; ++l)
+    {
+      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
+    }
+
+  std::string line;
+  while (std::getline(file, line) && l < data.r2_position.R2_FOOTER)
+    {
+      ++l;
+      // skip repeated header which only happens in the 2020 file
+      if (line.find("1 A  elt") != std::string::npos)
         {
-          if (!parseAMEReactionTwoFormat(line))
-            {
-              fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
-            }
+          continue;
+        }
+
+      if (!parseAMEReactionTwoFormat(line))
+        {
+          fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
         }
     }
 
@@ -353,6 +369,12 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
     {
       fmt::print("\n***ERROR***: {} couldn't be opened, does it exist?\n\n", nubaseTable);
       return false;
+    }
+
+  const NUBASE::Data data("", year);
+  for (int i = 0; i < data.position.HEADER; ++i)
+    {
+      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
     }
 
   std::string line;

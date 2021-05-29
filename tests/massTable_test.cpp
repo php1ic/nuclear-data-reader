@@ -85,9 +85,9 @@ TEST_CASE("Try to read non-existant file", "[MassTable]")
   table.setFilePaths();
 
   SECTION("NUBASE") { REQUIRE_FALSE(table.readNUBASE("doesnot.exist")); }
-  SECTION("AME mass table") { REQUIRE_FALSE(table.readAME("doesnot.exist")); }
-  SECTION("AME first reaction file") { REQUIRE_FALSE(table.readAMEReactionFile("doesnot.exist", 1)); }
-  SECTION("AME second reaction file") { REQUIRE_FALSE(table.readAMEReactionFile("doesnot.exist", 2)); }
+  SECTION("AME mass table") { REQUIRE_FALSE(table.readAMEMassFile("doesnot.exist")); }
+  SECTION("AME first reaction file") { REQUIRE_FALSE(table.readAMEReactionFileOne("doesnot.exist")); }
+  SECTION("AME second reaction file") { REQUIRE_FALSE(table.readAMEReactionFileTwo("doesnot.exist")); }
 }
 
 
@@ -105,7 +105,7 @@ TEST_CASE("Read the AME mass file", "[MassTable]")
   const MassTable table(2003);
   table.setFilePaths();
 
-  REQUIRE(table.readAME(table.AME_masstable));
+  REQUIRE(table.readAMEMassFile(table.AME_masstable));
 }
 
 
@@ -115,8 +115,8 @@ TEST_CASE("Read the AME reaction files", "[MassTable]")
   {
     MassTable table(2003);
     table.setFilePaths();
-    REQUIRE(table.readAMEReactionFile(table.AME_reaction_1, 1));
-    REQUIRE(table.readAMEReactionFile(table.AME_reaction_2, 2));
+    REQUIRE(table.readAMEReactionFileOne(table.AME_reaction_1));
+    REQUIRE(table.readAMEReactionFileTwo(table.AME_reaction_2));
   }
 }
 
