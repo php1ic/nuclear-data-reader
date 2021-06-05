@@ -33,10 +33,12 @@ The code can read data from the following published papers:
   - [2003](http://www.sciencedirect.com/science/article/pii/S0375947403018086) - [DOI](http://dx.doi.org/10.1016/j.nuclphysa.2003.11.002)
   - [2012](http://cpc-hepnp.ihep.ac.cn:8080/Jwk_cpc/EN/abstract/abstract2709.shtml) - [DOI](http://dx.doi.org/10.1088/1674-1137/36/12/002)
   - [2016](http://cpc-hepnp.ihep.ac.cn:8080/Jwk_cpc/EN/abstract/abstract8344.shtml) - [DOI](http://dx.doi.org/10.1088/1674-1137/41/3/030002)
+  - [2020](https://iopscience.iop.org/article/10.1088/1674-1137/abddb0) - [DOI](https://doi.org/10.1088/1674-1137/abddb0)
 - The NUBASE evaluation of nuclear and decay properties
   - [2003](http://www.sciencedirect.com/science/article/pii/S0375947403018074) - [DOI](http://dx.doi.org/10.1016/j.nuclphysa.2003.11.001)
   - [2012](http://cpc-hepnp.ihep.ac.cn:8080/Jwk_cpc/EN/abstract/abstract2725.shtml) - [DOI](http://dx.doi.org/10.1088/1674-1137/36/12/001)
   - [2016](http://cpc-hepnp.ihep.ac.cn:8080/Jwk_cpc/EN/abstract/abstract8343.shtml) - [DOI](http://dx.doi.org/10.1088/1674-1137/41/3/030001)
+  - [2020](https://iopscience.iop.org/article/10.1088/1674-1137/abddae) - [DOI](https://doi.org/10.1088/1674-1137/abddae)
 
 The data contained within is freely available as ASCII files, all of which are included with the project for ease.
 The newer tables are available on the [AMDC](https://www-nds.iaea.org/amdc/) website, and the [historic](http://amdc.in2p3.fr/) page can be used to find older ones.
