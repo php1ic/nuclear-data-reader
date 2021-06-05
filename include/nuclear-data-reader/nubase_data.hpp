@@ -82,7 +82,7 @@ namespace NUBASE
     mutable std::string full_data{};
 
     /// Generic value to use if the lifetime has no units
-    static inline const std::string noUnit = "no_units";
+    static inline const std::string noUnit{ "no_units" };
 
     /**
      * \struct State
@@ -179,7 +179,8 @@ namespace NUBASE
 
     /**
      * Extract the half life value from the data file
-     *
+     * TODO - Remove this function. It is never used and looks to have been succeeded.
+     *        Also it converts all numbers to seconds so is not even correct!
      * \param Nothing
      *
      * \return Nothing
