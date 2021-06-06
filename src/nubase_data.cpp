@@ -36,7 +36,7 @@ void NUBASE::Data::setSpinParity() const
   // The isotope can have no spin/parity, but a decay method, in which case we
   // pass the above condition but there is no need to do any processing. Set
   // the values to unknown and get out.
-  if (full_data.size() <= position.START_SPIN || full_data.at(position.START_SPIN) == ' ')
+  if (static_cast<int>(full_data.size()) <= position.START_SPIN || full_data.at(position.START_SPIN) == ' ')
     {
       J  = 100.0;
       pi = pi_exp = J_exp = J_tent = 2;
@@ -211,11 +211,11 @@ void NUBASE::Data::setSpinParity() const
   // Member J stores the spin as a double
   if (jpi.find('/') == std::string::npos)
     {
-      J = Converter::StringToDouble(jpi, 0, jpi.length());
+      J = Converter::StringToDouble(jpi, 0, static_cast<int>(jpi.length()));
     }
   else
     {
-      J = 0.5 * Converter::StringToDouble(jpi, 0, jpi.find('/'));
+      J = 0.5 * Converter::StringToDouble(jpi, 0, static_cast<int>(jpi.find('/')));
     }
 }
 
@@ -232,7 +232,7 @@ void NUBASE::Data::setExperimental() const
       std::replace(full_data.begin(), full_data.end(), '#', ' ');
     }
 
-  exp = (measured > position.END_DME) ? 1 : 0;
+  exp = (static_cast<int>(measured) > position.END_DME) ? 1 : 0;
 }
 
 
@@ -274,7 +274,7 @@ void NUBASE::Data::setHalfLife() const
   // Line length is not always as long as the half life position
   // Create a temporary string with either the half life or a know value
   std::string lifetime =
-      (full_data.size() < (position.START_HALFLIFEVALUE - 1))
+      (static_cast<int>(full_data.size()) < (position.START_HALFLIFEVALUE - 1))
           ? noUnit
           : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
@@ -314,7 +314,7 @@ void NUBASE::Data::setHalfLife() const
           full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
       std::replace(hle.begin(), hle.end(), '>', ' ');
       std::replace(hle.begin(), hle.end(), '<', ' ');
-      const double hl_error_double = Converter::StringToDouble(hle, 0, hle.size());
+      const double hl_error_double = Converter::StringToDouble(hle, 0, static_cast<int>(hle.size()));
 
       setHalfLifeUnit();
 
