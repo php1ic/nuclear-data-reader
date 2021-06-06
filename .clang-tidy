@@ -15,7 +15,7 @@ Checks: '*,
 -readability-qualified-auto,
 -llvm-qualified-auto'
 WarningsAsErrors: ''
-HeaderFilterRegex: '*inch/(src/|include/inch)'
+HeaderFilterRegex: '*nuclear-data-reader/(src/|include/nuclear-data-reader)'
 AnalyzeTemporaryDtors: false
 FormatStyle: none
 ...
