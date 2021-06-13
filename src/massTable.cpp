@@ -1,6 +1,5 @@
 #include "nuclear-data-reader/massTable.hpp"
 
-#include "nuclear-data-reader/ame_line_position.hpp"
 #include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"

@@ -1,7 +1,5 @@
 #include "nuclear-data-reader/ame_data.hpp"
 
-#include "nuclear-data-reader/ame_line_position.hpp"
-
 #include <cmath>
 
 double AME::Data::getRelativeMassExcessError(const double min_allowed) const

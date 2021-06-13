@@ -2,7 +2,6 @@
 # Keep list alphabetical
 set(HEADERS
   ame_data.hpp
-  ame_line_position.hpp
   ame_mass_position.hpp
   ame_reaction1_position.hpp
   ame_reaction2_position.hpp
