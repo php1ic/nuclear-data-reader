@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -37,28 +38,28 @@ namespace NUBASE
     LinePosition position;
 
     /// Is the isotope experimental or extrapolated/theoretical
-    mutable int exp{ 0 };
+    mutable uint8_t exp{ 0 };
     /// The mass number
-    mutable int A{ 0 };
+    mutable uint16_t A{ 0 };
     /// The proton number
-    mutable int Z{ 0 };
+    mutable uint8_t Z{ 0 };
     /// The neutron number
-    mutable int N{ 0 };
+    mutable uint8_t N{ 0 };
     /// The state level
-    mutable int level{ 0 };
+    mutable uint8_t level{ 0 };
     /// The parity of the spin state
-    mutable int pi{ 0 };
+    mutable uint8_t pi{ 0 };
     /// Is the parity of the spin state experimental
-    mutable int pi_exp{ 0 };
+    mutable uint8_t pi_exp{ 0 };
     /// The spin value of the state
-    mutable int J_exp{ 0 };
+    mutable uint8_t J_exp{ 0 };
     /// Is the spin value experimental
-    mutable int J_tent{ 0 };
+    mutable uint8_t J_tent{ 0 };
     /// Is the isotope neutron or proton rich
     /// (defined by which 'side' of stability it is on, not N=Z line)
-    mutable int rich{ 0 };
+    mutable uint8_t rich{ 0 };
     /// What year was the isotope discovered
-    mutable int year{ 1900 };
+    mutable uint16_t year{ 1900 };
 
     /// Mass excess from the NUBASE table
     mutable double mass_excess{ 0.1 };
@@ -95,7 +96,7 @@ namespace NUBASE
       {
       }
 
-      int level{ 0 };
+      uint8_t level{ 0 };
       double energy{ 0.0 };
       double error{ 0.0 };
     };

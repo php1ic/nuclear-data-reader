@@ -1,6 +1,7 @@
 #ifndef NUBASE_LINE_POSITION_HPP
 #define NUBASE_LINE_POSITION_HPP
 
+#include <cstdint>
 #include <limits>
 
 namespace NUBASE
@@ -12,7 +13,7 @@ namespace NUBASE
       if (_year < 2020)
         {
           HEADER              = 0;
-          FOOTER              = std::numeric_limits<int>::max();
+          FOOTER              = std::numeric_limits<uint16_t>::max();
           START_A             = 0;
           END_A               = 3;
           START_Z             = 4;
@@ -57,7 +58,7 @@ namespace NUBASE
       else
         {
           HEADER              = 25;
-          FOOTER              = std::numeric_limits<int>::max();
+          FOOTER              = std::numeric_limits<uint16_t>::max();
           START_A             = 0;
           END_A               = 3;
           START_Z             = 4;
@@ -91,35 +92,38 @@ namespace NUBASE
         }
     }
 
-    mutable int HEADER;
-    mutable int FOOTER;
-    mutable int START_A;
-    mutable int END_A;
-    mutable int START_Z;
-    mutable int END_Z;
-    mutable int START_STATE;
-    mutable int END_STATE;
-    mutable int START_ME;
-    mutable int END_ME;
-    mutable int START_DME;
-    mutable int END_DME;
-    mutable int START_ISOMER;
-    mutable int END_ISOMER;
-    mutable int START_DISOMER;
-    mutable int END_DISOMER;
-    mutable int START_HALFLIFEVALUE;
-    mutable int END_HALFLIFEVALUE;
-    mutable int START_HALFLIFEUNIT;
-    mutable int END_HALFLIFEUNIT;
-    mutable int START_HALFLIFEERROR;
-    mutable int END_HALFLIFEERROR;
-    mutable int START_SPIN;
-    mutable int END_SPIN;
-    mutable int START_ENSDF;
-    mutable int END_ENSDF;
-    mutable int START_YEAR;
-    mutable int END_YEAR;
-    mutable int START_DECAYSTRING;
+    // Max values
+    // uint8_t  = 255
+    // uint16_t = 65535
+    mutable uint8_t HEADER;
+    mutable uint16_t FOOTER;
+    mutable uint8_t START_A;
+    mutable uint8_t END_A;
+    mutable uint8_t START_Z;
+    mutable uint8_t END_Z;
+    mutable uint8_t START_STATE;
+    mutable uint8_t END_STATE;
+    mutable uint8_t START_ME;
+    mutable uint8_t END_ME;
+    mutable uint8_t START_DME;
+    mutable uint8_t END_DME;
+    mutable uint8_t START_ISOMER;
+    mutable uint8_t END_ISOMER;
+    mutable uint8_t START_DISOMER;
+    mutable uint8_t END_DISOMER;
+    mutable uint8_t START_HALFLIFEVALUE;
+    mutable uint8_t END_HALFLIFEVALUE;
+    mutable uint8_t START_HALFLIFEUNIT;
+    mutable uint8_t END_HALFLIFEUNIT;
+    mutable uint8_t START_HALFLIFEERROR;
+    mutable uint8_t END_HALFLIFEERROR;
+    mutable uint8_t START_SPIN;
+    mutable uint8_t END_SPIN;
+    mutable uint8_t START_ENSDF;
+    mutable uint8_t END_ENSDF;
+    mutable uint8_t START_YEAR;
+    mutable uint8_t END_YEAR;
+    mutable uint8_t START_DECAYSTRING;
   };
 } // namespace NUBASE
 #endif // NUBASE_LINE_POSITION_HPP
