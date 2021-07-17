@@ -35,14 +35,21 @@ namespace NUBASE
           END_HALFLIFEERROR   = 77;
           START_SPIN          = 79;
           END_SPIN            = 93;
+
           // After the 2003 table, the discovery
           // year was added, alterting the positions
-          START_YEAR = 105;
-          END_YEAR   = 109;
-          // Let the 03 position be the odd-one-out and thus
-          // have the slightly awkward name
-          START_DECAYSTRING_03 = 106;
-          START_DECAYSTRING    = 110;
+          if (_year != 2003)
+            {
+              START_YEAR        = 105;
+              END_YEAR          = 109;
+              START_DECAYSTRING = 110;
+            }
+          else
+            {
+              START_YEAR        = 0;
+              END_YEAR          = 0;
+              START_DECAYSTRING = 106;
+            }
           // The decay string goes to EOL, put here, commented,
           // to show that we haven't just forgotten about it.
           // END_DECAYSTRING = EOL;
@@ -113,7 +120,6 @@ namespace NUBASE
     mutable int START_YEAR;
     mutable int END_YEAR;
     mutable int START_DECAYSTRING;
-    mutable int START_DECAYSTRING_03;
   };
 } // namespace NUBASE
 #endif // NUBASE_LINE_POSITION_HPP

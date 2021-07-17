@@ -427,13 +427,12 @@ void NUBASE::Data::setHalfLife() const
 }
 
 
-void NUBASE::Data::setDecayMode(const int table_year) const
+void NUBASE::Data::setDecayMode() const
 {
   // Store how ground-state decays in member decay
   std::string Decay{ "isomer?" };
 
-  // Format changed after 2003 table
-  const size_t startCharacter = (table_year == 2003) ? position.START_DECAYSTRING_03 : position.START_DECAYSTRING;
+  const size_t startCharacter = position.START_DECAYSTRING;
 
   if (full_data.size() >= startCharacter)
     {

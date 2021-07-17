@@ -171,10 +171,17 @@ namespace NUBASE
      */
     inline void setYear() const
     {
-      // Some isotopes have no value for the year so we need to watch for that.
-      // Leave it as the default if no year is given
-      const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
-      year             = std::isspace(value.front()) != 0 ? 1900 : Converter::StringToInt(value);
+      if (position.START_YEAR == 0)
+        {
+          year = 1900;
+        }
+      else
+        {
+          // Some isotopes have no value for the year so we need to watch for that.
+          // Leave it as the default if no year is given
+          const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
+          year             = std::isspace(value.front()) != 0 ? 1900 : Converter::StringToInt(value);
+        }
     }
 
     /**
@@ -308,7 +315,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    void setDecayMode(const int table_year) const;
+    void setDecayMode() const;
 
     /**
      * Set the rich flag for the isotope

@@ -340,13 +340,9 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 
   data.setHalfLife();
 
-  // Discovery year was added after 2003
-  if (year != 2003)
-    {
-      data.setYear();
-    }
+  data.setYear();
 
-  data.setDecayMode(year);
+  data.setDecayMode();
 
   if (data.decay == "stable")
     {

@@ -820,10 +820,10 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                                     2003);
 
 
-      gs03_isotope.setDecayMode(2003);
+      gs03_isotope.setDecayMode();
       REQUIRE_THAT(gs03_isotope.decay, Catch::Matches("B-"));
 
-      isomer03_isotope.setDecayMode(2003);
+      isomer03_isotope.setDecayMode();
       REQUIRE_THAT(isomer03_isotope.decay, Catch::Matches("IT"));
     }
 
@@ -833,7 +833,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                          "11 10Al24i  2009 B- ?;B-n ?",
                          2003 };
 
-      data.setDecayMode(2003);
+      data.setDecayMode();
       REQUIRE_THAT(data.decay, Catch::Matches("unknown"));
     }
 
@@ -843,7 +843,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                          "00 90Ne.Aj   e+=79 5;EC=21 5",
                          2003 };
 
-      data.setDecayMode(2003);
+      data.setDecayMode();
       REQUIRE_FALSE(data.decay.compare("B+"));
     }
 
@@ -853,7 +853,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                          "94           B+>95;IT<5",
                          2003 };
 
-      data.setDecayMode(2003);
+      data.setDecayMode();
       REQUIRE_FALSE(data.decay.compare("B+"));
     }
   }
@@ -871,10 +871,10 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                                     2020);
 
 
-      gs20_isotope.setDecayMode(2020);
+      gs20_isotope.setDecayMode();
       REQUIRE_THAT(gs20_isotope.decay, Catch::Matches("EC"));
 
-      isomer20_isotope.setDecayMode(2020);
+      isomer20_isotope.setDecayMode();
       REQUIRE_THAT(isomer20_isotope.decay, Catch::Matches("IT"));
     }
 
@@ -884,7 +884,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                          "3/2-#         16          2012 B- ?",
                          2020 };
 
-      data.setDecayMode(2020);
+      data.setDecayMode();
       REQUIRE_THAT(data.decay, Catch::Matches("unknown"));
     }
 
@@ -893,7 +893,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
     //{
     //  NUBASE::Data data{ "", 2020 };
     //
-    //  data.setDecayMode(2020);
+    //  data.setDecayMode();
     //  REQUIRE_FALSE(data.decay.compare("B+"));
     //}
 
@@ -903,7 +903,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                          "         17          1967 SF>97;B+<2;A<1",
                          2020 };
 
-      data.setDecayMode(2020);
+      data.setDecayMode();
       REQUIRE_FALSE(data.decay.compare("SF"));
     }
   }
