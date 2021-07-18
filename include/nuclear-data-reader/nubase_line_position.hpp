@@ -126,4 +126,5 @@ namespace NUBASE
     mutable uint8_t START_DECAYSTRING;
   };
 } // namespace NUBASE
+
 #endif // NUBASE_LINE_POSITION_HPP
