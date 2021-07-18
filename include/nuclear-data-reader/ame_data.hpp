@@ -15,6 +15,7 @@
 #include "nuclear-data-reader/converter.hpp"
 #include <string_view>
 
+#include <cstdint>
 #include <string>
 
 namespace AME
@@ -30,23 +31,25 @@ namespace AME
     Data(const Data&) = default;
     Data(Data&&)      = default;
 
-    Data& operator=(const Data&) = default;
-    Data& operator=(Data&&) = default;
+    // Delete due to const member
+    Data& operator=(const Data&) = delete;
+    Data& operator=(Data&&) = delete;
 
     ~Data() = default;
 
-    MassPosition mass_position;
-    Reaction1Position r1_position;
-    Reaction2Position r2_position;
+    /// Where are the variables located on the line in the file(s)
+    const MassPosition mass_position;
+    const Reaction1Position r1_position;
+    const Reaction2Position r2_position;
 
     /// Is the isotope experimental or extrapolated/theoretical
-    mutable int exp{ 0 };
+    mutable uint8_t exp{ 0 };
     /// The mass number
-    mutable int A{ 0 };
+    mutable uint16_t A{ 0 };
     /// The proton number
-    mutable int Z{ 0 };
+    mutable uint8_t Z{ 0 };
     /// The neutron number
-    mutable int N{ 0 };
+    mutable uint8_t N{ 0 };
     /// Mass excess from the AME table
     mutable double mass_excess{ 0.1 };
     /// Error on the mass excess from the AME table

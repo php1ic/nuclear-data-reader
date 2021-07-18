@@ -25,17 +25,19 @@ namespace NUBASE
   class Data
   {
   public:
-    Data(std::string line, const int _year) : position(_year), full_data(std::move(line)) {}
+    Data(std::string line, const uint16_t _year) : position(_year), full_data(std::move(line)) {}
 
     Data(const Data&) = default;
     Data(Data&&)      = default;
 
-    Data& operator=(const Data&) = default;
-    Data& operator=(Data&&) = default;
+    // Delete due to const member
+    Data& operator=(const Data&) = delete;
+    Data& operator=(Data&&) = delete;
 
     ~Data() = default;
 
-    LinePosition position;
+    /// Where are the variables located on the line in the file
+    const LinePosition position;
 
     /// Is the isotope experimental or extrapolated/theoretical
     mutable uint8_t exp{ 0 };
