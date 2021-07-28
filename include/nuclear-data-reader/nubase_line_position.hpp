@@ -8,7 +8,7 @@ namespace NUBASE
 {
   struct LinePosition
   {
-    explicit LinePosition(const int _year)
+    explicit LinePosition(const uint16_t _year)
     {
       if (_year < 2020)
         {

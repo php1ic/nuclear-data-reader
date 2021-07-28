@@ -20,6 +20,7 @@
 #include <array>
 #include <chrono>
 #include <cmath>
+#include <cstdint>
 #include <string>
 #include <utility>
 #include <vector>
@@ -32,14 +33,15 @@ public:
   Isotope(const Isotope&) = default;
   Isotope(Isotope&&)      = default;
 
-  Isotope& operator=(const Isotope&) = default;
-  Isotope& operator=(Isotope&&) = default;
+  // Delete due to const member
+  Isotope& operator=(const Isotope&) = delete;
+  Isotope& operator=(Isotope&&) = delete;
 
   ~Isotope() = default;
 
   // What decimal precision should be used if the data is printed to file
   // The AME files use 4dp so lets default to that
-  static constexpr int NDP{ 4 };
+  static constexpr uint8_t NDP{ 4 };
 
   // All of the AME data
   mutable AME::Data ame;

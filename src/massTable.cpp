@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <array>
 #include <climits>
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <ios>
@@ -108,7 +109,8 @@ AME::Data MassTable::parseAMEMassFormat(const std::string& line) const
 }
 
 
-std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string& line, const int reactionFile) const
+std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string& line,
+                                                               const uint8_t reactionFile) const
 {
   // Check that the mass table has already been populated
   if (ameDataTable.empty())
@@ -120,8 +122,8 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
   const AME::Data data(line, year);
 
   // A & Z are in the same place for both reaction files, but lets not assume they will be forever
-  const int A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
-  const int Z = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
+  const uint16_t A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
+  const uint8_t Z  = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
 
   // Look for the correct isotope in the existing data table
   auto isotope = std::find_if(
@@ -401,7 +403,7 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 }
 
 
-bool MassTable::mergeData(const int verbosity) const
+bool MassTable::mergeData(const uint8_t verbosity) const
 {
   if (ameDataTable.size() != nubaseDataTable.size())
     {

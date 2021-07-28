@@ -23,7 +23,7 @@ namespace AME
   class Data
   {
   public:
-    Data(std::string line, const int _year) :
+    Data(std::string line, const uint16_t _year) :
         mass_position(_year), r1_position(_year), r2_position(_year), full_data(std::move(line))
     {
     }
@@ -145,12 +145,12 @@ namespace AME
     /**
      *
      */
-    [[nodiscard]] inline int getReaction_1_A(const std::string& line) const
+    [[nodiscard]] inline uint16_t getReaction_1_A(const std::string& line) const
     {
       return Converter::StringToInt(line, r1_position.START_R1_A, r1_position.END_R1_A);
     }
 
-    [[nodiscard]] inline int getReaction_2_A(const std::string& line) const
+    [[nodiscard]] inline uint16_t getReaction_2_A(const std::string& line) const
     {
       return Converter::StringToInt(line, r2_position.START_R2_A, r2_position.END_R2_A);
     }
@@ -158,12 +158,12 @@ namespace AME
     /**
      *
      */
-    [[nodiscard]] inline int getReaction_1_Z(const std::string& line) const
+    [[nodiscard]] inline uint8_t getReaction_1_Z(const std::string& line) const
     {
       return Converter::StringToInt(line, r1_position.START_R1_Z, r1_position.END_R1_Z);
     }
 
-    [[nodiscard]] inline int getReaction_2_Z(const std::string& line) const
+    [[nodiscard]] inline uint8_t getReaction_2_Z(const std::string& line) const
     {
       return Converter::StringToInt(line, r2_position.START_R2_Z, r2_position.END_R2_Z);
     }
@@ -227,7 +227,7 @@ namespace AME
      *
      * \return Nothing
      */
-    inline void setExperimental(const int val) const noexcept { exp = val; }
+    inline void setExperimental(const uint8_t val) const noexcept { exp = val; }
 
     /**
      * Extract the binding energy per A

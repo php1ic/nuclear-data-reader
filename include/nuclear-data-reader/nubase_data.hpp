@@ -94,7 +94,8 @@ namespace NUBASE
      */
     struct State
     {
-      State(const int _level, const double _energy, const double _error) : level(_level), energy(_energy), error(_error)
+      State(const uint8_t _level, const double _energy, const double _error) :
+          level(_level), energy(_energy), error(_error)
       {
       }
 
@@ -245,7 +246,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setExperimental(const int val) const noexcept { exp = val; }
+    inline void setExperimental(const uint8_t val) const noexcept { exp = val; }
 
     /**
      * Extract the state/level from the data file

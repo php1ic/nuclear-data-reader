@@ -13,6 +13,7 @@
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
 
+#include <cstdint>
 #include <filesystem>
 #include <regex>
 #include <vector>
@@ -20,7 +21,7 @@
 class MassTable
 {
 public:
-  explicit MassTable(const int _year) : year(_year)
+  explicit MassTable(const uint16_t _year) : year(_year)
   {
     pnSide.fill(false);
 
@@ -43,14 +44,14 @@ public:
   ~MassTable() = default;
 
   /// What years do we have data for
-  static constexpr std::array<int, 4> valid_years{ 2003, 2012, 2016, 2020 };
+  static constexpr std::array<uint16_t, 4> valid_years{ 2003, 2012, 2016, 2020 };
   /// Which year's table should we read
-  mutable int year{};
+  mutable uint16_t year{};
   /// We expand the line to ensure it's long enough when reading the 3 AME files
-  mutable int line_length{};
+  mutable uint8_t line_length{};
 
   /// The max Z value of any isotope
-  static constexpr int MAX_Z{ 118 };
+  static constexpr uint8_t MAX_Z{ 118 };
   /// Keep track of when we have gone from proton -> neutron rich
   mutable std::array<bool, MAX_Z + 1> pnSide{};
 
@@ -93,10 +94,10 @@ public:
    * \return[TRUE] A valid year has been requested and thus set
    * \return[FALSE] An invalid year has been requested so no change has been made
    */
-  [[nodiscard]] inline bool setTableYear(const int _year) const noexcept
+  [[nodiscard]] inline bool setTableYear(const uint16_t _year) const noexcept
   {
-    const int original_year = year;
-    year                    = _year;
+    const uint16_t original_year = year;
+    year                         = _year;
 
     if (!validateYear())
       {
@@ -128,7 +129,7 @@ public:
    * \return[TRUE] Successful merge
    * \return[FALSE] TBD
    */
-  [[nodiscard]] bool mergeData(const int verbosity = 0) const;
+  [[nodiscard]] bool mergeData(const uint8_t verbosity = 0) const;
 
   /**
    * Read a single line of the NUBASE data table for isotopic information
@@ -180,7 +181,7 @@ public:
    * \return[FAIL] The end() iterator
    */
   [[nodiscard]] std::vector<AME::Data>::iterator getMatchingIsotope(const std::string& line,
-                                                                    const int reactionFile) const;
+                                                                    const uint8_t reactionFile) const;
 
   /**
    * Fill the main container with the data that will be used to create the chart
