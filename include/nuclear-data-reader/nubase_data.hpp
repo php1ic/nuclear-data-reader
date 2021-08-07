@@ -85,7 +85,11 @@ namespace NUBASE
     mutable std::string full_data{};
 
     /// Generic value to use if the lifetime has no units
-    static inline const std::string noUnit{ "no_units" };
+    static const auto& noUnit()
+    {
+      static const std::string empty_unit{ "no_units" };
+      return empty_unit;
+    }
 
     /**
      * \struct State
