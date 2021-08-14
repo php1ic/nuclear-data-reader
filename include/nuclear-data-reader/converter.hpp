@@ -61,7 +61,7 @@ public:
   /// The std::vector<std::pair<>> used to convert Z<->Symbol
   static const auto& symbolZmap()
   {
-    static const std::vector<std::pair<std::string, int>> themap{
+    static const std::vector<std::pair<std::string, uint8_t>> themap{
       { "n", 0 },    { "H", 1 },    { "He", 2 },   { "Li", 3 },   { "Be", 4 },   { "B", 5 },    { "C", 6 },
       { "N", 7 },    { "O", 8 },    { "F", 9 },    { "Ne", 10 },  { "Na", 11 },  { "Mg", 12 },  { "Al", 13 },
       { "Si", 14 },  { "P", 15 },   { "S", 16 },   { "Cl", 17 },  { "Ar", 18 },  { "K", 19 },   { "Ca", 20 },
@@ -112,7 +112,7 @@ public:
    *
    * \return The symbol as a std:string
    */
-  [[nodiscard]] static std::string ZToSymbol(const int Z);
+  [[nodiscard]] static std::string ZToSymbol(const uint8_t Z);
 
   /**
    * Convert elemental symbol to proton number
@@ -121,7 +121,7 @@ public:
    *
    * \return The proton number as an int
    */
-  [[nodiscard]] static int SymbolToZ(std::string_view symbol);
+  [[nodiscard]] static uint8_t SymbolToZ(std::string_view symbol);
 
   /**
    * Convert the entire string <var> into it's integer value.
@@ -145,7 +145,7 @@ public:
    *
    * \return The substring as desccribed above
    */
-  [[nodiscard]] static std::string NumberAsString(const std::string& fullString, const int start, const int end)
+  [[nodiscard]] static std::string NumberAsString(const std::string& fullString, const uint8_t start, const uint8_t end)
   {
     const auto number = fullString.substr(start, end - start);
     return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
@@ -162,7 +162,7 @@ public:
    * \return[PASS] The given substring as an integer
    * \return[FAIL] The max int type value if an empty string (i.e. all space characters) is provided
    */
-  [[nodiscard]] static inline int StringToInt(const std::string& fullString, const int start, const int end)
+  [[nodiscard]] static inline int StringToInt(const std::string& fullString, const uint8_t start, const uint8_t end)
   {
     const auto number = NumberAsString(fullString, start, end);
     return number.empty() ? std::numeric_limits<int>::max() : std::stoi(number);
@@ -178,7 +178,8 @@ public:
    * \return[PASS] The given substring as an double
    * \return[FAIL] The max double type value if an empty string (i.e. all space characters) is provided
    */
-  [[nodiscard]] static inline double StringToDouble(const std::string& fullString, const int start, const int end)
+  [[nodiscard]] static inline double
+  StringToDouble(const std::string& fullString, const uint8_t start, const uint8_t end)
   {
     const auto number = NumberAsString(fullString, start, end);
     return number.empty() ? std::numeric_limits<double>::max() : std::stod(number);
@@ -194,7 +195,7 @@ public:
    * \return A std:string of the input number, truncated to the required precision
    * \return A std::string with contents "null" if number is std::numeric_limits<double>::max()
    */
-  [[nodiscard]] static std::string FloatToNdp(const double number, const int numDP = 1);
+  [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1);
 };
 
 #endif // CONVERTER_HPP

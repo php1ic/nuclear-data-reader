@@ -27,7 +27,8 @@ int Converter::StringToInt(const std::string& var)
   return number;
 }
 
-std::string Converter::ZToSymbol(const int Z)
+
+std::string Converter::ZToSymbol(const uint8_t Z)
 {
   const auto it = std::find_if(
       symbolZmap().cbegin(), symbolZmap().cend(), [Z](const auto& element) { return element.second == Z; });
@@ -44,7 +45,7 @@ std::string Converter::ZToSymbol(const int Z)
 }
 
 
-int Converter::SymbolToZ(std::string_view symbol)
+uint8_t Converter::SymbolToZ(std::string_view symbol)
 {
   const auto it = std::find_if(
       symbolZmap().cbegin(), symbolZmap().cend(), [symbol](const auto& element) { return element.first == symbol; });
@@ -53,7 +54,7 @@ int Converter::SymbolToZ(std::string_view symbol)
     if (it == symbolZmap().end())
       {
         // fmt::print("\n**WARNING**: {} is not a valid symbol\n", symbol);
-        return 200;
+        return uint8_t{ 200 };
       }
 
     return it->second;
@@ -61,7 +62,7 @@ int Converter::SymbolToZ(std::string_view symbol)
 }
 
 
-std::string Converter::FloatToNdp(const double number, const int numDP)
+std::string Converter::FloatToNdp(const double number, const uint8_t numDP)
 {
   return Converter::almost_equal(number, std::numeric_limits<double>::max(), 1) ? "null"
                                                                                 : fmt::format("{:.{}f}", number, numDP);
