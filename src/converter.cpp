@@ -62,7 +62,7 @@ uint8_t Converter::SymbolToZ(std::string_view symbol)
 }
 
 
-std::string Converter::FloatToNdp(const double number, const uint8_t numDP)
+std::string Converter::FloatToNdp(const double number, const uint8_t numDP) noexcept
 {
   return Converter::almost_equal(number, std::numeric_limits<double>::max(), 1) ? "null"
                                                                                 : fmt::format("{:.{}f}", number, numDP);

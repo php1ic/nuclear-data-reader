@@ -96,7 +96,8 @@ public:
    * \return[false] The numbers are not equal
    */
   template<class T>
-  static typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type almost_equal(T x, T y, int ulp)
+  static constexpr typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+  almost_equal(T x, T y, int ulp) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
@@ -195,7 +196,7 @@ public:
    * \return A std:string of the input number, truncated to the required precision
    * \return A std::string with contents "null" if number is std::numeric_limits<double>::max()
    */
-  [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1);
+  [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept;
 };
 
 #endif // CONVERTER_HPP
