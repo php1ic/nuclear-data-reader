@@ -15,7 +15,10 @@
 
 #include <string_view>
 
+#include <fmt/format.h>
+
 #include <algorithm>
+#include <charconv>
 #include <chrono>
 #include <climits>
 #include <cmath>
@@ -24,6 +27,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+
 
 class Converter
 {
@@ -113,7 +117,7 @@ public:
    *
    * \return The symbol as a std:string
    */
-  [[nodiscard]] static std::string_view ZToSymbol(const uint8_t Z);
+  [[nodiscard]] static std::string_view ZToSymbol(const uint8_t Z, const uint8_t verbosity = 0);
 
   /**
    * Convert elemental symbol to proton number
@@ -122,7 +126,7 @@ public:
    *
    * \return The proton number as an int
    */
-  [[nodiscard]] static uint8_t SymbolToZ(std::string_view symbol);
+  [[nodiscard]] static uint8_t SymbolToZ(const std::string_view symbol, const uint8_t verbosity = 0);
 
   /**
    * Convert the entire string <var> into it's integer value.
@@ -133,7 +137,13 @@ public:
    * \return[success] The string as a number
    * \return[failure] 200 signifies failure
    */
-  [[nodiscard]] static int StringToInt(const std::string& var);
+  [[nodiscard]] static inline int StringToInt(const std::string_view var) noexcept
+  {
+    int number{ 0 };
+    auto [ptr, ec]{ std::from_chars(var.data(), var.data() + var.size(), number) };
+    return ec == std::errc() ? number : Converter::SymbolToZ(var);
+  }
+
 
   /**
    * Extract the part of the string <fullString> from <start> to <end>
@@ -196,7 +206,12 @@ public:
    * \return A std:string of the input number, truncated to the required precision
    * \return A std::string with contents "null" if number is std::numeric_limits<double>::max()
    */
-  [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept;
+  [[nodiscard]] static inline std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept
+  {
+    return Converter::almost_equal(number, std::numeric_limits<double>::max(), 1)
+               ? "null"
+               : fmt::format("{:.{}f}", number, numDP);
+  }
 };
 
 #endif // CONVERTER_HPP
