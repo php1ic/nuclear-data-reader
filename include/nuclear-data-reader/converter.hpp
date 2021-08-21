@@ -22,6 +22,7 @@
 #include <chrono>
 #include <climits>
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <ratio>
 #include <string>
@@ -144,34 +145,38 @@ public:
     return ec == std::errc() ? number : Converter::SymbolToZ(var);
   }
 
-
   /**
-   * Extract the part of the string <fullString> from <start> to <end>
-   * if it's all spaces or contains the '*' character return an empty string
-   * Otherwise, return the substring
+   * Convert any type from it's string(_view) representation to the given type.
+   * If the string does not convert properly, return the max value of the type
    *
-   * \param The string to extract the value from
-   * \param The first character position
-   * \param The final character position
+   * We know that the max line length from the files being read is 201 so a string will
+   * not be longer than that, hence the use of uint8.
    *
-   * \return The substring as desccribed above
+   * \param The full string containing the number
+   * \param The first/start character of the number to convert
+   * \param The last/end character of the number to convert
+   *
+   * \return[success] The portion of the string as a variable of the correc type
+   * \return[failure] The max value of the type requested
    */
-  [[nodiscard]] static std::string NumberAsString(const std::string& fullString, const uint8_t start, const uint8_t end)
+  template<typename T>
+  [[nodiscard]] static constexpr T
+  StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
   {
-    const auto number = fullString.substr(start, end - start);
-    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
-                                                                                                           : number;
+    T value;
+    auto [ptr, ec]{ std::from_chars(str.data() + start, str.data() + end, value) };
+    return ec == std::errc() ? value : std::numeric_limits<T>::max();
   }
 
   /**
-   * Convert the part of the string <fullString> from <start> to <end>
+   * Convert the part of the string <fullString> from <start> to <end> into an int
    *
    * \param The string to extract the value from
    * \param The first character position
    * \param The final character position
    *
-   * \return[PASS] The given substring as an integer
-   * \return[FAIL] The max int type value if an empty string (i.e. all space characters) is provided
+   * \return[success] The given substring as an integer
+   * \return[failure] The max int type value if an empty string (i.e. all space characters) is provided
    */
   [[nodiscard]] static inline int StringToInt(const std::string& fullString, const uint8_t start, const uint8_t end)
   {
@@ -194,6 +199,24 @@ public:
   {
     const auto number = NumberAsString(fullString, start, end);
     return number.empty() ? std::numeric_limits<double>::max() : std::stod(number);
+  }
+
+  /**
+   * Extract the part of the string <fullString> from <start> to <end>
+   * if it's all spaces or contains the '*' character return an empty string
+   * Otherwise, return the substring
+   *
+   * \param The string to extract the value from
+   * \param The first character position
+   * \param The final character position
+   *
+   * \return The substring as desccribed above
+   */
+  [[nodiscard]] static std::string NumberAsString(const std::string& fullString, const uint8_t start, const uint8_t end)
+  {
+    const auto number = fullString.substr(start, end - start);
+    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
+                                                                                                           : number;
   }
 
   /**
