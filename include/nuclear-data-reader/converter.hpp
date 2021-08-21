@@ -61,7 +61,7 @@ public:
   /// The std::vector<std::pair<>> used to convert Z<->Symbol
   static const auto& symbolZmap()
   {
-    static const std::vector<std::pair<std::string, uint8_t>> themap{
+    static const std::vector<std::pair<std::string_view, uint8_t>> themap{
       { "n", 0 },    { "H", 1 },    { "He", 2 },   { "Li", 3 },   { "Be", 4 },   { "B", 5 },    { "C", 6 },
       { "N", 7 },    { "O", 8 },    { "F", 9 },    { "Ne", 10 },  { "Na", 11 },  { "Mg", 12 },  { "Al", 13 },
       { "Si", 14 },  { "P", 15 },   { "S", 16 },   { "Cl", 17 },  { "Ar", 18 },  { "K", 19 },   { "Ca", 20 },
@@ -85,7 +85,7 @@ public:
 
   /**
    * Using == on floats/doubles is bad, this function compares 2 floats/doubles to see if they are the same.
-   * Lifted directly from here:
+   * Lifted (almost) directly from here:
    * https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
    *
    * \param One of the numbers to compare
@@ -113,7 +113,7 @@ public:
    *
    * \return The symbol as a std:string
    */
-  [[nodiscard]] static std::string ZToSymbol(const uint8_t Z);
+  [[nodiscard]] static std::string_view ZToSymbol(const uint8_t Z);
 
   /**
    * Convert elemental symbol to proton number

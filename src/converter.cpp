@@ -28,7 +28,7 @@ int Converter::StringToInt(const std::string& var)
 }
 
 
-std::string Converter::ZToSymbol(const uint8_t Z)
+std::string_view Converter::ZToSymbol(const uint8_t Z)
 {
   const auto it = std::find_if(
       symbolZmap().cbegin(), symbolZmap().cend(), [Z](const auto& element) { return element.second == Z; });
@@ -37,7 +37,7 @@ std::string Converter::ZToSymbol(const uint8_t Z)
     if (it == symbolZmap().end())
       {
         // fmt::print("\n**WARNING**: {} is not a valid proton number\n", Z);
-        return std::string{ "Xy" };
+        return std::string_view{ "Xy" };
       }
 
     return it->first;

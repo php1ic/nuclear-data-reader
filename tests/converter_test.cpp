@@ -51,15 +51,15 @@ TEST_CASE("Z -> Symbol", "[Converter]")
 {
   SECTION("A valid proton number is given")
   {
-    REQUIRE_THAT(Converter::ZToSymbol(1), Catch::Matches("H"));
-    REQUIRE_THAT(Converter::ZToSymbol(23), Catch::Matches("V"));
-    REQUIRE_THAT(Converter::ZToSymbol(45), Catch::Matches("Rh"));
+    REQUIRE(Converter::ZToSymbol(1) == "H");
+    REQUIRE(Converter::ZToSymbol(23) == "V");
+    REQUIRE(Converter::ZToSymbol(45) == "Rh");
   }
 
   SECTION("An invalid proton number is given")
   {
-    REQUIRE_THAT(Converter::ZToSymbol(-2), Catch::Matches("Xy"));
-    REQUIRE_THAT(Converter::ZToSymbol(120), Catch::Matches("Xy"));
+    REQUIRE(Converter::ZToSymbol(-2) == "Xy");
+    REQUIRE(Converter::ZToSymbol(120) == "Xy");
   }
 }
 
