@@ -27,7 +27,6 @@ jobs:
           auth_header="$(git config --local --get http.https://github.com/.extraheader)"
           git submodule sync --recursive
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-        # We currently compile against C++17 so default gcc and clang on ubuntu-latest are too old
       - name: Install dependencies
         run: sudo apt update && sudo apt install -y ninja-build ccache clang lcov gcc g++ clang
       - name: Configure
