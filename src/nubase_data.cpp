@@ -473,7 +473,7 @@ void NUBASE::Data::setDecayMode() const
 }
 
 
-void NUBASE::Data::setNeutronOrProtonRich(const bool pnSide) const
+void NUBASE::Data::setNeutronOrProtonRich(const bool pnSide) const noexcept
 {
   rich = (!pnSide) ? 2 : (decay == "stable") ? 6 : 3;
 
