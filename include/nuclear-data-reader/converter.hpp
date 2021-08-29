@@ -102,7 +102,7 @@ public:
    */
   template<class T>
   static constexpr typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-  almost_equal(T x, T y, int ulp) noexcept
+  almost_equal(const T x, const T y, const int ulp) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
