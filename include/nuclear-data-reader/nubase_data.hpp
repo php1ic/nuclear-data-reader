@@ -195,20 +195,6 @@ namespace NUBASE
     }
 
     /**
-     * Extract the half life value from the data file
-     * TODO - Remove this function. It is never used and looks to have been succeeded.
-     *        Also it converts all numbers to seconds so is not even correct!
-     * \param Nothing
-     *
-     * \return Nothing
-     */
-    inline void setHalfLifeValue() const
-    {
-      hl = Converter::seconds{ Converter::StringToDouble(
-          full_data, position.START_HALFLIFEVALUE, position.END_HALFLIFEVALUE) };
-    }
-
-    /**
      * Extract the units of the half life value from the data file
      *
      * \param Nothing

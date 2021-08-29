@@ -294,34 +294,6 @@ TEST_CASE("Read spin parity of the state", "[NUBASEData]")
 }
 
 
-TEST_CASE("Read half-life value", "[NUBASEData]")
-{
-  SECTION("Pre 2020")
-  {
-    NUBASE::Data gs03_isotope("100 0410   100Nb  -79939       26                              1.5    s 0.2    1+       "
-                              "     97           B-=100",
-                              2003);
-
-    gs03_isotope.setHalfLifeValue();
-    auto halflife = Converter::seconds{ 1.5 };
-
-    REQUIRE(gs03_isotope.hl == halflife);
-  }
-
-  SECTION("Post 2020")
-  {
-    NUBASE::Data gs20_isotope("083 0380   83Sr   -76798          7                                    32.41   h 0.03   "
-                              "7/2+*         15          1952 B+=100",
-                              2020);
-
-    gs20_isotope.setHalfLifeValue();
-    auto halflife = Converter::seconds{ 32.41 };
-
-    REQUIRE(gs20_isotope.hl == halflife);
-  }
-}
-
-
 TEST_CASE("Read half-life unit", "[NUBASEData]")
 {
   SECTION("Pre 2020")
