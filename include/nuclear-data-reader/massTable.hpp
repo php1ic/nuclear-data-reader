@@ -69,22 +69,25 @@ public:
   mutable std::vector<NUBASE::Data> nubaseDataTable;
   mutable std::vector<AME::Data> ameDataTable;
 
-  // Get the location of this source file
-  // This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/massTable.hpp
-  // Only the directory separator will be different, depending on OS
-  // We want to replace "include/nuclear-data-reader/massTable.hpp" with "data/", using the appropriate separator
-  inline static const std::filesystem::path datapath = std::filesystem::absolute(
-      std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
-
   /**
-   * Find the absolute path to the location of the data files,
-   * indepdent of the filesystem.
+   * Find the absolute path to the location of the data files, indepdent of the filesystem.
+   *
+   * Get the location of this source file
+   * This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/massTable.hpp
+   * Only the directory separator will be different, depending on OS
+   * We want to replace "include/nuclear-data-reader/massTable.hpp" with "data/", using the appropriate separator
    *
    * \param Nothing
    *
    * \return The absolute path to the data_files directory
    */
-  [[nodiscard]] inline static std::filesystem::path getAbsolutePath() { return datapath; }
+  static const auto& getAbsolutePath()
+  {
+    static const std::filesystem::path abs_path = std::filesystem::absolute(
+        std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
+
+    return abs_path;
+  }
 
   /**
    * Set the year of the table who's data will be read
