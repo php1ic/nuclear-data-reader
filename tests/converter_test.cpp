@@ -73,15 +73,15 @@ TEST_CASE("Floating point comparison", "[Converter]")
 
 TEST_CASE("Float -> string", "[Converter]")
 {
-  REQUIRE_THAT(Converter::FloatToNdp(1.234, 3), Catch::Matches("1.234"));
-  REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Matches("null"));
+  REQUIRE_THAT(Converter::FloatToNdp(1.234, 3), Catch::Equals("1.234"));
+  REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Equals("null"));
 }
 
 
 TEST_CASE("Generic string -> value", "[Converter]")
 {
   std::string_view d_str{ "987.654" };
-  SECTION("Double") { REQUIRE(Converter::StringToNum<double>(d_str, 0, 7) == Approx(987.654)); }
+  SECTION("Float") { REQUIRE(Converter::StringToNum<float>(d_str, 0, 7) == Approx(987.654)); }
 
   std::string_view i8_str{ "123" };
   SECTION("uint8_t") { REQUIRE(Converter::StringToNum<uint8_t>(i8_str, 0, 3) == 123); }

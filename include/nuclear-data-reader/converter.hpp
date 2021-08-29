@@ -229,11 +229,11 @@ public:
    * \return A std:string of the input number, truncated to the required precision
    * \return A std::string with contents "null" if number is std::numeric_limits<double>::max()
    */
-  [[nodiscard]] static inline std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept
+  template<typename T>
+  [[nodiscard]] static inline std::string FloatToNdp(const T number, const uint8_t numDP = 1) noexcept
   {
-    return Converter::almost_equal(number, std::numeric_limits<double>::max(), 1)
-               ? "null"
-               : fmt::format("{:.{}f}", number, numDP);
+    return Converter::almost_equal(number, std::numeric_limits<T>::max(), 1) ? "null"
+                                                                             : fmt::format("{:.{}f}", number, numDP);
   }
 };
 
