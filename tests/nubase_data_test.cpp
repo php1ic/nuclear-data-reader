@@ -147,10 +147,7 @@ TEST_CASE("Set IsomerEnergy", "[NUBASEData]")
                                   "         97           B-=100",
                                   2003);
 
-    double value{ 0.0 };
-    isomer03_isotope.setIsomerEnergy(value);
-
-    REQUIRE(value == Approx(340.0));
+    REQUIRE(isomer03_isotope.setIsomerEnergy() == Approx(340.0));
   }
 
   SECTION("Post 2020")
@@ -158,11 +155,8 @@ TEST_CASE("Set IsomerEnergy", "[NUBASEData]")
     NUBASE::Data isomer20_isotope("114 0431   114Tcm -58437         13         160        430       MD*   90     ms 20 "
                                   "    1+#           12          2011 B-~100;IT ?;B-n=1.3 4",
                                   2020);
-    double value{ 0.0 };
 
-    isomer20_isotope.setIsomerEnergy(value);
-
-    REQUIRE(value == Approx(160));
+    REQUIRE(isomer20_isotope.setIsomerEnergy() == Approx(160));
   }
 }
 
@@ -175,10 +169,7 @@ TEST_CASE("Set IsomerEnergyError", "[NUBASEData]")
                                   "(12-)         99           IT=100",
                                   2003);
 
-    double value{ 0.0 };
-    isomer03_isotope.setIsomerEnergyError(value);
-
-    REQUIRE(value == Approx(0.19));
+    REQUIRE(isomer03_isotope.setIsomerEnergyError() == Approx(0.19));
   }
 
   SECTION("Post 2020")
@@ -187,10 +178,7 @@ TEST_CASE("Set IsomerEnergyError", "[NUBASEData]")
                                   "    (8-)          19          1994 IT=100",
                                   2020);
 
-    double value{ 0.0 };
-    isomer20_isotope.setIsomerEnergyError(value);
-
-    REQUIRE(value == Approx(1.1));
+    REQUIRE(isomer20_isotope.setIsomerEnergyError() == Approx(1.1));
   }
 }
 

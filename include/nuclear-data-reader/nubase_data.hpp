@@ -207,7 +207,8 @@ namespace NUBASE
           full_data.substr(position.START_HALFLIFEUNIT, position.END_HALFLIFEUNIT - position.START_HALFLIFEUNIT);
 
       // Trim leading white space
-      halflife_unit.erase(halflife_unit.begin(), std::find_if(halflife_unit.begin(), halflife_unit.end(), [](int ch) {
+      halflife_unit.erase(halflife_unit.begin(),
+                          std::find_if(halflife_unit.begin(), halflife_unit.end(), [](const auto ch) {
                             return (std::isspace(ch) == 0);
                           }));
     }
@@ -259,9 +260,9 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setIsomerEnergy(double& energy) const
+    [[nodiscard]] inline double setIsomerEnergy() const
     {
-      energy = Converter::StringToDouble(full_data, position.START_ISOMER, position.END_ISOMER);
+      return Converter::StringToDouble(full_data, position.START_ISOMER, position.END_ISOMER);
     }
 
     /**
@@ -271,9 +272,9 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setIsomerEnergyError(double& error) const
+    [[nodiscard]] inline double setIsomerEnergyError() const
     {
-      error = Converter::StringToDouble(full_data, position.START_DISOMER, position.END_DISOMER);
+      return Converter::StringToDouble(full_data, position.START_DISOMER, position.END_DISOMER);
     }
 
     /**

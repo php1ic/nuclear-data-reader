@@ -245,20 +245,11 @@ void NUBASE::Data::setIsomerData(std::vector<NUBASE::Data>& nuc) const
     {
       if (A == previous->A && Z == previous->Z)
         {
-          double energy{ 0.0 };
-          double error{ 0.0 };
-
-          setIsomerEnergy(energy);
+          const auto energy = setIsomerEnergy();
+          const auto error  = setIsomerEnergyError();
 
           // Some isomers(3 in total) are measured via beta difference so come out -ve
-          if (energy < 0.0)
-            {
-              energy = std::fabs(energy);
-            }
-
-          setIsomerEnergyError(error);
-
-          previous->energy_levels.emplace_back(State(level, energy, error));
+          previous->energy_levels.emplace_back(State(level, energy < 0.0 ? energy : std::fabs(energy), error));
           return;
         }
     }

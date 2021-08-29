@@ -225,7 +225,7 @@ bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
   int l = 0;
   for (l = 0; l < data.mass_position.HEADER; ++l)
     {
-      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
+      file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
@@ -258,7 +258,7 @@ bool MassTable::readAMEReactionFileOne(const std::filesystem::path& reactionFile
   int l = 0;
   for (l = 0; l < data.r1_position.R1_HEADER; ++l)
     {
-      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
+      file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
@@ -292,7 +292,7 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
   int l = 0;
   for (l = 0; l < data.r2_position.R2_HEADER; ++l)
     {
-      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
+      file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
@@ -369,9 +369,9 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
     }
 
   const NUBASE::Data data("", year);
-  for (int i = 0; i < data.position.HEADER; ++i)
+  for (uint8_t i = 0; i < data.position.HEADER; ++i)
     {
-      file.ignore((std::numeric_limits<std::streamsize>::max) (), '\n');
+      file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
