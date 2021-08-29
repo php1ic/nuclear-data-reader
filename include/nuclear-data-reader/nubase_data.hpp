@@ -60,8 +60,10 @@ namespace NUBASE
     /// Is the isotope neutron or proton rich
     /// (defined by which 'side' of stability it is on, not N=Z line)
     mutable uint8_t rich{ 0 };
+    /// The discovery year to use if non is given
+    mutable uint16_t DEFAULT_YEAR{ 1900 };
     /// What year was the isotope discovered
-    mutable uint16_t year{ 1900 };
+    mutable uint16_t year{ DEFAULT_YEAR };
 
     /// Mass excess from the NUBASE table
     mutable double mass_excess{ 0.1 };
@@ -181,14 +183,14 @@ namespace NUBASE
     {
       if (position.START_YEAR == 0)
         {
-          year = 1900;
+          year = DEFAULT_YEAR;
         }
       else
         {
           // Some isotopes have no value for the year so we need to watch for that.
           // Leave it as the default if no year is given
           const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
-          year             = std::isspace(value.front()) != 0 ? 1900 : Converter::StringToInt(value);
+          year             = std::isspace(value.front()) != 0 ? DEFAULT_YEAR : Converter::StringToInt(value);
         }
     }
 
