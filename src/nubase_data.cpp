@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 
 
 double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
@@ -265,7 +266,7 @@ void NUBASE::Data::setHalfLife() const
   // Line length is not always as long as the half life position
   // Create a temporary string with either the half life or a know value
   std::string lifetime =
-      (full_data.size() < (position.START_HALFLIFEVALUE - 1))
+      (full_data.size() < static_cast<uint8_t>(position.START_HALFLIFEVALUE - 1))
           ? noUnit()
           : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
