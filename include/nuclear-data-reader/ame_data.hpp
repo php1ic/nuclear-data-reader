@@ -13,7 +13,6 @@
 #include "nuclear-data-reader/ame_reaction1_position.hpp"
 #include "nuclear-data-reader/ame_reaction2_position.hpp"
 #include "nuclear-data-reader/converter.hpp"
-#include <string_view>
 
 #include <cstdint>
 #include <string>

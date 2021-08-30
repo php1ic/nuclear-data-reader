@@ -3,24 +3,19 @@
 #include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
-#include <type_traits>
 
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
 #include <algorithm>
 #include <array>
-#include <climits>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
-#include <ios>
 #include <iterator>
 #include <limits>
 #include <sstream>
 #include <string>
-#include <utility>
-
 
 void MassTable::setFilePaths() const
 {

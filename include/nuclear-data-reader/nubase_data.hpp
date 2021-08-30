@@ -14,7 +14,6 @@
 #include <string_view>
 
 #include <algorithm>
-#include <array>
 #include <chrono>
 #include <cstdint>
 #include <string>

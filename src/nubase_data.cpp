@@ -2,7 +2,7 @@
 
 #include "nuclear-data-reader/nubase_line_position.hpp"
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <algorithm>
 #include <cmath>

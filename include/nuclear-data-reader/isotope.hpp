@@ -11,19 +11,12 @@
 #define ISOTOPE_HPP
 
 #include "nuclear-data-reader/ame_data.hpp"
-#include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
-#include "nuclear-data-reader/nubase_line_position.hpp"
-#include <string_view>
 
-#include <algorithm>
-#include <array>
-#include <chrono>
-#include <cmath>
 #include <cstdint>
 #include <string>
 #include <utility>
-#include <vector>
+
 
 class Isotope
 {
