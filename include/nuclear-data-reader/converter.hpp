@@ -156,14 +156,18 @@ public:
    * \return[success] The portion of the string as a variable of the correc type
    * \return[failure] The max value of the type requested
    */
-  template<typename T>
-  [[nodiscard]] static constexpr T
-  StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
-  {
-    T value;
-    auto [ptr, ec]{ std::from_chars(str.data() + start, str.data() + end, value) };
-    return ec == std::errc() ? value : std::numeric_limits<T>::max();
-  }
+  // Comment out for the moment while github actions is on ubuntu 20.04.
+  // std::from_chars requires gcc > v11 and clang > v12 so we get CI failure.
+  // This function isn't actually used yet, I was just playing to see if it's quicker than the converters
+  // currently used, with the aim of moving to this one.
+  // template<typename T>
+  //[[nodiscard]] static constexpr T
+  // StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
+  //{
+  //  T value;
+  //  auto [ptr, ec]{ std::from_chars(str.data() + start, str.data() + end, value) };
+  //  return ec == std::errc() ? value : std::numeric_limits<T>::max();
+  //}
 
   /**
    * Convert the part of the string <fullString> from <start> to <end> into an int

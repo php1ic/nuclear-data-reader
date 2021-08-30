@@ -77,7 +77,8 @@ TEST_CASE("Float -> string", "[Converter]")
   REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Equals("null"));
 }
 
-
+// Remove for the moment. See header for as to why
+/*
 TEST_CASE("Generic string -> value", "[Converter]")
 {
   std::string_view d_str{ "987.654" };
@@ -124,3 +125,4 @@ TEST_CASE("", "[.Benchmark]")
     };
   }
 }
+*/
