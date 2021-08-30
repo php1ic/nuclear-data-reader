@@ -26,7 +26,7 @@ public:
     pnSide.fill(false);
 
     // If a bad year is given, default to the latest
-    if (!validateYear())
+    if (!checkValidYear())
       {
         year = valid_years.back();
       }
@@ -102,13 +102,26 @@ public:
     const uint16_t original_year = year;
     year                         = _year;
 
-    if (!validateYear())
+    if (!checkValidYear())
       {
         year = original_year;
         return false;
       }
 
     return true;
+  }
+
+  /**
+   * Check that the given year corresponds to one that we have a mass table for
+   *
+   * \param The year we wnat to check
+   *
+   * \return[TRUE] A valid year
+   * \return[FALSE] An invalid year
+   */
+  [[nodiscard]] inline bool checkValidYear(const uint16_t _year) const
+  {
+    return (std::find(valid_years.cbegin(), valid_years.cend(), _year) != valid_years.end());
   }
 
   /**
@@ -119,7 +132,7 @@ public:
    * \return[TRUE] A valid year
    * \return[FALSE] An invalid year
    */
-  [[nodiscard]] inline bool validateYear() const
+  [[nodiscard]] inline bool checkValidYear() const
   {
     return (std::find(valid_years.cbegin(), valid_years.cend(), year) != valid_years.end());
   }

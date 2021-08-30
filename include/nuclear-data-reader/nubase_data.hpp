@@ -188,7 +188,7 @@ namespace NUBASE
       else
         {
           // Some isotopes have no value for the year so we need to watch for that.
-          // Leave it as the default if no year is given
+          // Set it as the default if no year is given
           const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
           year             = std::isspace(value.front()) != 0 ? DEFAULT_YEAR : Converter::StringToInt(value);
         }
