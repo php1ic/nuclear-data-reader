@@ -2,6 +2,8 @@
 
 #include <string_view>
 
+#include <fmt/format.h>
+
 #include <algorithm>
 #include <limits>
 #include <stdexcept>
@@ -46,4 +48,11 @@ uint8_t Converter::SymbolToZ(const std::string_view symbol, const uint8_t verbos
 
     return it->second;
   }();
+}
+
+
+std::string Converter::FloatToNdp(const double number, const uint8_t numDP) noexcept
+{
+  return Converter::almost_equal(number, std::numeric_limits<double>::max(), 1) ? "null"
+                                                                                : fmt::format("{:.{}f}", number, numDP);
 }
