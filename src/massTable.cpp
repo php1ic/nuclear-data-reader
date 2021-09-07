@@ -19,32 +19,34 @@
 
 void MassTable::setFilePaths() const
 {
+  const auto data_path{ MassTable::getAbsolutePath() / fmt::to_string(year) };
+
   switch (year)
     {
       default:
       case 2003:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2003" / "nubtab03.asc";
-        AME_masstable    = MassTable::getAbsolutePath() / "2003" / "mass.mas03";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2003" / "rct1.mas03";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2003" / "rct2.mas03";
+        NUBASE_masstable = data_path / "nubtab03.asc";
+        AME_masstable    = data_path / "mass.mas03";
+        AME_reaction_1   = data_path / "rct1.mas03";
+        AME_reaction_2   = data_path / "rct2.mas03";
         break;
       case 2012:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2012" / "nubtab12.asc";
-        AME_masstable    = MassTable::getAbsolutePath() / "2012" / "mass.mas12";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2012" / "rct1.mas12";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2012" / "rct2.mas12";
+        NUBASE_masstable = data_path / "nubtab12.asc";
+        AME_masstable    = data_path / "mass.mas12";
+        AME_reaction_1   = data_path / "rct1.mas12";
+        AME_reaction_2   = data_path / "rct2.mas12";
         break;
       case 2016:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2016" / "nubase2016.txt";
-        AME_masstable    = MassTable::getAbsolutePath() / "2016" / "mass16.txt";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2016" / "rct1-16.txt";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2016" / "rct2-16.txt";
+        NUBASE_masstable = data_path / "nubase2016.txt";
+        AME_masstable    = data_path / "mass16.txt";
+        AME_reaction_1   = data_path / "rct1-16.txt";
+        AME_reaction_2   = data_path / "rct2-16.txt";
         break;
       case 2020:
-        NUBASE_masstable = MassTable::getAbsolutePath() / "2020" / "nubase_1.mas20";
-        AME_masstable    = MassTable::getAbsolutePath() / "2020" / "mass.mas20";
-        AME_reaction_1   = MassTable::getAbsolutePath() / "2020" / "rct1.mas20";
-        AME_reaction_2   = MassTable::getAbsolutePath() / "2020" / "rct2.mas20";
+        NUBASE_masstable = data_path / "nubase_1.mas20";
+        AME_masstable    = data_path / "mass.mas20";
+        AME_reaction_1   = data_path / "rct1.mas20";
+        AME_reaction_2   = data_path / "rct2.mas20";
         break;
     }
 }
