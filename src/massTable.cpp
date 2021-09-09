@@ -119,8 +119,8 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
   const AME::Data data(line, year);
 
   // A & Z are in the same place for both reaction files, but lets not assume they will be forever
-  const uint16_t A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
-  const uint8_t Z  = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
+  const auto A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
+  const auto Z = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
 
   // Look for the correct isotope in the existing data table
   auto isotope = std::find_if(
@@ -219,7 +219,7 @@ bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
   std::ifstream file(ameTable, std::ios::binary);
 
   const AME::Data data("", year);
-  int l = 0;
+  uint8_t l = 0;
   for (l = 0; l < data.mass_position.HEADER; ++l)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
@@ -252,7 +252,7 @@ bool MassTable::readAMEReactionFileOne(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  int l = 0;
+  uint8_t l = 0;
   for (l = 0; l < data.r1_position.R1_HEADER; ++l)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
@@ -286,7 +286,7 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  int l = 0;
+  uint8_t l = 0;
   for (l = 0; l < data.r2_position.R2_HEADER; ++l)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
