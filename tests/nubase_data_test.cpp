@@ -1084,20 +1084,20 @@ TEST_CASE("Set the neutron/proton rich value", "[NUBASEData]")
   SECTION("Proton rich")
   {
     data.setNeutronOrProtonRich(false);
-    REQUIRE(data.rich == 2);
+    REQUIRE(data.rich == NUBASE::Richness::PROTON);
   }
 
   SECTION("Neutron rich")
   {
     data.setNeutronOrProtonRich(true);
-    REQUIRE(data.rich == 3);
+    REQUIRE(data.rich == NUBASE::Richness::NEUTRON);
   }
 
   SECTION("Stable")
   {
     data.decay = "stable";
     data.setNeutronOrProtonRich(true);
-    REQUIRE(data.rich == 6);
+    REQUIRE(data.rich == NUBASE::Richness::STABLE);
   }
 
   SECTION("Special cases of 96Tc and 144Pm that have no stable isotope")
@@ -1108,11 +1108,11 @@ TEST_CASE("Set the neutron/proton rich value", "[NUBASEData]")
 
       data.A = 90;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 2);
+      REQUIRE(data.rich == NUBASE::Richness::PROTON);
 
       data.A = 97;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 3);
+      REQUIRE(data.rich == NUBASE::Richness::NEUTRON);
     }
 
     SECTION("144Pm")
@@ -1121,11 +1121,11 @@ TEST_CASE("Set the neutron/proton rich value", "[NUBASEData]")
 
       data.A = 140;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 2);
+      REQUIRE(data.rich == NUBASE::Richness::PROTON);
 
       data.A = 145;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 3);
+      REQUIRE(data.rich == NUBASE::Richness::NEUTRON);
     }
   }
 }

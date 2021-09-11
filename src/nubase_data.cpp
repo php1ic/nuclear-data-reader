@@ -476,16 +476,18 @@ void NUBASE::Data::setDecayMode() const
 
 void NUBASE::Data::setNeutronOrProtonRich(const bool pnSide) const noexcept
 {
-  rich = (!pnSide) ? 2 : (decay == "stable") ? 6 : 3;
+  rich = (!pnSide)             ? NUBASE::Richness::PROTON
+         : (decay == "stable") ? NUBASE::Richness::STABLE
+                               : NUBASE::Richness::NEUTRON;
 
   // Tc(43) and Pm(61) have no stable isotopes so set the 'stable' point by hand
   switch (Z)
     {
       case 43:
-        rich = (A <= 96) ? 2 : 3;
+        rich = (A <= 96) ? NUBASE::Richness::PROTON : NUBASE::Richness::NEUTRON;
         break;
       case 61:
-        rich = (A <= 144) ? 2 : 3;
+        rich = (A <= 144) ? NUBASE::Richness::PROTON : NUBASE::Richness::NEUTRON;
         break;
     }
 }

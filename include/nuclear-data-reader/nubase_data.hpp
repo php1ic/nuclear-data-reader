@@ -19,8 +19,16 @@
 #include <string>
 #include <vector>
 
+
 namespace NUBASE
 {
+  enum class Richness
+  {
+    PROTON  = 2,
+    NEUTRON = 3,
+    STABLE  = 6
+  };
+
   class Data
   {
   public:
@@ -56,9 +64,6 @@ namespace NUBASE
     mutable uint8_t J_exp{ 0 };
     /// Is the spin value experimental
     mutable uint8_t J_tent{ 0 };
-    /// Is the isotope neutron or proton rich
-    /// (defined by which 'side' of stability it is on, not N=Z line)
-    mutable uint8_t rich{ 0 };
     /// The discovery year to use if non is given
     mutable uint16_t DEFAULT_YEAR{ 1900 };
     /// What year was the isotope discovered
@@ -84,6 +89,10 @@ namespace NUBASE
     mutable std::string decay{};
     /// The entire line for the isotope from the data file
     mutable std::string full_data{};
+
+    /// Is the isotope neutron or proton rich
+    /// (defined by which 'side' of stability it is on, not N=Z line)
+    mutable Richness rich{ Richness::STABLE };
 
     /// Generic value to use if the lifetime has no units
     static const auto& noUnit()
