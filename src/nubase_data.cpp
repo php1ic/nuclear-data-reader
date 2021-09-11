@@ -424,7 +424,7 @@ void NUBASE::Data::setDecayMode() const
   // Store how ground-state decays in member decay
   std::string Decay{ "isomer?" };
 
-  const size_t startCharacter = position.START_DECAYSTRING;
+  const auto startCharacter = position.START_DECAYSTRING;
 
   if (full_data.size() >= startCharacter)
     {
