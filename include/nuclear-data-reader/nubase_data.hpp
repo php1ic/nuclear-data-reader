@@ -22,11 +22,11 @@
 
 namespace NUBASE
 {
-  enum class Richness
+  enum class Richness : uint8_t
   {
-    PROTON  = 2,
-    NEUTRON = 3,
-    STABLE  = 6
+    PROTON  = 0,
+    NEUTRON = 1,
+    STABLE  = 2
   };
 
   class Data
