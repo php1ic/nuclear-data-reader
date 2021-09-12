@@ -66,8 +66,8 @@ TEST_CASE("Z -> Symbol", "[Converter]")
 
 TEST_CASE("Floating point comparison", "[Converter]")
 {
-  REQUIRE(Converter::almost_equal(0.1, 0.1, 1));
-  REQUIRE_FALSE(Converter::almost_equal(0.12, 0.11, 1));
+  REQUIRE(Converter::almost_equal(0.1, 0.1));
+  REQUIRE_FALSE(Converter::almost_equal(0.12, 0.11));
 }
 
 

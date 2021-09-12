@@ -92,14 +92,15 @@ public:
    *
    * \param One of the numbers to compare
    * \param The other number to compare
-   * \param
+   * \param How much accuracy do we require
+   *        https://en.wikipedia.org/wiki/Unit_in_the_last_place
    *
    * \return[true] The numbers equal
    * \return[false] The numbers are not equal
    */
   template<class T>
   static constexpr typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-  almost_equal(const T x, const T y, const int ulp) noexcept
+  almost_equal(const T x, const T y, const uint8_t ulp = 1) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
