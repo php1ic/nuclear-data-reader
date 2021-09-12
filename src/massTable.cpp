@@ -219,7 +219,7 @@ bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
   std::ifstream file(ameTable, std::ios::binary);
 
   const AME::Data data("", year);
-  uint8_t l = 0;
+  uint16_t l = 0;
   for (l = 0; l < data.mass_position.HEADER; ++l)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
@@ -252,7 +252,7 @@ bool MassTable::readAMEReactionFileOne(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  uint8_t l = 0;
+  uint16_t l = 0;
   for (l = 0; l < data.r1_position.R1_HEADER; ++l)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
@@ -286,7 +286,7 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  uint8_t l = 0;
+  uint16_t l = 0;
   for (l = 0; l < data.r2_position.R2_HEADER; ++l)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
