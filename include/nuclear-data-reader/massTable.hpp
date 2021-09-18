@@ -83,7 +83,7 @@ public:
    */
   static const auto& getAbsolutePath()
   {
-    static const std::filesystem::path abs_path = std::filesystem::absolute(
+    static const auto abs_path = std::filesystem::absolute(
         std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
 
     return abs_path;
