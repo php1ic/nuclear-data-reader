@@ -123,8 +123,6 @@ namespace AME
     /// Error on Q value for n alpha reaction
     mutable double dq_na{ 0.0 };
 
-    /// Isotopic symbol
-    // mutable std::string symbol{};
     /// The entire line for the isotope from the data file
     mutable std::string full_data{};
 
