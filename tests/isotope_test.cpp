@@ -4,7 +4,6 @@
 #include "nuclear-data-reader/massTable.hpp"
 
 #include <catch2/catch.hpp>
-#include <fmt/format.h>
 
 
 TEST_CASE("A json item is correctly output", "[Isotope]")

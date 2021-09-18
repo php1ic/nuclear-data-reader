@@ -11,10 +11,9 @@ on: #[push, pull_request]
 jobs:
   linux-build:
     name: Compilation
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [9]
         compiler: [clang++, g++]
         type: [Debug, Release]
 
@@ -28,11 +27,10 @@ jobs:
           auth_header="$(git config --local --get http.https://github.com/.extraheader)"
           git submodule sync --recursive
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-        # We currently compile against C++17 so default gcc and clang on ubuntu-latest are too old
       - name: Install dependencies
-        run: sudo apt update && sudo apt install -y ninja-build ccache clang lcov gcc-${{ matrix.version }} g++-${{ matrix.version }} clang-${{ matrix.version }}
+        run: sudo apt update && sudo apt install -y ninja-build ccache clang lcov gcc g++ clang
       - name: Configure
-        run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }}-${{ matrix.version }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
+        run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
       - name: Build
         run: cmake --build ../Build
       - name: Test
@@ -41,7 +39,7 @@ jobs:
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         run: |
           cd ../Build
-          lcov --directory . --capture --gcov-tool /usr/bin/gcov-${{ matrix.version }} --output-file coverage.info
+          lcov --directory . --capture --gcov-tool /usr/bin/gcov --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
           lcov --list coverage.info
       - name: Upload coverage report to codecov

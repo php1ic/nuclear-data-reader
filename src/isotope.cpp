@@ -4,10 +4,6 @@
 
 #include <fmt/format.h>
 
-#include <algorithm>
-#include <cmath>
-#include <limits>
-
 
 // std::string Isotope::CSVHeader()
 //{

@@ -147,10 +147,7 @@ TEST_CASE("Set IsomerEnergy", "[NUBASEData]")
                                   "         97           B-=100",
                                   2003);
 
-    double value{ 0.0 };
-    isomer03_isotope.setIsomerEnergy(value);
-
-    REQUIRE(value == Approx(340.0));
+    REQUIRE(isomer03_isotope.setIsomerEnergy() == Approx(340.0));
   }
 
   SECTION("Post 2020")
@@ -158,11 +155,8 @@ TEST_CASE("Set IsomerEnergy", "[NUBASEData]")
     NUBASE::Data isomer20_isotope("114 0431   114Tcm -58437         13         160        430       MD*   90     ms 20 "
                                   "    1+#           12          2011 B-~100;IT ?;B-n=1.3 4",
                                   2020);
-    double value{ 0.0 };
 
-    isomer20_isotope.setIsomerEnergy(value);
-
-    REQUIRE(value == Approx(160));
+    REQUIRE(isomer20_isotope.setIsomerEnergy() == Approx(160));
   }
 }
 
@@ -175,10 +169,7 @@ TEST_CASE("Set IsomerEnergyError", "[NUBASEData]")
                                   "(12-)         99           IT=100",
                                   2003);
 
-    double value{ 0.0 };
-    isomer03_isotope.setIsomerEnergyError(value);
-
-    REQUIRE(value == Approx(0.19));
+    REQUIRE(isomer03_isotope.setIsomerEnergyError() == Approx(0.19));
   }
 
   SECTION("Post 2020")
@@ -187,10 +178,7 @@ TEST_CASE("Set IsomerEnergyError", "[NUBASEData]")
                                   "    (8-)          19          1994 IT=100",
                                   2020);
 
-    double value{ 0.0 };
-    isomer20_isotope.setIsomerEnergyError(value);
-
-    REQUIRE(value == Approx(1.1));
+    REQUIRE(isomer20_isotope.setIsomerEnergyError() == Approx(1.1));
   }
 }
 
@@ -290,34 +278,6 @@ TEST_CASE("Read spin parity of the state", "[NUBASEData]")
     REQUIRE(isomer20_isotope.J == Approx(1));
     REQUIRE(isomer20_isotope.pi == 1);
     REQUIRE(isomer20_isotope.J_tent == 0);
-  }
-}
-
-
-TEST_CASE("Read half-life value", "[NUBASEData]")
-{
-  SECTION("Pre 2020")
-  {
-    NUBASE::Data gs03_isotope("100 0410   100Nb  -79939       26                              1.5    s 0.2    1+       "
-                              "     97           B-=100",
-                              2003);
-
-    gs03_isotope.setHalfLifeValue();
-    auto halflife = Converter::seconds{ 1.5 };
-
-    REQUIRE(gs03_isotope.hl == halflife);
-  }
-
-  SECTION("Post 2020")
-  {
-    NUBASE::Data gs20_isotope("083 0380   83Sr   -76798          7                                    32.41   h 0.03   "
-                              "7/2+*         15          1952 B+=100",
-                              2020);
-
-    gs20_isotope.setHalfLifeValue();
-    auto halflife = Converter::seconds{ 32.41 };
-
-    REQUIRE(gs20_isotope.hl == halflife);
   }
 }
 
@@ -1124,20 +1084,20 @@ TEST_CASE("Set the neutron/proton rich value", "[NUBASEData]")
   SECTION("Proton rich")
   {
     data.setNeutronOrProtonRich(false);
-    REQUIRE(data.rich == 2);
+    REQUIRE(data.rich == NUBASE::Richness::PROTON);
   }
 
   SECTION("Neutron rich")
   {
     data.setNeutronOrProtonRich(true);
-    REQUIRE(data.rich == 3);
+    REQUIRE(data.rich == NUBASE::Richness::NEUTRON);
   }
 
   SECTION("Stable")
   {
     data.decay = "stable";
     data.setNeutronOrProtonRich(true);
-    REQUIRE(data.rich == 6);
+    REQUIRE(data.rich == NUBASE::Richness::STABLE);
   }
 
   SECTION("Special cases of 96Tc and 144Pm that have no stable isotope")
@@ -1148,11 +1108,11 @@ TEST_CASE("Set the neutron/proton rich value", "[NUBASEData]")
 
       data.A = 90;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 2);
+      REQUIRE(data.rich == NUBASE::Richness::PROTON);
 
       data.A = 97;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 3);
+      REQUIRE(data.rich == NUBASE::Richness::NEUTRON);
     }
 
     SECTION("144Pm")
@@ -1161,11 +1121,11 @@ TEST_CASE("Set the neutron/proton rich value", "[NUBASEData]")
 
       data.A = 140;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 2);
+      REQUIRE(data.rich == NUBASE::Richness::PROTON);
 
       data.A = 145;
       data.setNeutronOrProtonRich(true);
-      REQUIRE(data.rich == 3);
+      REQUIRE(data.rich == NUBASE::Richness::NEUTRON);
     }
   }
 }

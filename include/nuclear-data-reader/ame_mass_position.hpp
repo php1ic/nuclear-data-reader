@@ -1,18 +1,19 @@
 #ifndef AME_MASS_POSITION_HPP
 #define AME_MASS_POSITION_HPP
 
+#include <cstdint>
 #include <limits>
 
 namespace AME
 {
   struct MassPosition
   {
-    explicit MassPosition(const int _year)
+    explicit MassPosition(const uint16_t _year)
     {
       if (_year < 2020)
         {
           HEADER                   = 39;
-          FOOTER                   = std::numeric_limits<int>::max();
+          FOOTER                   = std::numeric_limits<uint16_t>::max();
           START_A                  = 16;
           END_A                    = 19;
           START_Z                  = 11;
@@ -37,7 +38,7 @@ namespace AME
       else
         {
           HEADER                   = 36;
-          FOOTER                   = std::numeric_limits<int>::max();
+          FOOTER                   = std::numeric_limits<uint16_t>::max();
           START_A                  = 16;
           END_A                    = 19;
           START_Z                  = 11;
@@ -61,28 +62,28 @@ namespace AME
         }
     }
 
-    mutable int HEADER;
-    mutable int FOOTER;
-    mutable int START_A;
-    mutable int END_A;
-    mutable int START_Z;
-    mutable int END_Z;
-    mutable int START_ME;
-    mutable int END_ME;
-    mutable int START_DME;
-    mutable int END_DME;
-    mutable int START_BE_PER_A;
-    mutable int END_BE_PER_A;
-    mutable int START_DBE_PER_A;
-    mutable int END_DBE_PER_A;
-    mutable int START_BETA_DECAY_ENERGY;
-    mutable int END_BETA_DECAY_ENERGY;
-    mutable int START_DBETA_DECAY_ENERGY;
-    mutable int END_DBETA_DECAY_ENERGY;
-    mutable int START_MICRO_U;
-    mutable int END_MICRO_U;
-    mutable int START_MICRO_DU;
-    mutable int END_MICRO_DU;
+    mutable uint8_t HEADER;
+    mutable uint16_t FOOTER;
+    mutable uint8_t START_A;
+    mutable uint8_t END_A;
+    mutable uint8_t START_Z;
+    mutable uint8_t END_Z;
+    mutable uint8_t START_ME;
+    mutable uint8_t END_ME;
+    mutable uint8_t START_DME;
+    mutable uint8_t END_DME;
+    mutable uint8_t START_BE_PER_A;
+    mutable uint8_t END_BE_PER_A;
+    mutable uint8_t START_DBE_PER_A;
+    mutable uint8_t END_DBE_PER_A;
+    mutable uint8_t START_BETA_DECAY_ENERGY;
+    mutable uint8_t END_BETA_DECAY_ENERGY;
+    mutable uint8_t START_DBETA_DECAY_ENERGY;
+    mutable uint8_t END_DBETA_DECAY_ENERGY;
+    mutable uint8_t START_MICRO_U;
+    mutable uint8_t END_MICRO_U;
+    mutable uint8_t START_MICRO_DU;
+    mutable uint8_t END_MICRO_DU;
   };
 } // namespace AME
 

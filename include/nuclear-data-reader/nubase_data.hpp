@@ -14,17 +14,25 @@
 #include <string_view>
 
 #include <algorithm>
-#include <array>
 #include <chrono>
+#include <cstdint>
 #include <string>
 #include <vector>
 
+
 namespace NUBASE
 {
+  enum class Richness : uint8_t
+  {
+    PROTON  = 0,
+    NEUTRON = 1,
+    STABLE  = 2
+  };
+
   class Data
   {
   public:
-    Data(std::string line, const int _year) : position(_year), full_data(std::move(line)) {}
+    Data(std::string line, const uint16_t _year) : position(_year), full_data(std::move(line)) {}
 
     Data(const Data&) = default;
     Data(Data&&)      = default;
@@ -34,31 +42,31 @@ namespace NUBASE
 
     ~Data() = default;
 
-    LinePosition position;
+    /// Where are the variables located on the line in the file
+    mutable LinePosition position;
 
     /// Is the isotope experimental or extrapolated/theoretical
-    mutable int exp{ 0 };
+    mutable uint8_t exp{ 0 };
     /// The mass number
-    mutable int A{ 0 };
+    mutable uint16_t A{ 0 };
     /// The proton number
-    mutable int Z{ 0 };
+    mutable uint8_t Z{ 0 };
     /// The neutron number
-    mutable int N{ 0 };
+    mutable uint8_t N{ 0 };
     /// The state level
-    mutable int level{ 0 };
+    mutable uint8_t level{ 0 };
     /// The parity of the spin state
-    mutable int pi{ 0 };
+    mutable uint8_t pi{ 0 };
     /// Is the parity of the spin state experimental
-    mutable int pi_exp{ 0 };
+    mutable uint8_t pi_exp{ 0 };
     /// The spin value of the state
-    mutable int J_exp{ 0 };
+    mutable uint8_t J_exp{ 0 };
     /// Is the spin value experimental
-    mutable int J_tent{ 0 };
-    /// Is the isotope neutron or proton rich
-    /// (defined by which 'side' of stability it is on, not N=Z line)
-    mutable int rich{ 0 };
+    mutable uint8_t J_tent{ 0 };
+    /// The discovery year to use if non is given
+    mutable uint16_t DEFAULT_YEAR{ 1900 };
     /// What year was the isotope discovered
-    mutable int year{ 1900 };
+    mutable uint16_t year{ DEFAULT_YEAR };
 
     /// Mass excess from the NUBASE table
     mutable double mass_excess{ 0.1 };
@@ -81,8 +89,16 @@ namespace NUBASE
     /// The entire line for the isotope from the data file
     mutable std::string full_data{};
 
+    /// Is the isotope neutron or proton rich
+    /// (defined by which 'side' of stability it is on, not N=Z line)
+    mutable Richness rich{ Richness::STABLE };
+
     /// Generic value to use if the lifetime has no units
-    static inline const std::string noUnit{ "no_units" };
+    static const auto& noUnit()
+    {
+      static const std::string empty_unit{ "no_units" };
+      return empty_unit;
+    }
 
     /**
      * \struct State
@@ -91,11 +107,12 @@ namespace NUBASE
      */
     struct State
     {
-      State(const int _level, const double _energy, const double _error) : level(_level), energy(_energy), error(_error)
+      State(const uint8_t _level, const double _energy, const double _error) :
+          level(_level), energy(_energy), error(_error)
       {
       }
 
-      int level{ 0 };
+      uint8_t level{ 0 };
       double energy{ 0.0 };
       double error{ 0.0 };
     };
@@ -173,29 +190,15 @@ namespace NUBASE
     {
       if (position.START_YEAR == 0)
         {
-          year = 1900;
+          year = DEFAULT_YEAR;
         }
       else
         {
           // Some isotopes have no value for the year so we need to watch for that.
-          // Leave it as the default if no year is given
+          // Set it as the default if no year is given
           const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
-          year             = std::isspace(value.front()) != 0 ? 1900 : Converter::StringToInt(value);
+          year             = std::isspace(value.front()) != 0 ? DEFAULT_YEAR : Converter::StringToInt(value);
         }
-    }
-
-    /**
-     * Extract the half life value from the data file
-     * TODO - Remove this function. It is never used and looks to have been succeeded.
-     *        Also it converts all numbers to seconds so is not even correct!
-     * \param Nothing
-     *
-     * \return Nothing
-     */
-    inline void setHalfLifeValue() const
-    {
-      hl = Converter::seconds{ Converter::StringToDouble(
-          full_data, position.START_HALFLIFEVALUE, position.END_HALFLIFEVALUE) };
     }
 
     /**
@@ -211,7 +214,8 @@ namespace NUBASE
           full_data.substr(position.START_HALFLIFEUNIT, position.END_HALFLIFEUNIT - position.START_HALFLIFEUNIT);
 
       // Trim leading white space
-      halflife_unit.erase(halflife_unit.begin(), std::find_if(halflife_unit.begin(), halflife_unit.end(), [](int ch) {
+      halflife_unit.erase(halflife_unit.begin(),
+                          std::find_if(halflife_unit.begin(), halflife_unit.end(), [](const auto ch) {
                             return (std::isspace(ch) == 0);
                           }));
     }
@@ -242,7 +246,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setExperimental(const int val) const noexcept { exp = val; }
+    inline void setExperimental(const uint8_t val) const noexcept { exp = val; }
 
     /**
      * Extract the state/level from the data file
@@ -263,9 +267,9 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setIsomerEnergy(double& energy) const
+    [[nodiscard]] inline double setIsomerEnergy() const
     {
-      energy = Converter::StringToDouble(full_data, position.START_ISOMER, position.END_ISOMER);
+      return Converter::StringToDouble(full_data, position.START_ISOMER, position.END_ISOMER);
     }
 
     /**
@@ -275,9 +279,9 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setIsomerEnergyError(double& error) const
+    [[nodiscard]] inline double setIsomerEnergyError() const
     {
-      error = Converter::StringToDouble(full_data, position.START_DISOMER, position.END_DISOMER);
+      return Converter::StringToDouble(full_data, position.START_DISOMER, position.END_DISOMER);
     }
 
     /**
@@ -324,7 +328,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    void setNeutronOrProtonRich(const bool pnSide) const;
+    void setNeutronOrProtonRich(const bool pnSide) const noexcept;
   };
 } // namespace NUBASE
 

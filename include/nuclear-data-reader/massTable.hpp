@@ -13,44 +13,45 @@
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
 
+#include <cstdint>
 #include <filesystem>
 #include <regex>
 #include <vector>
 
+
 class MassTable
 {
 public:
-  explicit MassTable(const int _year) : year(_year)
+  explicit MassTable(const uint16_t _year) : year(_year)
   {
     pnSide.fill(false);
 
     // If a bad year is given, default to the latest
-    if (!validateYear())
+    if (!checkValidYear())
       {
         year = valid_years.back();
       }
 
-    line_length = (year < 2020) ? 125 : 144;
+    line_length = (year < 2020) ? AME::LINE_LENGTH::PRE_2020 : AME::LINE_LENGTH::POST_2020;
   }
 
   MassTable(const MassTable&)     = default;
   MassTable(MassTable&&) noexcept = default;
 
-  /// Delete both due to const members
-  MassTable& operator=(const MassTable&) = delete;
-  MassTable& operator=(MassTable&&) noexcept = delete;
+  MassTable& operator=(const MassTable&) = default;
+  MassTable& operator=(MassTable&&) noexcept = default;
 
   ~MassTable() = default;
 
   /// What years do we have data for
-  static constexpr std::array<int, 4> valid_years{ 2003, 2012, 2016, 2020 };
+  static constexpr std::array<uint16_t, 4> valid_years{ 2003, 2012, 2016, 2020 };
   /// Which year's table should we read
-  mutable int year{};
+  mutable uint16_t year{};
   /// We expand the line to ensure it's long enough when reading the 3 AME files
-  mutable int line_length{};
+  mutable uint8_t line_length{};
 
   /// The max Z value of any isotope
-  static constexpr int MAX_Z{ 118 };
+  static constexpr uint8_t MAX_Z{ 118 };
   /// Keep track of when we have gone from proton -> neutron rich
   mutable std::array<bool, MAX_Z + 1> pnSide{};
 
@@ -68,22 +69,25 @@ public:
   mutable std::vector<NUBASE::Data> nubaseDataTable;
   mutable std::vector<AME::Data> ameDataTable;
 
-  // Get the location of this source file
-  // This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/massTable.hpp
-  // Only the directory separator will be different, depending on OS
-  // We want to replace "include/nuclear-data-reader/massTable.hpp" with "data/", using the appropriate separator
-  inline static const std::filesystem::path datapath = std::filesystem::absolute(
-      std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
-
   /**
-   * Find the absolute path to the location of the data files,
-   * indepdent of the filesystem.
+   * Find the absolute path to the location of the data files, indepdent of the filesystem.
+   *
+   * Get the location of this source file
+   * This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/massTable.hpp
+   * Only the directory separator will be different, depending on OS
+   * We want to replace "include/nuclear-data-reader/massTable.hpp" with "data/", using the appropriate separator
    *
    * \param Nothing
    *
    * \return The absolute path to the data_files directory
    */
-  [[nodiscard]] inline static std::filesystem::path getAbsolutePath() { return datapath; }
+  static const auto& getAbsolutePath()
+  {
+    static const auto abs_path = std::filesystem::absolute(
+        std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
+
+    return abs_path;
+  }
 
   /**
    * Set the year of the table who's data will be read
@@ -93,18 +97,31 @@ public:
    * \return[TRUE] A valid year has been requested and thus set
    * \return[FALSE] An invalid year has been requested so no change has been made
    */
-  [[nodiscard]] inline bool setTableYear(const int _year) const noexcept
+  [[nodiscard]] inline bool setTableYear(const uint16_t _year) const noexcept
   {
-    const int original_year = year;
-    year                    = _year;
+    const uint16_t original_year = year;
+    year                         = _year;
 
-    if (!validateYear())
+    if (!checkValidYear())
       {
         year = original_year;
         return false;
       }
 
     return true;
+  }
+
+  /**
+   * Check that the given year corresponds to one that we have a mass table for
+   *
+   * \param The year we wnat to check
+   *
+   * \return[TRUE] A valid year
+   * \return[FALSE] An invalid year
+   */
+  [[nodiscard]] inline bool checkValidYear(const uint16_t _year) const
+  {
+    return (std::find(valid_years.cbegin(), valid_years.cend(), _year) != valid_years.end());
   }
 
   /**
@@ -115,7 +132,7 @@ public:
    * \return[TRUE] A valid year
    * \return[FALSE] An invalid year
    */
-  [[nodiscard]] inline bool validateYear() const
+  [[nodiscard]] inline bool checkValidYear() const
   {
     return (std::find(valid_years.cbegin(), valid_years.cend(), year) != valid_years.end());
   }
@@ -128,7 +145,7 @@ public:
    * \return[TRUE] Successful merge
    * \return[FALSE] TBD
    */
-  [[nodiscard]] bool mergeData(const int verbosity = 0) const;
+  [[nodiscard]] bool mergeData(const uint8_t verbosity = 0) const;
 
   /**
    * Read a single line of the NUBASE data table for isotopic information
@@ -180,7 +197,7 @@ public:
    * \return[FAIL] The end() iterator
    */
   [[nodiscard]] std::vector<AME::Data>::iterator getMatchingIsotope(const std::string& line,
-                                                                    const int reactionFile) const;
+                                                                    const uint8_t reactionFile) const;
 
   /**
    * Fill the main container with the data that will be used to create the chart

@@ -1,18 +1,19 @@
 #ifndef AME_REACTION1_POSITION_HPP
 #define AME_REACTION1_POSITION_HPP
 
+#include <cstdint>
 #include <limits>
 
 namespace AME
 {
   struct Reaction1Position
   {
-    explicit Reaction1Position(const int _year)
+    explicit Reaction1Position(const uint16_t _year)
     {
       if (_year < 2020)
         {
           R1_HEADER  = 39;
-          R1_FOOTER  = std::numeric_limits<int>::max();
+          R1_FOOTER  = std::numeric_limits<uint16_t>::max();
           START_R1_A = 1;
           END_R1_A   = 4;
           START_R1_Z = 8;
@@ -45,7 +46,7 @@ namespace AME
       else
         {
           R1_HEADER  = 36;
-          R1_FOOTER  = std::numeric_limits<int>::max();
+          R1_FOOTER  = std::numeric_limits<uint16_t>::max();
           START_R1_A = 1;
           END_R1_A   = 4;
           START_R1_Z = 8;
@@ -77,36 +78,36 @@ namespace AME
         }
     }
 
-    mutable int R1_HEADER;
-    mutable int R1_FOOTER;
-    mutable int START_R1_A;
-    mutable int END_R1_A;
-    mutable int START_R1_Z;
-    mutable int END_R1_Z;
-    mutable int START_S2N;
-    mutable int END_S2N;
-    mutable int START_DS2N;
-    mutable int END_DS2N;
-    mutable int START_S2P;
-    mutable int END_S2P;
-    mutable int START_DS2P;
-    mutable int END_DS2P;
-    mutable int START_QA;
-    mutable int END_QA;
-    mutable int START_DQA;
-    mutable int END_DQA;
-    mutable int START_Q2B;
-    mutable int END_Q2B;
-    mutable int START_DQ2B;
-    mutable int END_DQ2B;
-    mutable int START_QEP;
-    mutable int END_QEP;
-    mutable int START_DQEP;
-    mutable int END_DQEP;
-    mutable int START_QBN;
-    mutable int END_QBN;
-    mutable int START_DQBN;
-    mutable int END_DQBN;
+    mutable uint8_t R1_HEADER;
+    mutable uint16_t R1_FOOTER;
+    mutable uint8_t START_R1_A;
+    mutable uint8_t END_R1_A;
+    mutable uint8_t START_R1_Z;
+    mutable uint8_t END_R1_Z;
+    mutable uint8_t START_S2N;
+    mutable uint8_t END_S2N;
+    mutable uint8_t START_DS2N;
+    mutable uint8_t END_DS2N;
+    mutable uint8_t START_S2P;
+    mutable uint8_t END_S2P;
+    mutable uint8_t START_DS2P;
+    mutable uint8_t END_DS2P;
+    mutable uint8_t START_QA;
+    mutable uint8_t END_QA;
+    mutable uint8_t START_DQA;
+    mutable uint8_t END_DQA;
+    mutable uint8_t START_Q2B;
+    mutable uint8_t END_Q2B;
+    mutable uint8_t START_DQ2B;
+    mutable uint8_t END_DQ2B;
+    mutable uint8_t START_QEP;
+    mutable uint8_t END_QEP;
+    mutable uint8_t START_DQEP;
+    mutable uint8_t END_DQEP;
+    mutable uint8_t START_QBN;
+    mutable uint8_t END_QBN;
+    mutable uint8_t START_DQBN;
+    mutable uint8_t END_DQBN;
   };
 } // namespace AME
 

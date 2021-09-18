@@ -2,10 +2,11 @@
 
 #include "nuclear-data-reader/nubase_line_position.hpp"
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 
 
 double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
@@ -245,20 +246,11 @@ void NUBASE::Data::setIsomerData(std::vector<NUBASE::Data>& nuc) const
     {
       if (A == previous->A && Z == previous->Z)
         {
-          double energy{ 0.0 };
-          double error{ 0.0 };
-
-          setIsomerEnergy(energy);
+          const auto energy = setIsomerEnergy();
+          const auto error  = setIsomerEnergyError();
 
           // Some isomers(3 in total) are measured via beta difference so come out -ve
-          if (energy < 0.0)
-            {
-              energy = std::fabs(energy);
-            }
-
-          setIsomerEnergyError(error);
-
-          previous->energy_levels.emplace_back(State(level, energy, error));
+          previous->energy_levels.emplace_back(State(level, energy < 0.0 ? energy : std::fabs(energy), error));
           return;
         }
     }
@@ -274,8 +266,8 @@ void NUBASE::Data::setHalfLife() const
   // Line length is not always as long as the half life position
   // Create a temporary string with either the half life or a know value
   std::string lifetime =
-      (full_data.size() < (position.START_HALFLIFEVALUE - 1))
-          ? noUnit
+      (full_data.size() < static_cast<uint8_t>(position.START_HALFLIFEVALUE - 1))
+          ? noUnit()
           : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
   // Certain string mean we should not try and parse them as half lives
@@ -283,7 +275,7 @@ void NUBASE::Data::setHalfLife() const
   if (lifetime.find_first_not_of(' ') == std::string::npos || lifetime.find("p-unst") != std::string::npos
       || lifetime.find('R') != std::string::npos)
     {
-      lifetime = noUnit;
+      lifetime = noUnit();
     }
 
   // Not currently interested in approximations or limits
@@ -293,7 +285,7 @@ void NUBASE::Data::setHalfLife() const
   });
 
   // If noUnits assume unknown so very short half life
-  if (lifetime == noUnit)
+  if (lifetime == noUnit())
     {
       hl       = Converter::seconds{ 1.0e-24 };
       hl_error = Converter::seconds{ 1.0 };
@@ -432,7 +424,7 @@ void NUBASE::Data::setDecayMode() const
   // Store how ground-state decays in member decay
   std::string Decay{ "isomer?" };
 
-  const size_t startCharacter = position.START_DECAYSTRING;
+  const auto startCharacter = position.START_DECAYSTRING;
 
   if (full_data.size() >= startCharacter)
     {
@@ -482,18 +474,20 @@ void NUBASE::Data::setDecayMode() const
 }
 
 
-void NUBASE::Data::setNeutronOrProtonRich(const bool pnSide) const
+void NUBASE::Data::setNeutronOrProtonRich(const bool pnSide) const noexcept
 {
-  rich = (!pnSide) ? 2 : (decay == "stable") ? 6 : 3;
+  rich = (!pnSide)             ? NUBASE::Richness::PROTON
+         : (decay == "stable") ? NUBASE::Richness::STABLE
+                               : NUBASE::Richness::NEUTRON;
 
   // Tc(43) and Pm(61) have no stable isotopes so set the 'stable' point by hand
   switch (Z)
     {
       case 43:
-        rich = (A <= 96) ? 2 : 3;
+        rich = (A <= 96) ? NUBASE::Richness::PROTON : NUBASE::Richness::NEUTRON;
         break;
       case 61:
-        rich = (A <= 144) ? 2 : 3;
+        rich = (A <= 144) ? NUBASE::Richness::PROTON : NUBASE::Richness::NEUTRON;
         break;
     }
 }

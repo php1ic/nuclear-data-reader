@@ -11,18 +11,12 @@
 #define ISOTOPE_HPP
 
 #include "nuclear-data-reader/ame_data.hpp"
-#include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
-#include "nuclear-data-reader/nubase_line_position.hpp"
-#include <string_view>
 
-#include <algorithm>
-#include <array>
-#include <chrono>
-#include <cmath>
+#include <cstdint>
 #include <string>
 #include <utility>
-#include <vector>
+
 
 class Isotope
 {
@@ -39,7 +33,7 @@ public:
 
   // What decimal precision should be used if the data is printed to file
   // The AME files use 4dp so lets default to that
-  static constexpr int NDP{ 4 };
+  static constexpr uint8_t NDP{ 4 };
 
   // All of the AME data
   mutable AME::Data ame;

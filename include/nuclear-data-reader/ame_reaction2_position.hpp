@@ -1,18 +1,19 @@
 #ifndef AME_REACTION2_POSITION_HPP
 #define AME_REACTION2_POSITION_HPP
 
+#include <cstdint>
 #include <limits>
 
 namespace AME
 {
   struct Reaction2Position
   {
-    explicit Reaction2Position(const int _year)
+    explicit Reaction2Position(const uint16_t _year)
     {
       if (_year < 2020)
         {
           R2_HEADER  = 39;
-          R2_FOOTER  = std::numeric_limits<int>::max();
+          R2_FOOTER  = std::numeric_limits<uint16_t>::max();
           START_R2_A = 1;
           END_R2_A   = 4;
           START_R2_Z = 8;
@@ -77,36 +78,36 @@ namespace AME
         }
     }
 
-    mutable int R2_HEADER;
-    mutable int R2_FOOTER;
-    mutable int START_R2_A;
-    mutable int END_R2_A;
-    mutable int START_R2_Z;
-    mutable int END_R2_Z;
-    mutable int START_SN;
-    mutable int END_SN;
-    mutable int START_DSN;
-    mutable int END_DSN;
-    mutable int START_SP;
-    mutable int END_SP;
-    mutable int START_DSP;
-    mutable int END_DSP;
-    mutable int START_Q4B;
-    mutable int END_Q4B;
-    mutable int START_DQ4B;
-    mutable int END_DQ4B;
-    mutable int START_QDA;
-    mutable int END_QDA;
-    mutable int START_DQDA;
-    mutable int END_DQDA;
-    mutable int START_QPA;
-    mutable int END_QPA;
-    mutable int START_DQPA;
-    mutable int END_DQPA;
-    mutable int START_QNA;
-    mutable int END_QNA;
-    mutable int START_DQNA;
-    mutable int END_DQNA;
+    mutable uint8_t R2_HEADER;
+    mutable uint16_t R2_FOOTER;
+    mutable uint8_t START_R2_A;
+    mutable uint8_t END_R2_A;
+    mutable uint8_t START_R2_Z;
+    mutable uint8_t END_R2_Z;
+    mutable uint8_t START_SN;
+    mutable uint8_t END_SN;
+    mutable uint8_t START_DSN;
+    mutable uint8_t END_DSN;
+    mutable uint8_t START_SP;
+    mutable uint8_t END_SP;
+    mutable uint8_t START_DSP;
+    mutable uint8_t END_DSP;
+    mutable uint8_t START_Q4B;
+    mutable uint8_t END_Q4B;
+    mutable uint8_t START_DQ4B;
+    mutable uint8_t END_DQ4B;
+    mutable uint8_t START_QDA;
+    mutable uint8_t END_QDA;
+    mutable uint8_t START_DQDA;
+    mutable uint8_t END_DQDA;
+    mutable uint8_t START_QPA;
+    mutable uint8_t END_QPA;
+    mutable uint8_t START_DQPA;
+    mutable uint8_t END_DQPA;
+    mutable uint8_t START_QNA;
+    mutable uint8_t END_QNA;
+    mutable uint8_t START_DQNA;
+    mutable uint8_t END_DQNA;
   };
 } // namespace AME
 

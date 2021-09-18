@@ -13,16 +13,22 @@
 #include "nuclear-data-reader/ame_reaction1_position.hpp"
 #include "nuclear-data-reader/ame_reaction2_position.hpp"
 #include "nuclear-data-reader/converter.hpp"
-#include <string_view>
 
+#include <cstdint>
 #include <string>
 
 namespace AME
 {
+  enum LINE_LENGTH : uint8_t
+  {
+    PRE_2020  = 125,
+    POST_2020 = 144
+  };
+
   class Data
   {
   public:
-    Data(std::string line, const int _year) :
+    Data(std::string line, const uint16_t _year) :
         mass_position(_year), r1_position(_year), r2_position(_year), full_data(std::move(line))
     {
     }
@@ -35,18 +41,19 @@ namespace AME
 
     ~Data() = default;
 
-    MassPosition mass_position;
-    Reaction1Position r1_position;
-    Reaction2Position r2_position;
+    /// Where are the variables located on the line in the file(s)
+    mutable MassPosition mass_position;
+    mutable Reaction1Position r1_position;
+    mutable Reaction2Position r2_position;
 
     /// Is the isotope experimental or extrapolated/theoretical
-    mutable int exp{ 0 };
+    mutable uint8_t exp{ 0 };
     /// The mass number
-    mutable int A{ 0 };
+    mutable uint16_t A{ 0 };
     /// The proton number
-    mutable int Z{ 0 };
+    mutable uint8_t Z{ 0 };
     /// The neutron number
-    mutable int N{ 0 };
+    mutable uint8_t N{ 0 };
     /// Mass excess from the AME table
     mutable double mass_excess{ 0.1 };
     /// Error on the mass excess from the AME table
@@ -116,8 +123,6 @@ namespace AME
     /// Error on Q value for n alpha reaction
     mutable double dq_na{ 0.0 };
 
-    /// Isotopic symbol
-    // mutable std::string symbol{};
     /// The entire line for the isotope from the data file
     mutable std::string full_data{};
 
@@ -142,12 +147,12 @@ namespace AME
     /**
      *
      */
-    [[nodiscard]] inline int getReaction_1_A(const std::string& line) const
+    [[nodiscard]] inline uint16_t getReaction_1_A(const std::string& line) const
     {
       return Converter::StringToInt(line, r1_position.START_R1_A, r1_position.END_R1_A);
     }
 
-    [[nodiscard]] inline int getReaction_2_A(const std::string& line) const
+    [[nodiscard]] inline uint16_t getReaction_2_A(const std::string& line) const
     {
       return Converter::StringToInt(line, r2_position.START_R2_A, r2_position.END_R2_A);
     }
@@ -155,12 +160,12 @@ namespace AME
     /**
      *
      */
-    [[nodiscard]] inline int getReaction_1_Z(const std::string& line) const
+    [[nodiscard]] inline uint8_t getReaction_1_Z(const std::string& line) const
     {
       return Converter::StringToInt(line, r1_position.START_R1_Z, r1_position.END_R1_Z);
     }
 
-    [[nodiscard]] inline int getReaction_2_Z(const std::string& line) const
+    [[nodiscard]] inline uint8_t getReaction_2_Z(const std::string& line) const
     {
       return Converter::StringToInt(line, r2_position.START_R2_Z, r2_position.END_R2_Z);
     }
@@ -224,7 +229,7 @@ namespace AME
      *
      * \return Nothing
      */
-    inline void setExperimental(const int val) const noexcept { exp = val; }
+    inline void setExperimental(const uint8_t val) const noexcept { exp = val; }
 
     /**
      * Extract the binding energy per A

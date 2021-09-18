@@ -126,7 +126,7 @@ TEST_CASE("Validate the requested table year", "[MassTable]")
   SECTION("Construction is correct")
   {
     MassTable table(2003);
-    REQUIRE(table.validateYear());
+    REQUIRE(table.checkValidYear());
     REQUIRE(table.year == 2003);
   }
 
@@ -144,6 +144,21 @@ TEST_CASE("Validate the requested table year", "[MassTable]")
   }
 }
 
+
+TEST_CASE("Validate user input table year", "[MassTable]")
+{
+  SECTION("A correct year is given")
+  {
+    MassTable table(2003);
+    REQUIRE(table.checkValidYear(2012));
+  }
+
+  SECTION("An unknown year is given")
+  {
+    MassTable table(2012);
+    REQUIRE_FALSE(table.checkValidYear(1999));
+  }
+}
 
 TEST_CASE("Populate the internal mass table", "[MassTable]")
 {
