@@ -18,6 +18,7 @@
 #include <regex>
 #include <vector>
 
+
 class MassTable
 {
 public:
@@ -31,7 +32,7 @@ public:
         year = valid_years.back();
       }
 
-    line_length = (year < 2020) ? 125 : 144;
+    line_length = (year < 2020) ? AME::LINE_LENGTH::PRE_2020 : AME::LINE_LENGTH::POST_2020;
   }
 
   MassTable(const MassTable&)     = default;

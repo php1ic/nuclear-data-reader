@@ -19,6 +19,12 @@
 
 namespace AME
 {
+  enum LINE_LENGTH : uint8_t
+  {
+    PRE_2020  = 125,
+    POST_2020 = 144
+  };
+
   class Data
   {
   public:
