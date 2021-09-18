@@ -26,9 +26,8 @@ public:
   Isotope(const Isotope&) = default;
   Isotope(Isotope&&)      = default;
 
-  // Delete due to const member
-  Isotope& operator=(const Isotope&) = delete;
-  Isotope& operator=(Isotope&&) = delete;
+  Isotope& operator=(const Isotope&) = default;
+  Isotope& operator=(Isotope&&) = default;
 
   ~Isotope() = default;
 

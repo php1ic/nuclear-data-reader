@@ -37,9 +37,8 @@ public:
   MassTable(const MassTable&)     = default;
   MassTable(MassTable&&) noexcept = default;
 
-  /// Delete both due to const members
-  MassTable& operator=(const MassTable&) = delete;
-  MassTable& operator=(MassTable&&) noexcept = delete;
+  MassTable& operator=(const MassTable&) = default;
+  MassTable& operator=(MassTable&&) noexcept = default;
 
   ~MassTable() = default;
 

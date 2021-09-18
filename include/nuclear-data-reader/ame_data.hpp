@@ -30,16 +30,15 @@ namespace AME
     Data(const Data&) = default;
     Data(Data&&)      = default;
 
-    // Delete due to const member
-    Data& operator=(const Data&) = delete;
-    Data& operator=(Data&&) = delete;
+    Data& operator=(const Data&) = default;
+    Data& operator=(Data&&) = default;
 
     ~Data() = default;
 
     /// Where are the variables located on the line in the file(s)
-    const MassPosition mass_position;
-    const Reaction1Position r1_position;
-    const Reaction2Position r2_position;
+    mutable MassPosition mass_position;
+    mutable Reaction1Position r1_position;
+    mutable Reaction2Position r2_position;
 
     /// Is the isotope experimental or extrapolated/theoretical
     mutable uint8_t exp{ 0 };
