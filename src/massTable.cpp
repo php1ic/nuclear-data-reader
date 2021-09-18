@@ -4,7 +4,7 @@
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
 
-#include <fmt/format.h>
+#include <fmt/os.h>
 #include <fmt/ostream.h>
 
 #include <algorithm>
@@ -457,24 +457,18 @@ bool MassTable::mergeData(const uint8_t verbosity) const
 
 bool MassTable::outputTableToJSON() const
 {
-  const std::filesystem::path outfile = fmt::format("masstable_{}.json", year);
+  const auto outfile = fmt::format("masstable_{}.json", year);
 
   fmt::print("New file: {}\n", outfile);
-  std::ofstream out(outfile);
+  auto out = fmt::output_file(outfile);
 
-  if (!out.is_open())
-    {
-      fmt::print("\n***ERROR***: {} couldn't be opened", outfile);
-      return false;
-    }
-
-  fmt::print(out, "[\n");
+  out.print("[\n");
   // The final element can't have a trailing comma, otherwise we'd use a range loop here
   for (auto isotope = fullDataTable.cbegin(); isotope != fullDataTable.cend(); ++isotope)
     {
-      fmt::print(out, "{}{}", isotope->writeAsJSON(), (isotope != std::prev(fullDataTable.end(), 1)) ? ",\n" : "");
+      out.print("{}{}", isotope->writeAsJSON(), (isotope != std::prev(fullDataTable.end(), 1)) ? ",\n" : "");
     }
-  fmt::print(out, "\n]\n");
+  out.print("\n]\n");
   out.close();
 
   return true;
