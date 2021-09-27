@@ -214,6 +214,14 @@ public:
    *
    * \return The substring as desccribed above
    */
+  [[nodiscard]] static std::string_view
+  NumberAsString(const std::string_view fullString, const uint8_t start, const uint8_t end)
+  {
+    const auto number = fullString.substr(start, end - start);
+    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
+                                                                                                           : number;
+  }
+
   [[nodiscard]] static std::string NumberAsString(const std::string& fullString, const uint8_t start, const uint8_t end)
   {
     const auto number = fullString.substr(start, end - start);

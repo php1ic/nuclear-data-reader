@@ -78,11 +78,26 @@ TEST_CASE("Float -> string", "[Converter]")
 }
 
 // Remove for the moment. See header for as to why
-/*
 TEST_CASE("Generic string -> value", "[Converter]")
 {
   std::string_view d_str{ "987.654" };
-  SECTION("Float") { REQUIRE(Converter::StringToNum<float>(d_str, 0, 7) == Approx(987.654)); }
+  SECTION("Double") { REQUIRE(Converter::StringToNum<double>(d_str, 0, 7) == Approx(987.654)); }
+
+  std::string_view e_str{ "   *   " };
+  SECTION("Double")
+  {
+    REQUIRE(Converter::StringToNum<double>(e_str, 0, 7) == Approx(std::numeric_limits<double>::max()));
+  }
+
+  // Be specific, and verbose, so initialise with empty string
+  std::string_view b_str{ "" };
+  SECTION("Double")
+  {
+    REQUIRE(Converter::StringToNum<double>(b_str, 0, 7) == Approx(std::numeric_limits<double>::max()));
+  }
+
+  std::string_view f_str{ "abc987.654abc" };
+  SECTION("Float") { REQUIRE(Converter::StringToNum<float>(f_str, 3, 10) == Approx(987.654)); }
 
   std::string_view i8_str{ "123" };
   SECTION("uint8_t") { REQUIRE(Converter::StringToNum<uint8_t>(i8_str, 0, 3) == 123); }
@@ -125,4 +140,3 @@ TEST_CASE("", "[.Benchmark]")
     };
   }
 }
-*/
