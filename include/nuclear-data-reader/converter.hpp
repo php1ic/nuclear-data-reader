@@ -161,14 +161,14 @@ public:
   // std::from_chars requires gcc > v11 and clang > v12 so we get CI failure.
   // This function isn't actually used yet, I was just playing to see if it's quicker than the converters
   // currently used, with the aim of moving to this one.
-  // template<typename T>
-  //[[nodiscard]] static constexpr T
-  // StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
-  //{
-  //  T value;
-  //  auto [ptr, ec]{ std::from_chars(str.data() + start, str.data() + end, value) };
-  //  return ec == std::errc() ? value : std::numeric_limits<T>::max();
-  //}
+  template<typename T>
+  [[nodiscard]] static constexpr T
+  StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
+  {
+    T value;
+    auto [ptr, ec]{ std::from_chars(str.data() + start, str.data() + end, value) };
+    return ec == std::errc() ? value : std::numeric_limits<T>::max();
+  }
 
   /**
    * Convert the part of the string <fullString> from <start> to <end> into an int
