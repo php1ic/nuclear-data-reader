@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -135,7 +136,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setA() const { A = Converter::StringToInt(full_data, position.START_A, position.END_A); }
+    inline void setA() const { A = Converter::StringToNum<uint16_t>(full_data, position.START_A, position.END_A); }
 
     /**
      * Extract the proton number from the data file
@@ -144,7 +145,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setZ() const { Z = Converter::StringToInt(full_data, position.START_Z, position.END_Z); }
+    inline void setZ() const { Z = Converter::StringToNum<uint8_t>(full_data, position.START_Z, position.END_Z); }
 
     /**
      * Extract the mass-excess from the NUBASE data file
@@ -155,7 +156,7 @@ namespace NUBASE
      */
     inline void setMassExcess() const
     {
-      mass_excess = Converter::StringToDouble(full_data, position.START_ME, position.END_ME);
+      mass_excess = Converter::StringToNum<double>(full_data, position.START_ME, position.END_ME);
     }
 
     /**
@@ -167,7 +168,7 @@ namespace NUBASE
      */
     inline void setMassExcessError() const
     {
-      dmass_excess = Converter::StringToDouble(full_data, position.START_DME, position.END_DME);
+      dmass_excess = Converter::StringToNum<double>(full_data, position.START_DME, position.END_DME);
     }
 
     /**
@@ -188,16 +189,15 @@ namespace NUBASE
      */
     inline void setYear() const
     {
-      if (position.START_YEAR == 0)
+      year = (position.START_YEAR == 0)
+                 ? DEFAULT_YEAR
+                 : Converter::StringToNum<uint16_t>(full_data, position.START_YEAR, position.END_YEAR);
+
+      // Some isotopes have no value for the year so we need to watch for that.
+      // Set it as the default if no year is given
+      if (year == std::numeric_limits<uint16_t>::max())
         {
           year = DEFAULT_YEAR;
-        }
-      else
-        {
-          // Some isotopes have no value for the year so we need to watch for that.
-          // Set it as the default if no year is given
-          const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
-          year             = std::isspace(value.front()) != 0 ? DEFAULT_YEAR : Converter::StringToInt(value);
         }
     }
 
@@ -257,7 +257,7 @@ namespace NUBASE
      */
     inline void setState() const
     {
-      level = Converter::StringToInt(full_data, position.START_STATE, position.END_STATE);
+      level = Converter::StringToNum<uint8_t>(full_data, position.START_STATE, position.END_STATE);
     }
 
     /**
@@ -269,7 +269,7 @@ namespace NUBASE
      */
     [[nodiscard]] inline double setIsomerEnergy() const
     {
-      return Converter::StringToDouble(full_data, position.START_ISOMER, position.END_ISOMER);
+      return Converter::StringToNum<double>(full_data, position.START_ISOMER, position.END_ISOMER);
     }
 
     /**
@@ -281,7 +281,7 @@ namespace NUBASE
      */
     [[nodiscard]] inline double setIsomerEnergyError() const
     {
-      return Converter::StringToDouble(full_data, position.START_DISOMER, position.END_DISOMER);
+      return Converter::StringToNum<double>(full_data, position.START_DISOMER, position.END_DISOMER);
     }
 
     /**

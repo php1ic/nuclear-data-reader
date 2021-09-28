@@ -212,11 +212,11 @@ void NUBASE::Data::setSpinParity() const
   // Member J stores the spin as a double
   if (jpi.find('/') == std::string::npos)
     {
-      J = Converter::StringToDouble(jpi, 0, jpi.length());
+      J = Converter::StringToNum<double>(jpi, 0, jpi.length());
     }
   else
     {
-      J = 0.5 * Converter::StringToDouble(jpi, 0, jpi.find('/'));
+      J = 0.5 * Converter::StringToNum<double>(jpi, 0, jpi.find('/'));
     }
 }
 
@@ -298,15 +298,15 @@ void NUBASE::Data::setHalfLife() const
     }
   else
     {
-      const double hl_double =
-          Converter::StringToDouble(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
+      const auto hl_double =
+          Converter::StringToNum<double>(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
 
       // FIXME: Formatting is not consitent, extracting the error should be refactored into it's own method
       auto hle =
           full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
       std::replace(hle.begin(), hle.end(), '>', ' ');
       std::replace(hle.begin(), hle.end(), '<', ' ');
-      const double hl_error_double = Converter::StringToDouble(hle, 0, hle.size());
+      const auto hl_error_double = Converter::StringToNum<double>(hle, 0, hle.size());
 
       setHalfLifeUnit();
 

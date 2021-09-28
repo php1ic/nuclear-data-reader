@@ -885,6 +885,12 @@ TEST_CASE("Read the year", "[NUBASEData]")
                                   2012);
     isomer12_isotope.setYear();
     REQUIRE(isomer12_isotope.year == 1982);
+
+    NUBASE::Data missing_year("087 0431W  87Tcm  -57683        4         7       1       *    2#     s        1/2-#    "
+                              "        09Ga40e       B+ ?;IT ?",
+                              2012);
+    missing_year.setYear();
+    REQUIRE(missing_year.year == 1900);
   }
 
   SECTION("Post 2020")
@@ -900,6 +906,12 @@ TEST_CASE("Read the year", "[NUBASEData]")
                                   2020);
     isomer20_isotope.setYear();
     REQUIRE(isomer20_isotope.year == 1975);
+
+    NUBASE::Data missing_year("046 0248   46Cr i -20328         13        9143         17       RQ                     "
+                              "(4+)    T=2   10               p=?",
+                              2020);
+    missing_year.setYear();
+    REQUIRE(missing_year.year == 1900);
   }
 }
 
