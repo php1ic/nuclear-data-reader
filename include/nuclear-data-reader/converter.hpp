@@ -125,7 +125,7 @@ public:
    *
    * \return The proton number as an int
    */
-  [[nodiscard]] static uint8_t SymbolToZ(const std::string_view symbol, const uint8_t verbosity = 0);
+  [[nodiscard]] static uint8_t SymbolToZ(std::string_view symbol, const uint8_t verbosity = 0);
 
   /**
    * Convert the entire string <var> into it's integer value.
@@ -136,7 +136,7 @@ public:
    * \return[success] The string as a number
    * \return[failure] 200 signifies failure
    */
-  [[nodiscard]] static inline int StringToInt(const std::string_view var) noexcept
+  [[nodiscard]] static inline int StringToInt(std::string_view var) noexcept
   {
     int number{ 0 };
     auto [ptr, ec]{ std::from_chars(var.data(), var.data() + var.size(), number) };
@@ -162,11 +162,11 @@ public:
   // This function isn't actually used yet, I was just playing to see if it's quicker than the converters
   // currently used, with the aim of moving to this one.
   template<typename T>
-  [[nodiscard]] static constexpr T
-  StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
+  [[nodiscard]] static constexpr T StringToNum(std::string_view str, const uint8_t start, const uint8_t end) noexcept
   {
+    auto number = NumberAsString(str, start, end);
     T value;
-    auto [ptr, ec]{ std::from_chars(str.data() + start, str.data() + end, value) };
+    auto [ptr, ec]{ std::from_chars(number.data(), number.data() + number.size(), value) };
     return ec == std::errc() ? value : std::numeric_limits<T>::max();
   }
 
@@ -212,12 +212,13 @@ public:
    * \param The first character position
    * \param The final character position
    *
-   * \return The substring as desccribed above
+   * \return The substring as described above
    */
   [[nodiscard]] static std::string_view
-  NumberAsString(const std::string_view fullString, const uint8_t start, const uint8_t end)
+  NumberAsString(std::string_view fullString, const uint8_t start, const uint8_t end)
   {
-    const auto number = fullString.substr(start, end - start);
+    auto number = TrimString(fullString.substr(start, end - start));
+
     return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
                                                                                                            : number;
   }
@@ -227,6 +228,25 @@ public:
     const auto number = fullString.substr(start, end - start);
     return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
                                                                                                            : number;
+  }
+
+  /**
+   * Trim leading and trailing repeated characters from the given std::string_view
+   *
+   * \param The string_view to trim
+   * \param The repeated character to remove (default is a space character)
+   *
+   * \return The orginal string with the characters removed
+   */
+  [[nodiscard]] static std::string_view TrimString(std::string_view str, std::string_view trim_character = " ")
+  {
+    str.remove_prefix(std::min(str.find_first_not_of(trim_character), str.size()));
+    const auto pos = str.find(trim_character);
+    if (pos != std::string_view::npos)
+      {
+        str.remove_suffix(str.size() - pos);
+      }
+    return str;
   }
 
   /**
