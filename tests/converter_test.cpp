@@ -53,7 +53,23 @@ TEST_CASE("Float -> string", "[Converter]")
   REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Equals("null"));
 }
 
-// Remove for the moment. See header for as to why
+
+TEST_CASE("Trim a string", "[Converter]")
+{
+  std::string_view space{ "     567   " };
+  REQUIRE(Converter::TrimString(space) == "567");
+
+  std::string_view leading_space{ "     963.2" };
+  REQUIRE(Converter::TrimString(leading_space) == "963.2");
+
+  std::string_view trailing_space{ "abc123   " };
+  REQUIRE(Converter::TrimString(trailing_space) == "abc123");
+
+  std::string_view different_char{ "___asdf___" };
+  REQUIRE(Converter::TrimString(different_char, "_") == "asdf");
+}
+
+
 TEST_CASE("Generic string -> value", "[Converter]")
 {
   std::string_view d_str{ "987.654" };
