@@ -128,22 +128,6 @@ public:
   [[nodiscard]] static uint8_t SymbolToZ(std::string_view symbol, const uint8_t verbosity = 0);
 
   /**
-   * Convert the entire string <var> into it's integer value.
-   * If the string is not an int, pass it through Converter::SymbolToZ
-   *
-   * \param The string to be converted
-   *
-   * \return[success] The string as a number
-   * \return[failure] 200 signifies failure
-   */
-  [[nodiscard]] static inline int StringToInt(std::string_view var) noexcept
-  {
-    int number{ 0 };
-    auto [ptr, ec]{ std::from_chars(var.data(), var.data() + var.size(), number) };
-    return ec == std::errc() ? number : Converter::SymbolToZ(var);
-  }
-
-  /**
    * Convert any type from it's string(_view) representation to the given type.
    * If the string does not convert properly, return the max value of the type
    *
@@ -171,39 +155,6 @@ public:
   }
 
   /**
-   * Convert the part of the string <fullString> from <start> to <end> into an int
-   *
-   * \param The string to extract the value from
-   * \param The first character position
-   * \param The final character position
-   *
-   * \return[success] The given substring as an integer
-   * \return[failure] The max int type value if an empty string (i.e. all space characters) is provided
-   */
-  [[nodiscard]] static inline int StringToInt(const std::string& fullString, const uint8_t start, const uint8_t end)
-  {
-    const auto number = NumberAsString(fullString, start, end);
-    return number.empty() ? std::numeric_limits<int>::max() : std::stoi(number);
-  }
-
-  /**
-   * Convert the the part of the string <fullString> from <start> to <end>
-   *
-   * \param The string to extract the value from
-   * \param The first character position
-   * \param The final character position
-   *
-   * \return[PASS] The given substring as an double
-   * \return[FAIL] The max double type value if an empty string (i.e. all space characters) is provided
-   */
-  [[nodiscard]] static inline double
-  StringToDouble(const std::string& fullString, const uint8_t start, const uint8_t end)
-  {
-    const auto number = NumberAsString(fullString, start, end);
-    return number.empty() ? std::numeric_limits<double>::max() : std::stod(number);
-  }
-
-  /**
    * Extract the part of the string <fullString> from <start> to <end>
    * if it's all spaces or contains the '*' character return an empty string
    * Otherwise, return the substring
@@ -219,13 +170,6 @@ public:
   {
     auto number = TrimString(fullString.substr(start, end - start));
 
-    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
-                                                                                                           : number;
-  }
-
-  [[nodiscard]] static std::string NumberAsString(const std::string& fullString, const uint8_t start, const uint8_t end)
-  {
-    const auto number = fullString.substr(start, end - start);
     return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
                                                                                                            : number;
   }
