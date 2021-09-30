@@ -72,30 +72,39 @@ TEST_CASE("Trim a string", "[Converter]")
 
 TEST_CASE("Generic string -> value", "[Converter]")
 {
-  std::string_view d_str{ "987.654" };
-  SECTION("Double") { REQUIRE(Converter::StringToNum<double>(d_str, 0, 7) == Approx(987.654)); }
-
-  std::string_view e_str{ "   *   " };
   SECTION("Double")
   {
+    std::string_view d_str{ "987.654" };
+    REQUIRE(Converter::StringToNum<double>(d_str, 0, 7) == Approx(987.654));
+  }
+
+  SECTION("Float")
+  {
+    std::string_view f_str{ "abc987.654abc" };
+    REQUIRE(Converter::StringToNum<float>(f_str, 3, 10) == Approx(987.654));
+  }
+
+  SECTION("uint8_t")
+  {
+    std::string_view i8_str{ "123" };
+    REQUIRE(Converter::StringToNum<uint8_t>(i8_str, 0, 3) == 123);
+  }
+
+  SECTION("uint16_t")
+  {
+    std::string_view i16_str{ "4563" };
+    REQUIRE(Converter::StringToNum<uint16_t>(i16_str, 0, 4) == 4563);
+  }
+
+  SECTION("No number")
+  {
+    std::string_view e_str{ "   *   " };
     REQUIRE(Converter::StringToNum<double>(e_str, 0, 7) == Approx(std::numeric_limits<double>::max()));
+
+    // Be specific, and verbose, so initialise with empty string
+    std::string_view b_str{ "" };
+    REQUIRE(Converter::StringToNum<int>(b_str, 0, 5) == Approx(std::numeric_limits<int>::max()));
   }
-
-  // Be specific, and verbose, so initialise with empty string
-  std::string_view b_str{ "" };
-  SECTION("Double")
-  {
-    REQUIRE(Converter::StringToNum<double>(b_str, 0, 7) == Approx(std::numeric_limits<double>::max()));
-  }
-
-  std::string_view f_str{ "abc987.654abc" };
-  SECTION("Float") { REQUIRE(Converter::StringToNum<float>(f_str, 3, 10) == Approx(987.654)); }
-
-  std::string_view i8_str{ "123" };
-  SECTION("uint8_t") { REQUIRE(Converter::StringToNum<uint8_t>(i8_str, 0, 3) == 123); }
-
-  std::string_view i16_str{ "4563" };
-  SECTION("uint16_t") { REQUIRE(Converter::StringToNum<uint16_t>(i16_str, 0, 4) == 4563); }
 }
 
 
