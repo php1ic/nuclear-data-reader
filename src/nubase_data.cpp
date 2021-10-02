@@ -262,12 +262,14 @@ void NUBASE::Data::setIsomerData(std::vector<NUBASE::Data>& nuc) const
 
 void NUBASE::Data::setHalfLife() const
 {
+  const std::string noUnit{ "no_units" };
+
   // Annoying data file format strikes again
   // Line length is not always as long as the half life position
   // Create a temporary string with either the half life or a know value
   std::string lifetime =
       (full_data.size() < static_cast<uint8_t>(position.START_HALFLIFEVALUE - 1))
-          ? noUnit()
+          ? noUnit
           : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
   // Certain string mean we should not try and parse them as half lives
@@ -275,7 +277,7 @@ void NUBASE::Data::setHalfLife() const
   if (lifetime.find_first_not_of(' ') == std::string::npos || lifetime.find("p-unst") != std::string::npos
       || lifetime.find('R') != std::string::npos)
     {
-      lifetime = noUnit();
+      lifetime = noUnit;
     }
 
   // Not currently interested in approximations or limits
@@ -285,7 +287,7 @@ void NUBASE::Data::setHalfLife() const
   });
 
   // If noUnits assume unknown so very short half life
-  if (lifetime == noUnit())
+  if (lifetime == noUnit)
     {
       hl       = Converter::seconds{ 1.0e-24 };
       hl_error = Converter::seconds{ 1.0 };
