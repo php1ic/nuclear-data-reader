@@ -14,7 +14,7 @@
 
 | OS    | Config                                      | Build Status                                                                                                                                             | Compiler Version |
 |-------|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------:|
-| Linux | [Github](.github/workflows/cmake_build.yml) | [![BuildAndTest](https://github.com/php1ic/nuclear-data-reader/workflows/BuildAndTest/badge.svg)](https://github.com/php1ic/nuclear-data-reader/actions) |    gcc9, clang10 |
+| Linux | [Github](.github/workflows/cmake_build.yml) | [![BuildAndTest](https://github.com/php1ic/nuclear-data-reader/workflows/BuildAndTest/badge.svg)](https://github.com/php1ic/nuclear-data-reader/actions) |   gcc11, clang12 |
 
 
 ## Introduction
