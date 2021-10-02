@@ -402,9 +402,10 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 
 bool MassTable::mergeData(const uint8_t verbosity) const
 {
+  fmt::print("Merging AME and NUBASE data <--");
   if (ameDataTable.size() != nubaseDataTable.size())
     {
-      fmt::print("**WARNING** The AME data ({}) has a different number of isotopes to NUBASE ({})\n",
+      fmt::print("\n**WARNING** The AME data ({}) has a different number of isotopes to NUBASE ({})\n",
                  ameDataTable.size(),
                  nubaseDataTable.size());
     }
@@ -425,7 +426,7 @@ bool MassTable::mergeData(const uint8_t verbosity) const
           fmt::print("{} {}\n", nubase.A, nubase.Z);
         }
     }
-
+  fmt::print("--> done\n");
   return true;
 }
 
