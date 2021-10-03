@@ -296,8 +296,8 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
   while (std::getline(file, line) && l < data.r2_position.R2_FOOTER)
     {
       ++l;
-      // skip repeated header which only happens in the 2020 file
-      if (line.find("1 A  elt") != std::string::npos)
+      // skip repeated header which only happens in the 2020 file (so far)
+      if (year == uint16_t{ 2020 } && line.find("1 A  elt") != std::string::npos)
         {
           continue;
         }
