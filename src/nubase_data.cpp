@@ -265,11 +265,11 @@ void NUBASE::Data::setIsomerData(std::vector<NUBASE::Data>& nuc) const
 
 void NUBASE::Data::setHalfLife() const
 {
-  const std::string noUnit{ "no_units" };
-
   // Annoying data file format strikes again
   // Line length is not always as long as the half life position
-  // Create a temporary string with either the half life or a know value
+  // Create a temporary string with either the half life or a known value
+  const std::string noUnit{ "no_units" };
+
   std::string lifetime =
       (full_data.size() < static_cast<uint8_t>(position.START_HALFLIFEVALUE - 1))
           ? noUnit
@@ -285,11 +285,11 @@ void NUBASE::Data::setHalfLife() const
 
   // Not currently interested in approximations or limits
   std::string_view remove{ "<>~" };
-  std::transform(lifetime.begin(), lifetime.end(), lifetime.begin(), [&remove](const char c) {
+  std::transform(lifetime.begin(), lifetime.end(), lifetime.begin(), [remove](const char c) {
     return remove.find(c) != std::string::npos ? ' ' : c;
   });
 
-  // If noUnits assume unknown so very short half life
+  // If noUnit assume unknown so very short half life
   if (lifetime == noUnit)
     {
       hl       = Converter::seconds{ 1.0e-24 };
@@ -303,15 +303,11 @@ void NUBASE::Data::setHalfLife() const
     }
   else
     {
+      // Get the numerical part of the half life that we can use to create a chrono value later
       const auto hl_double =
           Converter::StringToNum<double>(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
 
-      // FIXME: Formatting is not consitent, extracting the error should be refactored into it's own method
-      auto hle =
-          full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
-      std::replace(hle.begin(), hle.end(), '>', ' ');
-      std::replace(hle.begin(), hle.end(), '<', ' ');
-      const auto hl_error_double = Converter::StringToNum<double>(hle, 0, hle.size());
+      const auto hl_error_double = getNumericalHalfLifeError();
 
       setHalfLifeUnit();
 

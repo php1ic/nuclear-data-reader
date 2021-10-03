@@ -213,6 +213,23 @@ namespace NUBASE
                           }));
     }
 
+
+    /**
+     * Extract the numerical value of the error on the half life
+     *
+     * \param Nothing
+     *
+     * \return The error on the half life
+     */
+    inline double getNumericalHalfLifeError() const
+    {
+      auto hle =
+          full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
+      std::replace(hle.begin(), hle.end(), '>', ' ');
+      std::replace(hle.begin(), hle.end(), '<', ' ');
+      return Converter::StringToNum<double>(hle, 0, hle.size());
+    }
+
     /**
      * Set the isotope symbol
      *
