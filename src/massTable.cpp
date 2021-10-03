@@ -366,15 +366,17 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
     }
 
   const NUBASE::Data data("", year);
-  for (uint8_t i = 0; i < data.position.HEADER; ++i)
+  uint16_t l = 0;
+  for (l = 0; l < data.position.HEADER; ++l)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
 
-  while (std::getline(file, line))
+  while (std::getline(file, line) && l < data.position.FOOTER)
     {
+      ++l;
       if (line.find("non-exist") != std::string::npos)
         {
           continue;
