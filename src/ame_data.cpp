@@ -13,7 +13,9 @@ double AME::Data::getRelativeMassExcessError(const double min_allowed) const
       mass_excess = 0.0001;
     }
 
-  return (std::fabs(dmass_excess / mass_excess) < min_allowed) ? min_allowed : std::fabs(dmass_excess / mass_excess);
+  const auto rme{ std::fabs(dmass_excess / mass_excess) };
+
+  return (rme < min_allowed) ? min_allowed : rme;
 }
 
 
