@@ -32,11 +32,11 @@ class Converter
 public:
   Converter() = default;
 
-  Converter(const Converter&) = default;
-  Converter(Converter&&)      = default;
+  Converter(const Converter&)     = default;
+  Converter(Converter&&) noexcept = default;
 
-  Converter& operator=(Converter&&) = default;
   Converter& operator=(const Converter&) = default;
+  Converter& operator=(Converter&&) noexcept = default;
 
   ~Converter() = default;
 

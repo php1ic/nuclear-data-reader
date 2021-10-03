@@ -33,11 +33,11 @@ namespace AME
     {
     }
 
-    Data(const Data&) = default;
-    Data(Data&&)      = default;
+    Data(const Data&)     = default;
+    Data(Data&&) noexcept = default;
 
     Data& operator=(const Data&) = default;
-    Data& operator=(Data&&) = default;
+    Data& operator=(Data&&) noexcept = default;
 
     ~Data() = default;
 

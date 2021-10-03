@@ -23,11 +23,11 @@ class Isotope
 public:
   Isotope(AME::Data _ame, NUBASE::Data _nubase) : ame(std::move(_ame)), nubase(std::move(_nubase)) {}
 
-  Isotope(const Isotope&) = default;
-  Isotope(Isotope&&)      = default;
+  Isotope(const Isotope&)     = default;
+  Isotope(Isotope&&) noexcept = default;
 
   Isotope& operator=(const Isotope&) = default;
-  Isotope& operator=(Isotope&&) = default;
+  Isotope& operator=(Isotope&&) noexcept = default;
 
   ~Isotope() = default;
 
