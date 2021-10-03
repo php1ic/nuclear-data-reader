@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
-#include <ranges>
 
 
 double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
@@ -245,15 +244,15 @@ void NUBASE::Data::setIsomerData(std::vector<NUBASE::Data>& nuc) const
   // Loop from the penultimate isotope towards the beginning.
   // Original order is ground state followed by ascending states,
   // theoretically we could just modify nuc.back(), but that's not safe
-  for (auto& previous : nuc | std::views::reverse)
+  for (auto previous = nuc.rbegin(); previous != nuc.rend(); ++previous)
     {
-      if (A == previous.A && Z == previous.Z)
+      if (A == previous->A && Z == previous->Z)
         {
           const auto energy = setIsomerEnergy();
           const auto error  = setIsomerEnergyError();
 
           // Some isomers(3 in total) are measured via beta difference so come out -ve
-          previous.energy_levels.emplace_back(State(level, energy < 0.0 ? energy : std::fabs(energy), error));
+          previous->energy_levels.emplace_back(State(level, energy < 0.0 ? energy : std::fabs(energy), error));
           return;
         }
     }
