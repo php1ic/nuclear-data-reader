@@ -414,11 +414,11 @@ bool MassTable::mergeData(const uint8_t verbosity) const
 
   for (const auto& nubase : nubaseDataTable)
     {
-      const auto ame = std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase](const auto n) -> bool {
-        return (n.A == nubase.A && n.Z == nubase.Z);
+      const auto ame = std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase](const auto AME) -> bool {
+        return (AME.A == nubase.A && AME.Z == nubase.Z);
       });
 
-      if (ame != ameDataTable.end())
+      if (ame != ameDataTable.cend())
         {
           // Isotope(AME, NUBASE))
           fullDataTable.emplace_back(Isotope(*ame, nubase));
