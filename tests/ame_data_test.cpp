@@ -1,3 +1,4 @@
+#define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include "nuclear-data-reader/ame_data.hpp"
 
 #include <catch2/catch.hpp>
@@ -975,5 +976,33 @@ TEST_CASE("Error on Q value of n alpha", "[AMEData]")
     const AME::Data data(line, 2020);
     data.setQNAlphaEnergyError();
     REQUIRE(data.dq_na == Approx(11.4377));
+  }
+}
+
+
+TEST_CASE("Reading values", "[.Benchmark]")
+{
+  SECTION("uint8")
+  {
+    const std::string line{ " 127 Ba  56    8219.3598   16.8867   5756.2431   15.3714 -26908#      300#      "
+                            "11982.5943   13.7412   3787.1606   14.5849  10495.8520   11.4377" };
+    const AME::Data data(line, 2020);
+
+    BENCHMARK_ADVANCED("Set an 8 bit unsigned int")(Catch::Benchmark::Chronometer meter)
+    {
+      meter.measure([&data]() { data.setZ(); });
+    };
+  }
+
+  SECTION("uint16")
+  {
+    const std::string line{ " 127 Ba  56    8219.3598   16.8867   5756.2431   15.3714 -26908#      300#      "
+                            "11982.5943   13.7412   3787.1606   14.5849  10495.8520   11.4377" };
+    const AME::Data data(line, 2020);
+
+    BENCHMARK_ADVANCED("Set a 16 bit unsigned int")(Catch::Benchmark::Chronometer meter)
+    {
+      meter.measure([&data]() { data.setA(); });
+    };
   }
 }
