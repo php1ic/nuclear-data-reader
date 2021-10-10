@@ -305,12 +305,7 @@ void NUBASE::Data::setHalfLife() const
 
   setHalfLifeUnit();
 
-  if (halflife_unit.find_first_not_of(' ') == std::string::npos)
-    {
-      halflife_unit = "ys";
-    }
-
-  if (halflife_unit == "ys")
+  if (halflife_unit == "ys" || halflife_unit.find_first_not_of(' ') == std::string::npos)
     {
       hl       = Converter::attoseconds{ 1.0e-6 * hl_double };
       hl_error = Converter::attoseconds{ 1.0e-6 * hl_error_double };
