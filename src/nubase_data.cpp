@@ -273,12 +273,22 @@ void NUBASE::Data::setHalfLife() const
           ? noUnit
           : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
-  // Certain string mean we should not try and parse them as half lives
-  // If they are found, convert to our know value
-  if (lifetime.find_first_not_of(' ') == std::string::npos || lifetime.find("p-unst") != std::string::npos
-      || lifetime.find('R') != std::string::npos)
+  // If there is no unit on the half life, or the string contains certain characters, we shouldn't bother trying to
+  // parse the values. Set as a very short half life and get out
+  if (lifetime == noUnit || lifetime.find_first_not_of(' ') == std::string::npos
+      || lifetime.find("p-unst") != std::string::npos || lifetime.find('R') != std::string::npos)
     {
-      lifetime = noUnit;
+      hl       = Converter::seconds{ 1.0e-24 };
+      hl_error = Converter::seconds{ 1.0 };
+      return;
+    }
+
+  // If stable set to very long and get out
+  if (lifetime.find("stbl") != std::string::npos)
+    {
+      hl       = Converter::seconds{ 1.0e24 };
+      hl_error = Converter::seconds{ 1.0 };
+      return;
     }
 
   // Not currently interested in approximations or limits
@@ -287,133 +297,118 @@ void NUBASE::Data::setHalfLife() const
     return remove.find(c) != std::string::npos ? ' ' : c;
   });
 
-  // If noUnit assume unknown so very short half life
-  if (lifetime == noUnit)
+  // Get the numerical part of the half life that we can use to create a chrono value later
+  const auto hl_double =
+      Converter::StringToNum<double>(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
+
+  const auto hl_error_double = getNumericalHalfLifeError();
+
+  setHalfLifeUnit();
+
+  if (halflife_unit.find_first_not_of(' ') == std::string::npos)
     {
-      hl       = Converter::seconds{ 1.0e-24 };
-      hl_error = Converter::seconds{ 1.0 };
+      halflife_unit = "ys";
     }
-  // If stable set to very long
-  else if (lifetime.find("stbl") != std::string::npos)
+
+  if (halflife_unit == "ys")
     {
-      hl       = Converter::seconds{ 1.0e24 };
-      hl_error = Converter::seconds{ 1.0 };
+      hl       = Converter::attoseconds{ 1.0e-6 * hl_double };
+      hl_error = Converter::attoseconds{ 1.0e-6 * hl_error_double };
     }
-  else
+  else if (halflife_unit == "zs")
     {
-      // Get the numerical part of the half life that we can use to create a chrono value later
-      const auto hl_double =
-          Converter::StringToNum<double>(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
-
-      const auto hl_error_double = getNumericalHalfLifeError();
-
-      setHalfLifeUnit();
-
-      if (halflife_unit.find_first_not_of(' ') == std::string::npos)
-        {
-          halflife_unit = "ys";
-        }
-
-      if (halflife_unit == "ys")
-        {
-          hl       = Converter::attoseconds{ 1.0e-6 * hl_double };
-          hl_error = Converter::attoseconds{ 1.0e-6 * hl_error_double };
-        }
-      else if (halflife_unit == "zs")
-        {
-          hl       = Converter::attoseconds{ 1.0e-3 * hl_double };
-          hl_error = Converter::attoseconds{ 1.0e-3 * hl_error_double };
-        }
-      else if (halflife_unit == "as")
-        {
-          hl       = Converter::attoseconds{ hl_double };
-          hl_error = Converter::attoseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "ps")
-        {
-          hl       = Converter::picoseconds{ hl_double };
-          hl_error = Converter::picoseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "ns")
-        {
-          hl       = Converter::nanoseconds{ hl_double };
-          hl_error = Converter::nanoseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "us")
-        {
-          hl       = Converter::microseconds{ hl_double };
-          hl_error = Converter::microseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "ms")
-        {
-          hl       = Converter::milliseconds{ hl_double };
-          hl_error = Converter::milliseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "s")
-        {
-          hl       = Converter::seconds{ hl_double };
-          hl_error = Converter::seconds{ hl_error_double };
-        }
-      else if (halflife_unit == "m")
-        {
-          hl       = Converter::minutes{ hl_double };
-          hl_error = Converter::minutes{ hl_error_double };
-        }
-      else if (halflife_unit == "h")
-        {
-          hl       = Converter::hours{ hl_double };
-          hl_error = Converter::hours{ hl_error_double };
-        }
-      else if (halflife_unit == "d")
-        {
-          hl       = Converter::days{ hl_double };
-          hl_error = Converter::days{ hl_error_double };
-        }
-      else if (halflife_unit == "y")
-        {
-          hl       = Converter::years{ hl_double };
-          hl_error = Converter::years{ hl_error_double };
-        }
-      else if (halflife_unit == "ky")
-        {
-          hl       = Converter::kiloyears{ hl_double };
-          hl_error = Converter::kiloyears{ hl_error_double };
-        }
-      else if (halflife_unit == "My")
-        {
-          hl       = Converter::millionyears{ hl_double };
-          hl_error = Converter::millionyears{ hl_error_double };
-        }
-      else if (halflife_unit == "Gy")
-        {
-          hl       = Converter::billionyears{ hl_double };
-          hl_error = Converter::billionyears{ hl_error_double };
-        }
-      else if (halflife_unit == "Ty")
-        {
-          hl       = Converter::billionyears{ 1.0e3 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e3 * hl_error_double };
-        }
-      else if (halflife_unit == "Py")
-        {
-          hl       = Converter::billionyears{ 1.0e6 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e6 * hl_error_double };
-        }
-      else if (halflife_unit == "Ey")
-        {
-          hl       = Converter::billionyears{ 1.0e9 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e9 * hl_error_double };
-        }
-      else if (halflife_unit == "Zy")
-        {
-          hl       = Converter::billionyears{ 1.0e12 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e12 * hl_error_double };
-        }
-      else if (halflife_unit == "Yy")
-        {
-          hl       = Converter::billionyears{ 1.0e15 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e15 * hl_error_double };
-        }
+      hl       = Converter::attoseconds{ 1.0e-3 * hl_double };
+      hl_error = Converter::attoseconds{ 1.0e-3 * hl_error_double };
+    }
+  else if (halflife_unit == "as")
+    {
+      hl       = Converter::attoseconds{ hl_double };
+      hl_error = Converter::attoseconds{ hl_error_double };
+    }
+  else if (halflife_unit == "ps")
+    {
+      hl       = Converter::picoseconds{ hl_double };
+      hl_error = Converter::picoseconds{ hl_error_double };
+    }
+  else if (halflife_unit == "ns")
+    {
+      hl       = Converter::nanoseconds{ hl_double };
+      hl_error = Converter::nanoseconds{ hl_error_double };
+    }
+  else if (halflife_unit == "us")
+    {
+      hl       = Converter::microseconds{ hl_double };
+      hl_error = Converter::microseconds{ hl_error_double };
+    }
+  else if (halflife_unit == "ms")
+    {
+      hl       = Converter::milliseconds{ hl_double };
+      hl_error = Converter::milliseconds{ hl_error_double };
+    }
+  else if (halflife_unit == "s")
+    {
+      hl       = Converter::seconds{ hl_double };
+      hl_error = Converter::seconds{ hl_error_double };
+    }
+  else if (halflife_unit == "m")
+    {
+      hl       = Converter::minutes{ hl_double };
+      hl_error = Converter::minutes{ hl_error_double };
+    }
+  else if (halflife_unit == "h")
+    {
+      hl       = Converter::hours{ hl_double };
+      hl_error = Converter::hours{ hl_error_double };
+    }
+  else if (halflife_unit == "d")
+    {
+      hl       = Converter::days{ hl_double };
+      hl_error = Converter::days{ hl_error_double };
+    }
+  else if (halflife_unit == "y")
+    {
+      hl       = Converter::years{ hl_double };
+      hl_error = Converter::years{ hl_error_double };
+    }
+  else if (halflife_unit == "ky")
+    {
+      hl       = Converter::kiloyears{ hl_double };
+      hl_error = Converter::kiloyears{ hl_error_double };
+    }
+  else if (halflife_unit == "My")
+    {
+      hl       = Converter::millionyears{ hl_double };
+      hl_error = Converter::millionyears{ hl_error_double };
+    }
+  else if (halflife_unit == "Gy")
+    {
+      hl       = Converter::billionyears{ hl_double };
+      hl_error = Converter::billionyears{ hl_error_double };
+    }
+  else if (halflife_unit == "Ty")
+    {
+      hl       = Converter::billionyears{ 1.0e3 * hl_double };
+      hl_error = Converter::billionyears{ 1.0e3 * hl_error_double };
+    }
+  else if (halflife_unit == "Py")
+    {
+      hl       = Converter::billionyears{ 1.0e6 * hl_double };
+      hl_error = Converter::billionyears{ 1.0e6 * hl_error_double };
+    }
+  else if (halflife_unit == "Ey")
+    {
+      hl       = Converter::billionyears{ 1.0e9 * hl_double };
+      hl_error = Converter::billionyears{ 1.0e9 * hl_error_double };
+    }
+  else if (halflife_unit == "Zy")
+    {
+      hl       = Converter::billionyears{ 1.0e12 * hl_double };
+      hl_error = Converter::billionyears{ 1.0e12 * hl_error_double };
+    }
+  else if (halflife_unit == "Yy")
+    {
+      hl       = Converter::billionyears{ 1.0e15 * hl_double };
+      hl_error = Converter::billionyears{ 1.0e15 * hl_error_double };
     }
 }
 
