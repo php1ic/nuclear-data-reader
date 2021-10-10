@@ -61,8 +61,7 @@ void NUBASE::Data::setSpinParity() const
     }
 
   // trim trailing spaces
-  size_t endpos = jpi.find_last_not_of(' ');
-  if (std::string::npos != endpos)
+  if (const auto endpos = jpi.find_last_not_of(' '); std::string::npos != endpos)
     {
       jpi = jpi.substr(0, endpos + 1);
     }
