@@ -204,6 +204,10 @@ public:
    * \return A std::string with contents "null" if number is std::numeric_limits<double>::max()
    */
   [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept;
-};
 
+  /**
+   */
+  [[nodiscard]] static std::tuple<std::chrono::duration<double>, std::chrono::duration<double>>
+  ToDuration(std::string_view unit, const double value, const double error) noexcept;
+};
 #endif // CONVERTER_HPP
