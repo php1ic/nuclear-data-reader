@@ -207,7 +207,6 @@ public:
 
   /**
    */
-  [[nodiscard]] static std::tuple<std::chrono::duration<double>, std::chrono::duration<double>>
-  ToDuration(std::string_view unit, const double value, const double error) noexcept;
+  [[nodiscard]] static std::chrono::duration<double> ToDuration(const double value, std::string_view unit) noexcept;
 };
 #endif // CONVERTER_HPP

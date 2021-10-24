@@ -305,7 +305,8 @@ void NUBASE::Data::setHalfLife() const
 
   setHalfLifeUnit();
 
-  std::tie(hl, hl_error) = Converter::ToDuration(halflife_unit, hl_double, hl_error_double);
+  hl       = Converter::ToDuration(hl_double, halflife_unit);
+  hl_error = Converter::ToDuration(hl_error_double, halflife_unit);
 }
 
 

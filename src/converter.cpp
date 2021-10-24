@@ -57,91 +57,94 @@ std::string Converter::FloatToNdp(const double number, const uint8_t numDP) noex
 }
 
 
-std::tuple<std::chrono::duration<double>, std::chrono::duration<double>>
-Converter::ToDuration(std::string_view unit, const double value, const double error) noexcept
+std::chrono::duration<double> Converter::ToDuration(const double value, std::string_view unit) noexcept
 {
+  std::chrono::duration<double> duration{};
+
   if (unit == "ys" || unit.find_first_not_of(' ') == std::string::npos)
     {
-      return { Converter::attoseconds{ 1.0e-6 * value }, Converter::attoseconds{ 1.0e-6 * error } };
+      duration = Converter::attoseconds{ 1.0e-6 * value };
     }
   else if (unit == "zs")
     {
-      return { Converter::attoseconds{ 1.0e-3 * value }, Converter::attoseconds{ 1.0e-3 * error } };
+      duration = Converter::attoseconds{ 1.0e-3 * value };
     }
   else if (unit == "as")
     {
-      return { Converter::attoseconds{ value }, Converter::attoseconds{ error } };
+      duration = Converter::attoseconds{ value };
     }
   else if (unit == "ps")
     {
-      return { Converter::picoseconds{ value }, Converter::picoseconds{ error } };
+      duration = Converter::picoseconds{ value };
     }
   else if (unit == "ns")
     {
-      return { Converter::nanoseconds{ value }, Converter::nanoseconds{ error } };
+      duration = Converter::nanoseconds{ value };
     }
   else if (unit == "us")
     {
-      return { Converter::microseconds{ value }, Converter::microseconds{ error } };
+      duration = Converter::microseconds{ value };
     }
   else if (unit == "ms")
     {
-      return { Converter::milliseconds{ value }, Converter::milliseconds{ error } };
+      duration = Converter::milliseconds{ value };
     }
   else if (unit == "s")
     {
-      return { Converter::seconds{ value }, Converter::seconds{ error } };
+      duration = Converter::seconds{ value };
     }
   else if (unit == "m")
     {
-      return { Converter::minutes{ value }, Converter::minutes{ error } };
+      duration = Converter::minutes{ value };
     }
   else if (unit == "h")
     {
-      return { Converter::hours{ value }, Converter::hours{ error } };
+      duration = Converter::hours{ value };
     }
   else if (unit == "d")
     {
-      return { Converter::days{ value }, Converter::days{ error } };
+      duration = Converter::days{ value };
     }
   else if (unit == "y")
     {
-      return { Converter::years{ value }, Converter::years{ error } };
+      duration = Converter::years{ value };
     }
   else if (unit == "ky")
     {
-      return { Converter::kiloyears{ value }, Converter::kiloyears{ error } };
+      duration = Converter::kiloyears{ value };
     }
   else if (unit == "My")
     {
-      return { Converter::millionyears{ value }, Converter::millionyears{ error } };
+      duration = Converter::millionyears{ value };
     }
   else if (unit == "Gy")
     {
-      return { Converter::billionyears{ value }, Converter::billionyears{ error } };
+      duration = Converter::billionyears{ value };
     }
   else if (unit == "Ty")
     {
-      return { Converter::billionyears{ 1.0e3 * value }, Converter::billionyears{ 1.0e3 * error } };
+      duration = Converter::billionyears{ 1.0e3 * value };
     }
   else if (unit == "Py")
     {
-      return { Converter::billionyears{ 1.0e6 * value }, Converter::billionyears{ 1.0e6 * error } };
+      duration = Converter::billionyears{ 1.0e6 * value };
     }
   else if (unit == "Ey")
     {
-      return { Converter::billionyears{ 1.0e9 * value }, Converter::billionyears{ 1.0e9 * error } };
+      duration = Converter::billionyears{ 1.0e9 * value };
     }
   else if (unit == "Zy")
     {
-      return { Converter::billionyears{ 1.0e12 * value }, Converter::billionyears{ 1.0e12 * error } };
+      duration = Converter::billionyears{ 1.0e12 * value };
     }
   else if (unit == "Yy")
     {
-      return { Converter::billionyears{ 1.0e15 * value }, Converter::billionyears{ 1.0e15 * error } };
+      duration = Converter::billionyears{ 1.0e15 * value };
     }
   else
     {
-      return { Converter::seconds{ 1.0e24 }, Converter::seconds{ 1.0 } };
+      duration = Converter::seconds{ 1.0e24 };
     }
+
+  return duration;
 }
