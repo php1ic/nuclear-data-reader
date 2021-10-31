@@ -86,6 +86,25 @@ public:
   }
 
   /**
+   * Get the hash of a const char* so we can use a swtich statement on std::string_view
+   * https://learnmoderncpp.com/2020/06/01/strings-as-switch-case-labels/
+   *
+   * \param The 'string' to take the hash of
+   *
+   * \return The hash of the input parameter
+   */
+  static constexpr inline auto string_hash(const char* s)
+  {
+    uint64_t hash{};
+    uint64_t c{};
+    for (auto p = s; *p != 0; ++p, ++c)
+      {
+        hash += *p << c;
+      }
+    return hash;
+  }
+
+  /**
    * Using == on floats/doubles is bad, this function compares 2 floats/doubles to see if they are the same.
    * Lifted (almost) directly from here:
    * https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
@@ -209,4 +228,12 @@ public:
    */
   [[nodiscard]] static std::chrono::duration<double> ToDuration(const double value, std::string_view unit) noexcept;
 };
+
+
+/// string literal to force the hashing of the string
+constexpr inline auto operator"" _sh(const char* s, size_t /*unused*/)
+{
+  return Converter::string_hash(s);
+}
+
 #endif // CONVERTER_HPP

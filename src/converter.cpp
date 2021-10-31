@@ -59,92 +59,51 @@ std::string Converter::FloatToNdp(const double number, const uint8_t numDP) noex
 
 std::chrono::duration<double> Converter::ToDuration(const double value, std::string_view unit) noexcept
 {
-  std::chrono::duration<double> duration{};
-
-  if (unit == "ys" || unit.find_first_not_of(' ') == std::string::npos)
-    {
-      duration = Converter::attoseconds{ 1.0e-6 * value };
-    }
-  else if (unit == "zs")
-    {
-      duration = Converter::attoseconds{ 1.0e-3 * value };
-    }
-  else if (unit == "as")
-    {
-      duration = Converter::attoseconds{ value };
-    }
-  else if (unit == "ps")
-    {
-      duration = Converter::picoseconds{ value };
-    }
-  else if (unit == "ns")
-    {
-      duration = Converter::nanoseconds{ value };
-    }
-  else if (unit == "us")
-    {
-      duration = Converter::microseconds{ value };
-    }
-  else if (unit == "ms")
-    {
-      duration = Converter::milliseconds{ value };
-    }
-  else if (unit == "s")
-    {
-      duration = Converter::seconds{ value };
-    }
-  else if (unit == "m")
-    {
-      duration = Converter::minutes{ value };
-    }
-  else if (unit == "h")
-    {
-      duration = Converter::hours{ value };
-    }
-  else if (unit == "d")
-    {
-      duration = Converter::days{ value };
-    }
-  else if (unit == "y")
-    {
-      duration = Converter::years{ value };
-    }
-  else if (unit == "ky")
-    {
-      duration = Converter::kiloyears{ value };
-    }
-  else if (unit == "My")
-    {
-      duration = Converter::millionyears{ value };
-    }
-  else if (unit == "Gy")
-    {
-      duration = Converter::billionyears{ value };
-    }
-  else if (unit == "Ty")
-    {
-      duration = Converter::billionyears{ 1.0e3 * value };
-    }
-  else if (unit == "Py")
-    {
-      duration = Converter::billionyears{ 1.0e6 * value };
-    }
-  else if (unit == "Ey")
-    {
-      duration = Converter::billionyears{ 1.0e9 * value };
-    }
-  else if (unit == "Zy")
-    {
-      duration = Converter::billionyears{ 1.0e12 * value };
-    }
-  else if (unit == "Yy")
-    {
-      duration = Converter::billionyears{ 1.0e15 * value };
-    }
-  else
-    {
-      duration = Converter::seconds{ 1.0e24 };
-    }
-
-  return duration;
+  return [=]() -> std::chrono::duration<double> {
+    switch (Converter::string_hash(unit.data()))
+      {
+        case "ys"_sh:
+          return Converter::attoseconds{ 1.0e-6 * value };
+        case "zs"_sh:
+          return Converter::attoseconds{ 1.0e-3 * value };
+        case "as"_sh:
+          return Converter::attoseconds{ value };
+        case "ps"_sh:
+          return Converter::picoseconds{ value };
+        case "ns"_sh:
+          return Converter::nanoseconds{ value };
+        case "us"_sh:
+          return Converter::microseconds{ value };
+        case "ms"_sh:
+          return Converter::milliseconds{ value };
+        case "s"_sh:
+          return Converter::seconds{ value };
+        case "m"_sh:
+          return Converter::minutes{ value };
+        case "h"_sh:
+          return Converter::hours{ value };
+        case "d"_sh:
+          return Converter::days{ value };
+        case "y"_sh:
+          return Converter::years{ value };
+        case "ky"_sh:
+          return Converter::kiloyears{ value };
+        case "My"_sh:
+          return Converter::millionyears{ value };
+        case "Gy"_sh:
+          return Converter::billionyears{ value };
+        case "Ty"_sh:
+          return Converter::billionyears{ 1.0e3 * value };
+        case "Py"_sh:
+          return Converter::billionyears{ 1.0e6 * value };
+        case "Ey"_sh:
+          return Converter::billionyears{ 1.0e9 * value };
+        case "Zy"_sh:
+          return Converter::billionyears{ 1.0e12 * value };
+        case "Yy"_sh:
+          return Converter::billionyears{ 1.0e15 * value };
+        default:
+          return Converter::seconds{ 1.0e24 };
+      }
+  }();
 }
