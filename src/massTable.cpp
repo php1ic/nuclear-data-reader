@@ -219,17 +219,17 @@ bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
   std::ifstream file(ameTable, std::ios::binary);
 
   const AME::Data data("", year);
-  uint16_t l = 0;
-  for (l = 0; l < data.mass_position.HEADER; ++l)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.mass_position.HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line) && l < data.mass_position.FOOTER)
+  while (std::getline(file, line) && line_number < data.mass_position.FOOTER)
     {
       ameDataTable.emplace_back(parseAMEMassFormat(line));
-      ++l;
+      ++line_number;
     }
 
   file.close();
@@ -252,16 +252,16 @@ bool MassTable::readAMEReactionFileOne(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  uint16_t l = 0;
-  for (l = 0; l < data.r1_position.R1_HEADER; ++l)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.r1_position.R1_HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line) && l < data.r1_position.R1_FOOTER)
+  while (std::getline(file, line) && line_number < data.r1_position.R1_FOOTER)
     {
-      ++l;
+      ++line_number;
       if (!parseAMEReactionOneFormat(line))
         {
           fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
@@ -286,16 +286,16 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  uint16_t l = 0;
-  for (l = 0; l < data.r2_position.R2_HEADER; ++l)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.r2_position.R2_HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line) && l < data.r2_position.R2_FOOTER)
+  while (std::getline(file, line) && line_number < data.r2_position.R2_FOOTER)
     {
-      ++l;
+      ++line_number;
       // skip repeated header which only happens in the 2020 file (so far)
       if (year == uint16_t{ 2020 } && line.find("1 A  elt") != std::string::npos)
         {
@@ -366,17 +366,17 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
     }
 
   const NUBASE::Data data("", year);
-  uint16_t l = 0;
-  for (l = 0; l < data.position.HEADER; ++l)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.position.HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
 
-  while (std::getline(file, line) && l < data.position.FOOTER)
+  while (std::getline(file, line) && line_number < data.position.FOOTER)
     {
-      ++l;
+      ++line_number;
       if (line.find("non-exist") != std::string::npos)
         {
           continue;
