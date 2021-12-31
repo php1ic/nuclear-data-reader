@@ -25,6 +25,12 @@ namespace AME
     POST_2020 = 144
   };
 
+  enum class Measured : uint8_t
+  {
+    EXPERIMENTAL = 0,
+    THEORETICAL  = 1
+  };
+
   class Data
   {
   public:
@@ -47,7 +53,7 @@ namespace AME
     mutable Reaction2Position r2_position;
 
     /// Is the isotope experimental or extrapolated/theoretical
-    mutable uint8_t exp{ 0 };
+    mutable Measured exp{ Measured::EXPERIMENTAL };
     /// The mass number
     mutable uint16_t A{ 0 };
     /// The proton number
@@ -235,7 +241,7 @@ namespace AME
      *
      * \return Nothing
      */
-    inline void setExperimental(const uint8_t val) const noexcept { exp = val; }
+    inline void setExperimental(const AME::Measured val) const noexcept { exp = val; }
 
     /**
      * Extract the binding energy per A

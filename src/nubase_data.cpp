@@ -234,7 +234,7 @@ void NUBASE::Data::setExperimental() const
       std::replace(full_data.begin(), full_data.end(), '#', ' ');
     }
 
-  exp = (measured > position.END_DME) ? 1 : 0;
+  exp = (measured > position.END_DME) ? NUBASE::Measured::EXPERIMENTAL : NUBASE::Measured::THEORETICAL;
 }
 
 
