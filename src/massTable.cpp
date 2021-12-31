@@ -414,7 +414,7 @@ bool MassTable::mergeData(const uint8_t verbosity) const
 
   for (const auto& nubase : nubaseDataTable)
     {
-      const auto ame = std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase](const auto AME) -> bool {
+      const auto ame = std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase](const auto& AME) -> bool {
         return (AME.A == nubase.A && AME.Z == nubase.Z);
       });
 
