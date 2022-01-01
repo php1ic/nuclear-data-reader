@@ -219,17 +219,17 @@ bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
   std::ifstream file(ameTable, std::ios::binary);
 
   const AME::Data data("", year);
-  uint16_t l = 0;
-  for (l = 0; l < data.mass_position.HEADER; ++l)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.mass_position.HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line) && l < data.mass_position.FOOTER)
+  while (std::getline(file, line) && line_number < data.mass_position.FOOTER)
     {
       ameDataTable.emplace_back(parseAMEMassFormat(line));
-      ++l;
+      ++line_number;
     }
 
   file.close();
@@ -252,16 +252,16 @@ bool MassTable::readAMEReactionFileOne(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  uint16_t l = 0;
-  for (l = 0; l < data.r1_position.R1_HEADER; ++l)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.r1_position.R1_HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line) && l < data.r1_position.R1_FOOTER)
+  while (std::getline(file, line) && line_number < data.r1_position.R1_FOOTER)
     {
-      ++l;
+      ++line_number;
       if (!parseAMEReactionOneFormat(line))
         {
           fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
@@ -286,18 +286,18 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
   std::ifstream file(reactionFile, std::ios::binary);
 
   const AME::Data data("", year);
-  uint16_t l = 0;
-  for (l = 0; l < data.r2_position.R2_HEADER; ++l)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.r2_position.R2_HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
-  while (std::getline(file, line) && l < data.r2_position.R2_FOOTER)
+  while (std::getline(file, line) && line_number < data.r2_position.R2_FOOTER)
     {
-      ++l;
-      // skip repeated header which only happens in the 2020 file
-      if (line.find("1 A  elt") != std::string::npos)
+      ++line_number;
+      // skip repeated header which only happens in the 2020 file (so far)
+      if (year == uint16_t{ 2020 } && line.find("1 A  elt") != std::string::npos)
         {
           continue;
         }
@@ -366,15 +366,17 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
     }
 
   const NUBASE::Data data("", year);
-  for (uint8_t i = 0; i < data.position.HEADER; ++i)
+  uint16_t line_number = 0;
+  for (line_number = 0; line_number < data.position.HEADER; ++line_number)
     {
       file.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 
   std::string line;
 
-  while (std::getline(file, line))
+  while (std::getline(file, line) && line_number < data.position.FOOTER)
     {
+      ++line_number;
       if (line.find("non-exist") != std::string::npos)
         {
           continue;
@@ -402,20 +404,21 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 
 bool MassTable::mergeData(const uint8_t verbosity) const
 {
+  fmt::print("Merging AME and NUBASE data <--");
   if (ameDataTable.size() != nubaseDataTable.size())
     {
-      fmt::print("**WARNING** The AME data ({}) has a different number of isotopes to NUBASE ({})\n",
+      fmt::print("\n**WARNING** The AME data ({}) has a different number of isotopes to NUBASE ({})\n",
                  ameDataTable.size(),
                  nubaseDataTable.size());
     }
 
   for (const auto& nubase : nubaseDataTable)
     {
-      const auto ame = std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase](const auto n) -> bool {
-        return (n.A == nubase.A && n.Z == nubase.Z);
+      const auto ame = std::find_if(ameDataTable.cbegin(), ameDataTable.cend(), [&nubase](const auto& AME) -> bool {
+        return (AME.A == nubase.A && AME.Z == nubase.Z);
       });
 
-      if (ame != ameDataTable.end())
+      if (ame != ameDataTable.cend())
         {
           // Isotope(AME, NUBASE))
           fullDataTable.emplace_back(Isotope(*ame, nubase));
@@ -425,7 +428,7 @@ bool MassTable::mergeData(const uint8_t verbosity) const
           fmt::print("{} {}\n", nubase.A, nubase.Z);
         }
     }
-
+  fmt::print("--> done\n");
   return true;
 }
 

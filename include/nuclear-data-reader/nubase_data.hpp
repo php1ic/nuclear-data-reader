@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -29,16 +30,22 @@ namespace NUBASE
     STABLE  = 2
   };
 
+  enum class Measured : uint8_t
+  {
+    EXPERIMENTAL = 0,
+    THEORETICAL  = 1
+  };
+
   class Data
   {
   public:
     Data(std::string line, const uint16_t _year) : position(_year), full_data(std::move(line)) {}
 
-    Data(const Data&) = default;
-    Data(Data&&)      = default;
+    Data(const Data&)     = default;
+    Data(Data&&) noexcept = default;
 
     Data& operator=(const Data&) = default;
-    Data& operator=(Data&&) = default;
+    Data& operator=(Data&&) noexcept = default;
 
     ~Data() = default;
 
@@ -46,7 +53,7 @@ namespace NUBASE
     mutable LinePosition position;
 
     /// Is the isotope experimental or extrapolated/theoretical
-    mutable uint8_t exp{ 0 };
+    mutable Measured exp{ Measured::EXPERIMENTAL };
     /// The mass number
     mutable uint16_t A{ 0 };
     /// The proton number
@@ -93,13 +100,6 @@ namespace NUBASE
     /// (defined by which 'side' of stability it is on, not N=Z line)
     mutable Richness rich{ Richness::STABLE };
 
-    /// Generic value to use if the lifetime has no units
-    static const auto& noUnit()
-    {
-      static const std::string empty_unit{ "no_units" };
-      return empty_unit;
-    }
-
     /**
      * \struct State
      *
@@ -135,7 +135,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setA() const { A = Converter::StringToInt(full_data, position.START_A, position.END_A); }
+    inline void setA() const { A = Converter::StringToNum<uint16_t>(full_data, position.START_A, position.END_A); }
 
     /**
      * Extract the proton number from the data file
@@ -144,7 +144,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setZ() const { Z = Converter::StringToInt(full_data, position.START_Z, position.END_Z); }
+    inline void setZ() const { Z = Converter::StringToNum<uint8_t>(full_data, position.START_Z, position.END_Z); }
 
     /**
      * Extract the mass-excess from the NUBASE data file
@@ -155,7 +155,7 @@ namespace NUBASE
      */
     inline void setMassExcess() const
     {
-      mass_excess = Converter::StringToDouble(full_data, position.START_ME, position.END_ME);
+      mass_excess = Converter::StringToNum<double>(full_data, position.START_ME, position.END_ME);
     }
 
     /**
@@ -167,7 +167,7 @@ namespace NUBASE
      */
     inline void setMassExcessError() const
     {
-      dmass_excess = Converter::StringToDouble(full_data, position.START_DME, position.END_DME);
+      dmass_excess = Converter::StringToNum<double>(full_data, position.START_DME, position.END_DME);
     }
 
     /**
@@ -188,16 +188,15 @@ namespace NUBASE
      */
     inline void setYear() const
     {
-      if (position.START_YEAR == 0)
+      year = (position.START_YEAR == 0)
+                 ? DEFAULT_YEAR
+                 : Converter::StringToNum<uint16_t>(full_data, position.START_YEAR, position.END_YEAR);
+
+      // Some isotopes have no value for the year so we need to watch for that.
+      // Set it as the default if no year is given
+      if (year == std::numeric_limits<uint16_t>::max())
         {
           year = DEFAULT_YEAR;
-        }
-      else
-        {
-          // Some isotopes have no value for the year so we need to watch for that.
-          // Set it as the default if no year is given
-          const auto value = full_data.substr(position.START_YEAR, position.END_YEAR - position.START_YEAR);
-          year             = std::isspace(value.front()) != 0 ? DEFAULT_YEAR : Converter::StringToInt(value);
         }
     }
 
@@ -218,6 +217,23 @@ namespace NUBASE
                           std::find_if(halflife_unit.begin(), halflife_unit.end(), [](const auto ch) {
                             return (std::isspace(ch) == 0);
                           }));
+    }
+
+
+    /**
+     * Extract the numerical value of the error on the half life
+     *
+     * \param Nothing
+     *
+     * \return The error on the half life
+     */
+    inline double getNumericalHalfLifeError() const
+    {
+      auto hle =
+          full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
+      std::replace(hle.begin(), hle.end(), '>', ' ');
+      std::replace(hle.begin(), hle.end(), '<', ' ');
+      return Converter::StringToNum<double>(hle, 0, hle.size());
     }
 
     /**
@@ -246,7 +262,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setExperimental(const uint8_t val) const noexcept { exp = val; }
+    inline void setExperimental(const NUBASE::Measured val) const noexcept { exp = val; }
 
     /**
      * Extract the state/level from the data file
@@ -257,7 +273,7 @@ namespace NUBASE
      */
     inline void setState() const
     {
-      level = Converter::StringToInt(full_data, position.START_STATE, position.END_STATE);
+      level = Converter::StringToNum<uint8_t>(full_data, position.START_STATE, position.END_STATE);
     }
 
     /**
@@ -269,7 +285,7 @@ namespace NUBASE
      */
     [[nodiscard]] inline double setIsomerEnergy() const
     {
-      return Converter::StringToDouble(full_data, position.START_ISOMER, position.END_ISOMER);
+      return Converter::StringToNum<double>(full_data, position.START_ISOMER, position.END_ISOMER);
     }
 
     /**
@@ -281,7 +297,7 @@ namespace NUBASE
      */
     [[nodiscard]] inline double setIsomerEnergyError() const
     {
-      return Converter::StringToDouble(full_data, position.START_DISOMER, position.END_DISOMER);
+      return Converter::StringToNum<double>(full_data, position.START_DISOMER, position.END_DISOMER);
     }
 
     /**

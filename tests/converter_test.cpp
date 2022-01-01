@@ -5,30 +5,6 @@
 #include <catch2/catch.hpp>
 
 
-TEST_CASE("String -> int", "[Converter]")
-{
-  REQUIRE(Converter::StringToInt("abc123def", 3, 6) == 123);
-  REQUIRE(Converter::StringToInt("456", 0, 3) == 456);
-  REQUIRE(Converter::StringToInt("   ", 0, 3) == std::numeric_limits<int>::max());
-}
-
-
-TEST_CASE("String -> double", "[Converter]")
-{
-  REQUIRE(Converter::StringToDouble("abc1.23def", 3, 7) == Approx(1.23));
-  REQUIRE(Converter::StringToDouble("45.6", 0, 4) == Approx(45.6));
-  REQUIRE(Converter::StringToDouble("   ", 0, 3) == Approx(std::numeric_limits<double>::max()));
-}
-
-
-TEST_CASE("String/Symbol to Int", "[Converter]")
-{
-  REQUIRE(Converter::StringToInt("C") == 6);
-  REQUIRE(Converter::StringToInt("He") == 2);
-  REQUIRE(Converter::StringToInt("Ag") == 47);
-}
-
-
 TEST_CASE("Symbol -> Z", "[Converter]")
 {
   SECTION("A valid isotope symbol is given")
@@ -77,18 +53,58 @@ TEST_CASE("Float -> string", "[Converter]")
   REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Equals("null"));
 }
 
-// Remove for the moment. See header for as to why
-/*
+
+TEST_CASE("Trim a string", "[Converter]")
+{
+  std::string_view space{ "     567   " };
+  REQUIRE(Converter::TrimString(space) == "567");
+
+  std::string_view leading_space{ "     963.2" };
+  REQUIRE(Converter::TrimString(leading_space) == "963.2");
+
+  std::string_view trailing_space{ "abc123   " };
+  REQUIRE(Converter::TrimString(trailing_space) == "abc123");
+
+  std::string_view different_char{ "___asdf___" };
+  REQUIRE(Converter::TrimString(different_char, "_") == "asdf");
+}
+
+
 TEST_CASE("Generic string -> value", "[Converter]")
 {
-  std::string_view d_str{ "987.654" };
-  SECTION("Float") { REQUIRE(Converter::StringToNum<float>(d_str, 0, 7) == Approx(987.654)); }
+  SECTION("Double")
+  {
+    std::string_view d_str{ "987.654" };
+    REQUIRE(Converter::StringToNum<double>(d_str, 0, 7) == Approx(987.654));
+  }
 
-  std::string_view i8_str{ "123" };
-  SECTION("uint8_t") { REQUIRE(Converter::StringToNum<uint8_t>(i8_str, 0, 3) == 123); }
+  SECTION("Float")
+  {
+    std::string_view f_str{ "abc987.654abc" };
+    REQUIRE(Converter::StringToNum<float>(f_str, 3, 10) == Approx(987.654));
+  }
 
-  std::string_view i16_str{ "4563" };
-  SECTION("uint16_t") { REQUIRE(Converter::StringToNum<uint16_t>(i16_str, 0, 4) == 4563); }
+  SECTION("uint8_t")
+  {
+    std::string_view i8_str{ "123" };
+    REQUIRE(Converter::StringToNum<uint8_t>(i8_str, 0, 3) == 123);
+  }
+
+  SECTION("uint16_t")
+  {
+    std::string_view i16_str{ "4563" };
+    REQUIRE(Converter::StringToNum<uint16_t>(i16_str, 0, 4) == 4563);
+  }
+
+  SECTION("No number")
+  {
+    std::string_view e_str{ "   *   " };
+    REQUIRE(Converter::StringToNum<double>(e_str, 0, 7) == Approx(std::numeric_limits<double>::max()));
+
+    // Be specific, and verbose, so initialise with empty string
+    std::string_view b_str{ "" };
+    REQUIRE(Converter::StringToNum<int>(b_str, 0, 5) == Approx(std::numeric_limits<int>::max()));
+  }
 }
 
 
@@ -101,12 +117,6 @@ TEST_CASE("", "[.Benchmark]")
       std::string_view sv_str{ "987.654" };
       meter.measure([&sv_str]() { return Converter::StringToNum<double>(sv_str, 0, 7); });
     };
-
-    BENCHMARK_ADVANCED("Double own")(Catch::Benchmark::Chronometer meter)
-    {
-      std::string str{ "987.654" };
-      meter.measure([&str]() { return Converter::StringToDouble(str, 0, 7); });
-    };
   }
 
   SECTION("Integer")
@@ -116,13 +126,5 @@ TEST_CASE("", "[.Benchmark]")
       std::string_view sv_str{ "123" };
       meter.measure([&sv_str]() { return Converter::StringToNum<uint8_t>(sv_str, 0, 3); });
     };
-
-
-    BENCHMARK_ADVANCED("Int own")(Catch::Benchmark::Chronometer meter)
-    {
-      std::string str{ "123" };
-      meter.measure([&str]() { return Converter::StringToInt(str, 0, 3); });
-    };
   }
 }
-*/

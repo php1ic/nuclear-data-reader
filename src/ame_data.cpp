@@ -13,7 +13,9 @@ double AME::Data::getRelativeMassExcessError(const double min_allowed) const
       mass_excess = 0.0001;
     }
 
-  return (std::fabs(dmass_excess / mass_excess) < min_allowed) ? min_allowed : std::fabs(dmass_excess / mass_excess);
+  const auto rme{ std::fabs(dmass_excess / mass_excess) };
+
+  return (rme < min_allowed) ? min_allowed : rme;
 }
 
 
@@ -29,5 +31,5 @@ void AME::Data::setExperimental() const
       std::replace(full_data.begin(), full_data.end(), '#', ' ');
     }
 
-  exp = (measured > mass_position.END_DME) ? 0 : 1;
+  exp = (measured > mass_position.END_DME) ? AME::Measured::EXPERIMENTAL : AME::Measured::THEORETICAL;
 }

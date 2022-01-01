@@ -1,9 +1,9 @@
 # Output compilation database that can be used by analysis tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Compile against c++17
-set(CMAKE_CXX_STANDARD 17)
-# We need c++17 so can't fallback
+# Compile against c++20
+set(CMAKE_CXX_STANDARD 20)
+# Don't fallback if c++20 is not available
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Use -std=c++?? rather than -std=gnu++??
 set(CMAKE_CXX_EXTENSIONS OFF)

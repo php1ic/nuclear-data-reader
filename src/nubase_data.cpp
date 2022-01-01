@@ -20,7 +20,9 @@ double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
       mass_excess = 0.0001;
     }
 
-  return (fabs(dmass_excess / mass_excess) < min_allowed) ? min_allowed : fabs(dmass_excess / mass_excess);
+  const auto rme{ std::fabs(dmass_excess / mass_excess) };
+
+  return (rme < min_allowed) ? min_allowed : rme;
 }
 
 
@@ -59,8 +61,7 @@ void NUBASE::Data::setSpinParity() const
     }
 
   // trim trailing spaces
-  size_t endpos = jpi.find_last_not_of(' ');
-  if (std::string::npos != endpos)
+  if (const auto endpos = jpi.find_last_not_of(' '); std::string::npos != endpos)
     {
       jpi = jpi.substr(0, endpos + 1);
     }
@@ -212,11 +213,11 @@ void NUBASE::Data::setSpinParity() const
   // Member J stores the spin as a double
   if (jpi.find('/') == std::string::npos)
     {
-      J = Converter::StringToDouble(jpi, 0, jpi.length());
+      J = Converter::StringToNum<double>(jpi, 0, jpi.length());
     }
   else
     {
-      J = 0.5 * Converter::StringToDouble(jpi, 0, jpi.find('/'));
+      J = 0.5 * Converter::StringToNum<double>(jpi, 0, jpi.find('/'));
     }
 }
 
@@ -233,7 +234,7 @@ void NUBASE::Data::setExperimental() const
       std::replace(full_data.begin(), full_data.end(), '#', ' ');
     }
 
-  exp = (measured > position.END_DME) ? 1 : 0;
+  exp = (measured > position.END_DME) ? NUBASE::Measured::EXPERIMENTAL : NUBASE::Measured::THEORETICAL;
 }
 
 
@@ -264,172 +265,56 @@ void NUBASE::Data::setHalfLife() const
 {
   // Annoying data file format strikes again
   // Line length is not always as long as the half life position
-  // Create a temporary string with either the half life or a know value
+  // Create a temporary string with either the half life or a known value
+  const std::string noUnit{ "no_units" };
+
   std::string lifetime =
       (full_data.size() < static_cast<uint8_t>(position.START_HALFLIFEVALUE - 1))
-          ? noUnit()
+          ? noUnit
           : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
-  // Certain string mean we should not try and parse them as half lives
-  // If they are found, convert to our know value
-  if (lifetime.find_first_not_of(' ') == std::string::npos || lifetime.find("p-unst") != std::string::npos
-      || lifetime.find('R') != std::string::npos)
+  // If there is no unit on the half life, or the string contains certain characters, we shouldn't bother trying to
+  // parse the values. Set as a very short half life and get out
+  if (lifetime == noUnit || lifetime.find_first_not_of(' ') == std::string::npos
+      || lifetime.find("p-unst") != std::string::npos || lifetime.find('R') != std::string::npos)
     {
-      lifetime = noUnit();
+      hl       = Converter::seconds{ 1.0e-24 };
+      hl_error = Converter::seconds{ 1.0 };
+      return;
+    }
+
+  // If stable set to very long and get out
+  if (lifetime.find("stbl") != std::string::npos)
+    {
+      hl       = Converter::seconds{ 1.0e24 };
+      hl_error = Converter::seconds{ 1.0 };
+      return;
     }
 
   // Not currently interested in approximations or limits
   std::string_view remove{ "<>~" };
-  std::transform(lifetime.begin(), lifetime.end(), lifetime.begin(), [&remove](const char c) {
+  std::transform(lifetime.begin(), lifetime.end(), lifetime.begin(), [remove](const char c) {
     return remove.find(c) != std::string::npos ? ' ' : c;
   });
 
-  // If noUnits assume unknown so very short half life
-  if (lifetime == noUnit())
-    {
-      hl       = Converter::seconds{ 1.0e-24 };
-      hl_error = Converter::seconds{ 1.0 };
-    }
-  // If stable set to very long
-  else if (lifetime.find("stbl") != std::string::npos)
-    {
-      hl       = Converter::seconds{ 1.0e24 };
-      hl_error = Converter::seconds{ 1.0 };
-    }
-  else
-    {
-      const double hl_double =
-          Converter::StringToDouble(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
+  // Get the numerical part of the half life that we can use to create a chrono value later
+  const auto hl_double =
+      Converter::StringToNum<double>(lifetime, 0, position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE);
 
-      // FIXME: Formatting is not consitent, extracting the error should be refactored into it's own method
-      auto hle =
-          full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
-      std::replace(hle.begin(), hle.end(), '>', ' ');
-      std::replace(hle.begin(), hle.end(), '<', ' ');
-      const double hl_error_double = Converter::StringToDouble(hle, 0, hle.size());
+  const auto hl_error_double = getNumericalHalfLifeError();
 
-      setHalfLifeUnit();
+  setHalfLifeUnit();
 
-      if (halflife_unit.find_first_not_of(' ') == std::string::npos)
-        {
-          halflife_unit = "ys";
-        }
-
-      if (halflife_unit == "ys")
-        {
-          hl       = Converter::attoseconds{ 1.0e-6 * hl_double };
-          hl_error = Converter::attoseconds{ 1.0e-6 * hl_error_double };
-        }
-      else if (halflife_unit == "zs")
-        {
-          hl       = Converter::attoseconds{ 1.0e-3 * hl_double };
-          hl_error = Converter::attoseconds{ 1.0e-3 * hl_error_double };
-        }
-      else if (halflife_unit == "as")
-        {
-          hl       = Converter::attoseconds{ hl_double };
-          hl_error = Converter::attoseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "ps")
-        {
-          hl       = Converter::picoseconds{ hl_double };
-          hl_error = Converter::picoseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "ns")
-        {
-          hl       = Converter::nanoseconds{ hl_double };
-          hl_error = Converter::nanoseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "us")
-        {
-          hl       = Converter::microseconds{ hl_double };
-          hl_error = Converter::microseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "ms")
-        {
-          hl       = Converter::milliseconds{ hl_double };
-          hl_error = Converter::milliseconds{ hl_error_double };
-        }
-      else if (halflife_unit == "s")
-        {
-          hl       = Converter::seconds{ hl_double };
-          hl_error = Converter::seconds{ hl_error_double };
-        }
-      else if (halflife_unit == "m")
-        {
-          hl       = Converter::minutes{ hl_double };
-          hl_error = Converter::minutes{ hl_error_double };
-        }
-      else if (halflife_unit == "h")
-        {
-          hl       = Converter::hours{ hl_double };
-          hl_error = Converter::hours{ hl_error_double };
-        }
-      else if (halflife_unit == "d")
-        {
-          hl       = Converter::days{ hl_double };
-          hl_error = Converter::days{ hl_error_double };
-        }
-      else if (halflife_unit == "y")
-        {
-          hl       = Converter::years{ hl_double };
-          hl_error = Converter::years{ hl_error_double };
-        }
-      else if (halflife_unit == "ky")
-        {
-          hl       = Converter::kiloyears{ hl_double };
-          hl_error = Converter::kiloyears{ hl_error_double };
-        }
-      else if (halflife_unit == "My")
-        {
-          hl       = Converter::millionyears{ hl_double };
-          hl_error = Converter::millionyears{ hl_error_double };
-        }
-      else if (halflife_unit == "Gy")
-        {
-          hl       = Converter::billionyears{ hl_double };
-          hl_error = Converter::billionyears{ hl_error_double };
-        }
-      else if (halflife_unit == "Ty")
-        {
-          hl       = Converter::billionyears{ 1.0e3 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e3 * hl_error_double };
-        }
-      else if (halflife_unit == "Py")
-        {
-          hl       = Converter::billionyears{ 1.0e6 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e6 * hl_error_double };
-        }
-      else if (halflife_unit == "Ey")
-        {
-          hl       = Converter::billionyears{ 1.0e9 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e9 * hl_error_double };
-        }
-      else if (halflife_unit == "Zy")
-        {
-          hl       = Converter::billionyears{ 1.0e12 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e12 * hl_error_double };
-        }
-      else if (halflife_unit == "Yy")
-        {
-          hl       = Converter::billionyears{ 1.0e15 * hl_double };
-          hl_error = Converter::billionyears{ 1.0e15 * hl_error_double };
-        }
-    }
+  hl       = Converter::ToDuration(hl_double, halflife_unit);
+  hl_error = Converter::ToDuration(hl_error_double, halflife_unit);
 }
 
 
 void NUBASE::Data::setDecayMode() const
 {
-  // Store how ground-state decays in member decay
-  std::string Decay{ "isomer?" };
-
-  const auto startCharacter = position.START_DECAYSTRING;
-
-  if (full_data.size() >= startCharacter)
-    {
-      Decay = full_data.substr(startCharacter);
-    }
+  // Create a std::string we can play with and modify in this function
+  auto Decay =
+      (full_data.size() >= position.START_DECAYSTRING) ? full_data.substr(position.START_DECAYSTRING) : "isomer?";
 
   // The string format is ... complicated, see Section 2.5 of the 2016 paper
   // 10.1088/1674-1137/41/3/030001

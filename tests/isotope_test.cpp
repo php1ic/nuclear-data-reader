@@ -15,7 +15,7 @@ TEST_CASE("A json item is correctly output", "[Isotope]")
   // Pick a random isotope to check output of
   const int id{ 56 };
   std::string data{
-    "{\"A\":14,\"Z\":5,\"N\":9,\"Symbol\":\"B\",\"Decay\":\"B-\",\"Experimental\":1,\"NubaseMassExcess\":23664.0000,"
+    "{\"A\":14,\"Z\":5,\"N\":9,\"Symbol\":\"B\",\"Decay\":\"B-\",\"Experimental\":0,\"NubaseMassExcess\":23664.0000,"
     "\"ErrorNubaseMassExcess\":21.0000,\"AMEMassExcess\":23663.6830,\"ErrorAMEMassExcess\":21.2130,\"HalfLife\":1."
     "250e-02,\"SingleNeutronSeparationEnergy\":969.8000,\"ErrorSingleNeutronSeparationEnergy\":21.2400,"
     "\"SingleProtonSeparationEnergy\":16873.1000,\"ErrorSingleProtonSeparationEnergy\":74.6700,"
