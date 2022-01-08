@@ -20,9 +20,7 @@ double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
       mass_excess = 0.0001;
     }
 
-  const auto rme{ std::fabs(dmass_excess / mass_excess) };
-
-  return (rme < min_allowed) ? min_allowed : rme;
+  return std::max(std::fabs(dmass_excess / mass_excess), min_allowed);
 }
 
 
