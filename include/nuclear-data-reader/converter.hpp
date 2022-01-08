@@ -222,6 +222,12 @@ public:
   [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept;
 
   /**
+   * Convert a numeric value and it's unit to a chrono::duration.
+   *
+   * \param value The numeric value of the time
+   * \param unit The SI unit of the time
+   *
+   * \return a std::chrono::duration represetning the value and unit given
    */
   [[nodiscard]] static std::chrono::duration<double> ToDuration(const double value, std::string_view unit) noexcept;
 };
