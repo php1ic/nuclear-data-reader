@@ -53,7 +53,7 @@ public:
   using seconds      = std::chrono::duration<double, std::ratio<1, 1>>;
   using minutes      = std::chrono::duration<double, std::ratio<60, 1>>;
   using hours        = std::chrono::duration<double, std::ratio<3600, 1>>;
-  using days         = std::chrono::duration<double, std::ratio<24 * 3600, 1>>;
+  using days         = std::chrono::duration<double, std::ratio<24L * 3600, 1>>;
   using years        = std::chrono::duration<double, std::ratio<year, 1>>;
   using kiloyears    = std::chrono::duration<double, std::ratio<1000 * year, 1>>;
   using millionyears = std::chrono::duration<double, std::ratio<1000000 * year, 1>>;
