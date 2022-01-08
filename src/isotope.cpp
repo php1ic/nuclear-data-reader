@@ -67,7 +67,7 @@ std::string Isotope::writeAsJSON(const bool human_readable) const
                      nubase.N,
                      nubase.symbol,
                      nubase.decay,
-                     nubase.exp,
+                     static_cast<uint8_t>(nubase.exp),
                      Converter::FloatToNdp(nubase.mass_excess, NDP),
                      Converter::FloatToNdp(nubase.dmass_excess, NDP),
                      Converter::FloatToNdp(ame.mass_excess, NDP),
