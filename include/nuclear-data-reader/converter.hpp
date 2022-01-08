@@ -60,11 +60,10 @@ public:
   using billionyears = std::chrono::duration<double, std::ratio<1000000000 * year, 1>>;
 
 
-  /// The std::vector<std::pair<>> used to convert Z<->Symbol
-  static const auto& symbolZmap()
-  {
-    static const std::vector<std::pair<std::string_view, uint8_t>> themap{
-      { "n", 0 },    { "H", 1 },    { "He", 2 },   { "Li", 3 },   { "Be", 4 },   { "B", 5 },    { "C", 6 },
+  /// FIXME: Masstable.hpp contains MAX_Z but if we include here we'll get cyclic includes
+  /// The std::array<std::pair<>> used to convert Z<->Symbol
+  static constexpr std::array<std::pair<std::string_view, uint8_t>, 119> symbolZmap = {
+    { { "n", 0 },    { "H", 1 },    { "He", 2 },   { "Li", 3 },   { "Be", 4 },   { "B", 5 },    { "C", 6 },
       { "N", 7 },    { "O", 8 },    { "F", 9 },    { "Ne", 10 },  { "Na", 11 },  { "Mg", 12 },  { "Al", 13 },
       { "Si", 14 },  { "P", 15 },   { "S", 16 },   { "Cl", 17 },  { "Ar", 18 },  { "K", 19 },   { "Ca", 20 },
       { "Sc", 21 },  { "Ti", 22 },  { "V", 23 },   { "Cr", 24 },  { "Mn", 25 },  { "Fe", 26 },  { "Co", 27 },
@@ -80,10 +79,8 @@ public:
       { "Pa", 91 },  { "U", 92 },   { "Np", 93 },  { "Pu", 94 },  { "Am", 95 },  { "Cm", 96 },  { "Bk", 97 },
       { "Cf", 98 },  { "Es", 99 },  { "Fm", 100 }, { "Md", 101 }, { "No", 102 }, { "Lr", 103 }, { "Rf", 104 },
       { "Db", 105 }, { "Sg", 106 }, { "Bh", 107 }, { "Hs", 108 }, { "Mt", 109 }, { "Ds", 110 }, { "Rg", 111 },
-      { "Cn", 112 }, { "Nh", 113 }, { "Fl", 114 }, { "Mc", 115 }, { "Lv", 116 }, { "Ts", 117 }, { "Og", 118 }
-    };
-    return themap;
-  }
+      { "Cn", 112 }, { "Nh", 113 }, { "Fl", 114 }, { "Mc", 115 }, { "Lv", 116 }, { "Ts", 117 }, { "Og", 118 } }
+  };
 
   /**
    * Get the hash of a const char* so we can use a swtich statement on std::string_view
