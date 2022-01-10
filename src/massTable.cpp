@@ -357,13 +357,14 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 {
   fmt::print("Reading {} for nuclear values <--", nubaseTable);
-  std::ifstream file(nubaseTable, std::ios::binary);
 
-  if (!file.is_open())
+  if (!std::filesystem::exists(nubaseTable))
     {
       fmt::print("\n***ERROR***: {} couldn't be opened, does it exist?\n\n", nubaseTable);
       return false;
     }
+
+  std::ifstream file(nubaseTable, std::ios::binary);
 
   const NUBASE::Data data("", year);
   uint16_t line_number = 0;
