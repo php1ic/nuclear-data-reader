@@ -232,8 +232,6 @@ bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
       ++line_number;
     }
 
-  file.close();
-
   fmt::print("--> done\n");
   return true;
 }
@@ -396,8 +394,6 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
       nubaseDataTable.emplace_back(nuclide);
     }
 
-  file.close();
-
   fmt::print("--> done\n");
   return true;
 }
@@ -453,7 +449,6 @@ bool MassTable::mergeData(const uint8_t verbosity) const
 //  //  {
 //  //    fmt::print(out, "{}\n", isotope.writeAsCSV());
 //  //  }
-//  out.close();
 //
 //  return true;
 //}
@@ -473,7 +468,6 @@ bool MassTable::outputTableToJSON() const
       out.print("{}{}", isotope->writeAsJSON(), (isotope != std::prev(fullDataTable.end(), 1)) ? ",\n" : "");
     }
   out.print("\n]\n");
-  out.close();
 
   return true;
 }
