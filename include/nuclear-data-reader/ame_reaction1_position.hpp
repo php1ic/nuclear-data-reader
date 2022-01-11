@@ -8,7 +8,7 @@ namespace AME
 {
   struct Reaction1Position
   {
-    explicit Reaction1Position(const uint16_t _year)
+    constexpr explicit Reaction1Position(const uint16_t _year)
     {
       if (_year < 2020)
         {

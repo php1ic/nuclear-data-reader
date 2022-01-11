@@ -8,7 +8,7 @@ namespace AME
 {
   struct MassPosition
   {
-    explicit MassPosition(const uint16_t _year)
+    constexpr explicit MassPosition(const uint16_t _year)
     {
       if (_year < 2020)
         {
