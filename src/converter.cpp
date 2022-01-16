@@ -6,17 +6,18 @@
 #include <fmt/format.h>
 
 #include <algorithm>
+#include <cstdint>
 #include <limits>
 #include <utility>
 #include <vector>
 
 
-std::string_view Converter::ZToSymbol(const uint8_t Z, const uint8_t verbosity)
+std::string_view Converter::ZToSymbol(const uint16_t Z, const uint8_t verbosity)
 {
   const auto it =
       std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [Z](const auto& element) { return element.second == Z; });
 
-  return [&]() {
+  return [&]() -> std::string_view {
     if (it == symbolZmap.end())
       {
         if (verbosity > 0)
@@ -31,12 +32,12 @@ std::string_view Converter::ZToSymbol(const uint8_t Z, const uint8_t verbosity)
 }
 
 
-uint8_t Converter::SymbolToZ(const std::string_view symbol, const uint8_t verbosity)
+uint16_t Converter::SymbolToZ(const std::string_view symbol, const uint8_t verbosity)
 {
   const auto it = std::find_if(
       symbolZmap.cbegin(), symbolZmap.cend(), [symbol](const auto& element) { return element.first == symbol; });
 
-  return [&]() {
+  return [&]() -> uint16_t {
     if (it == symbolZmap.end())
       {
         if (verbosity > 0)
