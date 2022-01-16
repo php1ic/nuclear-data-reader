@@ -57,9 +57,9 @@ namespace NUBASE
     /// The mass number
     mutable uint16_t A{ 0 };
     /// The proton number
-    mutable uint8_t Z{ 0 };
+    mutable uint16_t Z{ 0 };
     /// The neutron number
-    mutable uint8_t N{ 0 };
+    mutable uint16_t N{ 0 };
     /// The state level
     mutable uint8_t level{ 0 };
     /// The parity of the spin state
@@ -144,7 +144,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setZ() const { Z = Converter::StringToNum<uint8_t>(full_data, position.START_Z, position.END_Z); }
+    inline void setZ() const { Z = Converter::StringToNum<uint16_t>(full_data, position.START_Z, position.END_Z); }
 
     /**
      * Extract the mass-excess from the NUBASE data file
