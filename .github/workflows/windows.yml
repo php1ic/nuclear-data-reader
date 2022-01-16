@@ -11,7 +11,7 @@ on: #[push, pull_request]
 jobs:
   windows-build:
     name: Compilation
-    runs-on: windows-latest
+    runs-on: windows-2022
     strategy:
       matrix:
         type: [Debug, Release]
