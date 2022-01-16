@@ -1,0 +1,33 @@
+name: Windows Builds
+
+on: #[push, pull_request]
+  push:
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+      - 'data/**'
+      - 'scripts/**'
+
+jobs:
+  windows-build:
+    name: Compilation
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        type: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Configure
+        run: cmake -Bbuild -DNDR_UNIT_TESTS=ON -DCMAKE_BUILD_TYPE=${{ matrix.type }}
+
+      - name: Build
+        run: cmake --build build --config ${{ matrix.type }} -j2
+
+      - name: Test
+        run: |
+          cd build
+          ctest -C ${{ matrix.type }} -j2 -V
