@@ -16,6 +16,7 @@
 #include <string_view>
 
 #include <algorithm>
+#include <array>
 #include <charconv>
 #include <chrono>
 #include <cmath>
