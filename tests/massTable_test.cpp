@@ -51,40 +51,44 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
   {
     const MassTable table(2003);
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2003" / "nubtab03.asc"));
-    REQUIRE_THAT(table.AME_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2003" / "mass.mas03"));
-    REQUIRE_THAT(table.AME_reaction_1, Catch::Matches(MassTable::getAbsolutePath() / "2003" / "rct1.mas03"));
-    REQUIRE_THAT(table.AME_reaction_2, Catch::Matches(MassTable::getAbsolutePath() / "2003" / "rct2.mas03"));
+    REQUIRE_THAT(table.NUBASE_masstable.string(),
+                 Catch::Matches(MassTable::getAbsolutePath() / "2003" / "nubtab03.asc"));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2003" / "mass.mas03"));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2003" / "rct1.mas03"));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2003" / "rct2.mas03"));
   }
 
   SECTION("2012 data")
   {
     const MassTable table(2012);
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2012" / "nubtab12.asc"));
-    REQUIRE_THAT(table.AME_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2012" / "mass.mas12"));
-    REQUIRE_THAT(table.AME_reaction_1, Catch::Matches(MassTable::getAbsolutePath() / "2012" / "rct1.mas12"));
-    REQUIRE_THAT(table.AME_reaction_2, Catch::Matches(MassTable::getAbsolutePath() / "2012" / "rct2.mas12"));
+    REQUIRE_THAT(table.NUBASE_masstable.string(),
+                 Catch::Matches(MassTable::getAbsolutePath() / "2012" / "nubtab12.asc"));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2012" / "mass.mas12"));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2012" / "rct1.mas12"));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2012" / "rct2.mas12"));
   }
 
   SECTION("2016 data")
   {
     const MassTable table(2016);
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2016" / "nubase2016.txt"));
-    REQUIRE_THAT(table.AME_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2016" / "mass16.txt"));
-    REQUIRE_THAT(table.AME_reaction_1, Catch::Matches(MassTable::getAbsolutePath() / "2016" / "rct1-16.txt"));
-    REQUIRE_THAT(table.AME_reaction_2, Catch::Matches(MassTable::getAbsolutePath() / "2016" / "rct2-16.txt"));
+    REQUIRE_THAT(table.NUBASE_masstable.string(),
+                 Catch::Matches(MassTable::getAbsolutePath() / "2016" / "nubase2016.txt"));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2016" / "mass16.txt"));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2016" / "rct1-16.txt"));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2016" / "rct2-16.txt"));
   }
 
   SECTION("2020 data")
   {
     const MassTable table(2020);
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2020" / "nubase_1.mas20"));
-    REQUIRE_THAT(table.AME_masstable, Catch::Matches(MassTable::getAbsolutePath() / "2020" / "mass.mas20"));
-    REQUIRE_THAT(table.AME_reaction_1, Catch::Matches(MassTable::getAbsolutePath() / "2020" / "rct1.mas20"));
-    REQUIRE_THAT(table.AME_reaction_2, Catch::Matches(MassTable::getAbsolutePath() / "2020" / "rct2.mas20"));
+    REQUIRE_THAT(table.NUBASE_masstable.string(),
+                 Catch::Matches(MassTable::getAbsolutePath() / "2020" / "nubase_1.mas20"));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2020" / "mass.mas20"));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2020" / "rct1.mas20"));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2020" / "rct2.mas20"));
   }
 }
 
