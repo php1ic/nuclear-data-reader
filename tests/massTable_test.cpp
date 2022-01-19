@@ -49,46 +49,58 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
 {
   SECTION("2003 data")
   {
-    const MassTable table(2003);
+    constexpr int year = 2003;
+    const MassTable table(year);
+
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable.string(),
-                 Catch::Matches(MassTable::getAbsolutePath() / "2003" / "nubtab03.asc"));
-    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2003" / "mass.mas03"));
-    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2003" / "rct1.mas03"));
-    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2003" / "rct2.mas03"));
+    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+
+    REQUIRE_THAT(table.NUBASE_masstable.string(), Catch::Matches((root / "nubtab03.asc").string()));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches((root / "mass.mas03").string()));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches((root / "rct1.mas03").string()));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches((root / "rct2.mas03").string()));
   }
 
   SECTION("2012 data")
   {
-    const MassTable table(2012);
+    constexpr int year = 2012;
+    const MassTable table(year);
+
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable.string(),
-                 Catch::Matches(MassTable::getAbsolutePath() / "2012" / "nubtab12.asc"));
-    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2012" / "mass.mas12"));
-    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2012" / "rct1.mas12"));
-    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2012" / "rct2.mas12"));
+    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+
+    REQUIRE_THAT(table.NUBASE_masstable.string(), Catch::Matches((root / "nubtab12.asc").string()));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches((root / "mass.mas12").string()));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches((root / "rct1.mas12").string()));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches((root / "rct2.mas12").string()));
   }
 
   SECTION("2016 data")
   {
-    const MassTable table(2016);
+    constexpr int year = 2016;
+    const MassTable table(year);
+
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable.string(),
-                 Catch::Matches(MassTable::getAbsolutePath() / "2016" / "nubase2016.txt"));
-    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2016" / "mass16.txt"));
-    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2016" / "rct1-16.txt"));
-    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2016" / "rct2-16.txt"));
+    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+
+    REQUIRE_THAT(table.NUBASE_masstable.string(), Catch::Matches((root / "nubase2016.txt").string()));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches((root / "mass16.txt").string()));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches((root / "rct1-16.txt").string()));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches((root / "rct2-16.txt").string()));
   }
 
   SECTION("2020 data")
   {
-    const MassTable table(2020);
+    constexpr int year = 2020;
+    const MassTable table(year);
+
     table.setFilePaths();
-    REQUIRE_THAT(table.NUBASE_masstable.string(),
-                 Catch::Matches(MassTable::getAbsolutePath() / "2020" / "nubase_1.mas20"));
-    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches(MassTable::getAbsolutePath() / "2020" / "mass.mas20"));
-    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches(MassTable::getAbsolutePath() / "2020" / "rct1.mas20"));
-    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches(MassTable::getAbsolutePath() / "2020" / "rct2.mas20"));
+    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+
+    REQUIRE_THAT(table.NUBASE_masstable.string(), Catch::Matches((root / "nubase_1.mas20").string()));
+    REQUIRE_THAT(table.AME_masstable.string(), Catch::Matches((root / "mass.mas20").string()));
+    REQUIRE_THAT(table.AME_reaction_1.string(), Catch::Matches((root / "rct1.mas20").string()));
+    REQUIRE_THAT(table.AME_reaction_2.string(), Catch::Matches((root / "rct2.mas20").string()));
   }
 }
 
