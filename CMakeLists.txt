@@ -74,7 +74,16 @@ set(SOURCES
   ${SOURCE_DIR}/isotope.cpp
   )
 
-add_library(${PROJECT_NAME} SHARED ${SOURCES})
+# While I try and work out how to create a shared library
+# on windows that can actually be linked to, lets make a static one
+if(MSVC)
+  add_library(${PROJECT_NAME} STATIC ${SOURCES})
+else()
+  add_library(${PROJECT_NAME} SHARED ${SOURCES})
+endif()
+
+# Use a compile time definition to set the path to the data files
+add_compile_definitions(${PROJECT_NAME} PRIVATE NDR_DATA_PATH=\"${PROJECT_SOURCE_DIR}/data/\")
 
 # Where are the header files
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include/)
