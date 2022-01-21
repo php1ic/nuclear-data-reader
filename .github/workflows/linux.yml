@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         version: [11]
-        compiler: [clang++-12, g++-${{ matrix.version }}]
+        compiler: [clang++-12, g++-${{ version }}]
         type: [Debug, Release]
 
     steps:
