@@ -51,9 +51,7 @@ The project makes use of [fmt](https://github.com/fmtlib/fmt) and [Catch2](https
 The below is enough to get you started.
 
 ```
-$ git clone https://github.com/php1ic/nuclear-data-reader.git
-$ cd nuclear-data-reader
-$ git submodule update --init --recursive
+$ git clone -recurse-submodules https://github.com/php1ic/nuclear-data-reader.git
 ```
 
 
