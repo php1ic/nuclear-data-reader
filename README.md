@@ -12,10 +12,10 @@
 
 ---
 
-| OS    | Config                                      | Build Status                                                                                                                                             | Compiler Version |
-|-------|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------:|
-| Linux | [Github](.github/workflows/cmake_build.yml) | [![BuildAndTest](https://github.com/php1ic/nuclear-data-reader/workflows/BuildAndTest/badge.svg)](https://github.com/php1ic/nuclear-data-reader/actions) |   gcc11, clang12 |
-
+| OS             | Config                                       |                                                                                                                                                                            Build Status | Compiler Version |
+|----------------|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|-----------------:|
+| Linux          | [linux.yml](.github/workflows/linux.yml)     |       [![Linux Builds](https://github.com/php1ic/nuclear-data-reader/actions/workflows/linux.yml/badge.svg)](https://github.com/php1ic/nuclear-data-reader/actions/workflows/linux.yml) |   gcc11, clang12 |
+| Windows (MSVC) | [windows.yml](.github/workflows/windows.yml) | [![Windows Builds](https://github.com/php1ic/nuclear-data-reader/actions/workflows/windows.yml/badge.svg)](https://github.com/php1ic/nuclear-data-reader/actions/workflows/windows.yml) |        MSVC-2022 |
 
 ## Introduction
 
