@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         version: 11
-        compiler: [clang++-12, g++-${{ version }}]
+        compiler: [clang++-12, 'g++-${{ version }}']
         type: [Debug, Release]
 
     steps:
@@ -43,7 +43,7 @@ jobs:
         run: |
           cd ../Build
           #FIXME: gcov binary should be generic
-          lcov --directory . --capture --gcov-tool /usr/bin/gcov-${{ matix.version }} --output-file coverage.info
+          lcov --directory . --capture --gcov-tool /usr/bin/gcov-${{ matrix.version }} --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
           lcov --list coverage.info
 
