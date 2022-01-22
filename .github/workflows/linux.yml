@@ -7,6 +7,7 @@ on: #[push, pull_request]
       - 'docs/**'
       - 'data/**'
       - 'scripts/**'
+      - '.github/workflows/windows.yml'
 
 jobs:
   linux-build:
