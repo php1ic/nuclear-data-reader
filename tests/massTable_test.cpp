@@ -119,10 +119,21 @@ TEST_CASE("Try to read non-existant file", "[MassTable]")
 
 TEST_CASE("Read the NUBASE file", "[MassTable]")
 {
-  MassTable table(2003);
-  table.setFilePaths();
+  SECTION("File instance with no header")
+  {
+    MassTable table(2003);
+    table.setFilePaths();
 
-  REQUIRE(table.readNUBASE(table.NUBASE_masstable));
+    REQUIRE(table.readNUBASE(table.NUBASE_masstable));
+  }
+
+  SECTION("File instance with a header")
+  {
+    MassTable table(2020);
+    table.setFilePaths();
+
+    REQUIRE(table.readNUBASE(table.NUBASE_masstable));
+  }
 }
 
 
