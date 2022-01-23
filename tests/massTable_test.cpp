@@ -150,7 +150,7 @@ TEST_CASE("Read the AME reaction files", "[MassTable]")
 {
   SECTION("The AME mass table has not been read")
   {
-    MassTable table(2003);
+    const MassTable table(2003);
     table.setFilePaths();
     REQUIRE(table.readAMEReactionFileOne(table.AME_reaction_1));
     REQUIRE(table.readAMEReactionFileTwo(table.AME_reaction_2));
@@ -158,7 +158,7 @@ TEST_CASE("Read the AME reaction files", "[MassTable]")
 
   SECTION("The repeated header in reaction file number 2 from 2020 is skipped")
   {
-    MassTable table(2020);
+    const MassTable table(2020);
     table.setFilePaths();
     REQUIRE(table.readAMEReactionFileTwo(table.AME_reaction_2));
   }
@@ -169,21 +169,21 @@ TEST_CASE("Validate the requested table year", "[MassTable]")
 {
   SECTION("Construction is correct")
   {
-    MassTable table(2003);
+    const MassTable table(2003);
     REQUIRE(table.checkValidYear());
     REQUIRE(table.year == 2003);
   }
 
   SECTION("Construction is correct but ammendment of the year is not")
   {
-    MassTable table(2012);
+    const MassTable table(2012);
     REQUIRE_FALSE(table.setTableYear(2000));
     REQUIRE(table.year == 2012);
   }
 
   SECTION("Construction is invalid so the default is set")
   {
-    MassTable table(1999);
+    const MassTable table(1999);
     REQUIRE(table.year == table.valid_years.back());
   }
 }
@@ -193,13 +193,13 @@ TEST_CASE("Validate user input table year", "[MassTable]")
 {
   SECTION("A correct year is given")
   {
-    MassTable table(2003);
+    const MassTable table(2003);
     REQUIRE(table.checkValidYear(2012));
   }
 
   SECTION("An unknown year is given")
   {
-    MassTable table(2012);
+    const MassTable table(2012);
     REQUIRE_FALSE(table.checkValidYear(1999));
   }
 }
@@ -216,9 +216,9 @@ TEST_CASE("Read a line from the AME mass table as a whole", "[MassTable]")
   const std::string line{ "   9   20   11   31 Na    x   12654.768    211.321     7385.492    6.817 B-  15872.148  "
                           "211.668  31 013585.452    226.862" };
 
-  MassTable table(2003);
+  const MassTable table(2003);
 
-  auto data = table.parseAMEMassFormat(line);
+  const auto data = table.parseAMEMassFormat(line);
 
   REQUIRE(data.A == 31);
   REQUIRE(data.Z == 11);
@@ -238,7 +238,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
 {
   SECTION("No existing mass table")
   {
-    MassTable table(2012);
+    const MassTable table(2012);
     const auto it = table.getMatchingIsotope("", 1);
     REQUIRE(it == table.ameDataTable.end());
   }
