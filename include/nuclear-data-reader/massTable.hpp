@@ -70,12 +70,9 @@ public:
   mutable std::vector<AME::Data> ameDataTable;
 
   /**
-   * Find the absolute path to the location of the data files, indepdent of the filesystem.
-   *
-   * Get the location of this source file
-   * This will(should) always be - /some/path/nuclear-data-reader/include/nuclear-data-reader/massTable.hpp
-   * Only the directory separator will be different, depending on OS
-   * We want to replace "include/nuclear-data-reader/massTable.hpp" with "data/", using the appropriate separator
+   * Return the absolute path to the location of the data files.
+   * The value is passed as a compile option so we just need to construct
+   * the path variable.
    *
    * \param Nothing
    *
@@ -83,9 +80,7 @@ public:
    */
   static const auto& getAbsolutePath()
   {
-    static const auto abs_path = std::filesystem::absolute(
-        std::regex_replace(__FILE__, std::regex("(include.nuclear-data-reader)(.)(.*)"), "data$2"));
-
+    static const auto abs_path = std::filesystem::path(NDR_DATA_PATH);
     return abs_path;
   }
 

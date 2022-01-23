@@ -57,9 +57,9 @@ namespace AME
     /// The mass number
     mutable uint16_t A{ 0 };
     /// The proton number
-    mutable uint8_t Z{ 0 };
+    mutable uint16_t Z{ 0 };
     /// The neutron number
-    mutable uint8_t N{ 0 };
+    mutable uint16_t N{ 0 };
     /// Mass excess from the AME table
     mutable double mass_excess{ 0.1 };
     /// Error on the mass excess from the AME table
@@ -169,14 +169,14 @@ namespace AME
     /**
      *
      */
-    [[nodiscard]] inline uint8_t getReaction_1_Z(std::string_view line) const
+    [[nodiscard]] inline uint16_t getReaction_1_Z(std::string_view line) const
     {
-      return Converter::StringToNum<uint8_t>(line, r1_position.START_R1_Z, r1_position.END_R1_Z);
+      return Converter::StringToNum<uint16_t>(line, r1_position.START_R1_Z, r1_position.END_R1_Z);
     }
 
-    [[nodiscard]] inline uint8_t getReaction_2_Z(std::string_view line) const
+    [[nodiscard]] inline uint16_t getReaction_2_Z(std::string_view line) const
     {
-      return Converter::StringToNum<uint8_t>(line, r2_position.START_R2_Z, r2_position.END_R2_Z);
+      return Converter::StringToNum<uint16_t>(line, r2_position.START_R2_Z, r2_position.END_R2_Z);
     }
 
     /**
@@ -188,7 +188,7 @@ namespace AME
      */
     inline void setZ() const
     {
-      Z = Converter::StringToNum<uint8_t>(full_data, mass_position.START_Z, mass_position.END_Z);
+      Z = Converter::StringToNum<uint16_t>(full_data, mass_position.START_Z, mass_position.END_Z);
     }
 
     /**

@@ -1,4 +1,4 @@
-name: BuildAndTest
+name: Linux Builds
 
 on: #[push, pull_request]
   push:
@@ -7,6 +7,7 @@ on: #[push, pull_request]
       - 'docs/**'
       - 'data/**'
       - 'scripts/**'
+      - '.github/workflows/windows.yml'
 
 jobs:
   linux-build:
@@ -19,25 +20,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          # If your submodules are configured to use SSH instead of HTTPS please uncomment the following line
-          # git config --global url."https://github.com/".insteadOf "git@github.com:"
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+        with:
+          submodules: true
+
       - name: Install dependencies
         run: |
           # add a repository to get access to gcc v11
           sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
           sudo apt update && sudo apt install -y ninja-build ccache lcov gcc-11 g++-11 clang-12
+
       - name: Configure
         run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
+
       - name: Build
         run: cmake --build ../Build
+
       - name: Test
         run: cd ../Build && ctest -j2 -V
+
       - name: Generate coverage report
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++-11' }}
         run: |
@@ -46,11 +46,13 @@ jobs:
           lcov --directory . --capture --gcov-tool /usr/bin/gcov-11 --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
           lcov --list coverage.info
+
       - name: Upload coverage report to codecov
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++-11' }}
         uses: codecov/codecov-action@v1
         with:
           file: ../Build/coverage.info
+
       - name: Upload coverage report to codacy
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++-11' }}
         # uses: codacy/codacy-coverage-reporter-action@master

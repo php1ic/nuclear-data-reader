@@ -16,6 +16,7 @@
 #include <string_view>
 
 #include <algorithm>
+#include <array>
 #include <charconv>
 #include <chrono>
 #include <cmath>
@@ -62,7 +63,7 @@ public:
 
   /// FIXME: Masstable.hpp contains MAX_Z but if we include here we'll get cyclic includes
   /// The std::array<std::pair<>> used to convert Z<->Symbol
-  static constexpr std::array<std::pair<std::string_view, uint8_t>, 119> symbolZmap = {
+  static constexpr std::array<std::pair<std::string_view, uint16_t>, 119> symbolZmap = {
     { { "n", 0 },    { "H", 1 },    { "He", 2 },   { "Li", 3 },   { "Be", 4 },   { "B", 5 },    { "C", 6 },
       { "N", 7 },    { "O", 8 },    { "F", 9 },    { "Ne", 10 },  { "Na", 11 },  { "Mg", 12 },  { "Al", 13 },
       { "Si", 14 },  { "P", 15 },   { "S", 16 },   { "Cl", 17 },  { "Ar", 18 },  { "K", 19 },   { "Ca", 20 },
@@ -132,7 +133,7 @@ public:
    *
    * \return The symbol as a std:string
    */
-  [[nodiscard]] static std::string_view ZToSymbol(const uint8_t Z, const uint8_t verbosity = 0);
+  [[nodiscard]] static std::string_view ZToSymbol(const uint16_t Z, const uint8_t verbosity = 0);
 
   /**
    * Convert elemental symbol to proton number
@@ -141,7 +142,7 @@ public:
    *
    * \return The proton number as an int
    */
-  [[nodiscard]] static uint8_t SymbolToZ(std::string_view symbol, const uint8_t verbosity = 0);
+  [[nodiscard]] static uint16_t SymbolToZ(std::string_view symbol, const uint8_t verbosity = 0);
 
   /**
    * Convert any type from it's string(_view) representation to the given type.
