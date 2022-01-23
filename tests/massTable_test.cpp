@@ -144,6 +144,13 @@ TEST_CASE("Read the AME reaction files", "[MassTable]")
     REQUIRE(table.readAMEReactionFileOne(table.AME_reaction_1));
     REQUIRE(table.readAMEReactionFileTwo(table.AME_reaction_2));
   }
+
+  SECTION("The repeated header in reaction file number 2 from 2020 is skipped")
+  {
+    MassTable table(2020);
+    table.setFilePaths();
+    REQUIRE(table.readAMEReactionFileTwo(table.AME_reaction_2));
+  }
 }
 
 
