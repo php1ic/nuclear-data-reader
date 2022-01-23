@@ -70,21 +70,6 @@ public:
   mutable std::vector<AME::Data> ameDataTable;
 
   /**
-   * Return the absolute path to the location of the data files.
-   * The value is passed as a compile option so we just need to construct
-   * the path variable.
-   *
-   * \param Nothing
-   *
-   * \return The absolute path to the data_files directory
-   */
-  static const auto& getAbsolutePath()
-  {
-    static const auto abs_path = std::filesystem::path(NDR_DATA_PATH);
-    return abs_path;
-  }
-
-  /**
    * Set the year of the table who's data will be read
    *
    * \param The year table to use

@@ -19,7 +19,7 @@
 
 void MassTable::setFilePaths() const
 {
-  const auto data_path{ MassTable::getAbsolutePath() / fmt::to_string(year) };
+  const auto data_path{ std::filesystem::path{ NDR_DATA_PATH } / fmt::to_string(year) };
 
   switch (year)
     {

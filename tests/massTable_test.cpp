@@ -53,7 +53,7 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
     const MassTable table(year);
 
     table.setFilePaths();
-    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
 
     REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab03.asc").string());
     REQUIRE(table.AME_masstable.string() == (root / "mass.mas03").string());
@@ -67,7 +67,7 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
     const MassTable table(year);
 
     table.setFilePaths();
-    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
 
     REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab12.asc").string());
     REQUIRE(table.AME_masstable.string() == (root / "mass.mas12").string());
@@ -81,7 +81,7 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
     const MassTable table(year);
 
     table.setFilePaths();
-    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
 
     REQUIRE(table.NUBASE_masstable.string() == (root / "nubase2016.txt").string());
     REQUIRE(table.AME_masstable.string() == (root / "mass16.txt").string());
@@ -95,7 +95,7 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
     const MassTable table(year);
 
     table.setFilePaths();
-    const std::filesystem::path root = MassTable::getAbsolutePath() / std::to_string(year);
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
 
     REQUIRE(table.NUBASE_masstable.string() == (root / "nubase_1.mas20").string());
     REQUIRE(table.AME_masstable.string() == (root / "mass.mas20").string());
