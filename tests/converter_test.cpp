@@ -16,9 +16,14 @@ TEST_CASE("Symbol -> Z", "[Converter]")
 
   SECTION("An invalid isotope symbol is given")
   {
-    REQUIRE(Converter::SymbolToZ("Xy") == 200);
-    REQUIRE(Converter::SymbolToZ("ab") == 200);
-    REQUIRE(Converter::SymbolToZ("IS") == 200);
+    SECTION("Quiet failure on invalid symbol")
+    {
+      REQUIRE(Converter::SymbolToZ("Xy") == 200);
+      REQUIRE(Converter::SymbolToZ("ab") == 200);
+      REQUIRE(Converter::SymbolToZ("IS") == 200);
+    }
+
+    SECTION("Verbose failure on invalid synbol") { REQUIRE(Converter::SymbolToZ("Xy", 1) == 200); }
   }
 }
 
@@ -34,8 +39,13 @@ TEST_CASE("Z -> Symbol", "[Converter]")
 
   SECTION("An invalid proton number is given")
   {
-    REQUIRE(Converter::ZToSymbol(-2) == "Xy");
-    REQUIRE(Converter::ZToSymbol(120) == "Xy");
+    SECTION("Quiet failure on invalid proton number")
+    {
+      REQUIRE(Converter::ZToSymbol(-2) == "Xy");
+      REQUIRE(Converter::ZToSymbol(120) == "Xy");
+    }
+
+    SECTION("Verbose failure on invalid proton number") { REQUIRE(Converter::ZToSymbol(-2, 1) == "Xy"); }
   }
 }
 
