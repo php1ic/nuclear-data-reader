@@ -428,3 +428,44 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     REQUIRE(nubase.year == 1934);
   }
 }
+
+TEST_CASE("Merge AME and NUBASE data", "[MassTable]")
+{
+  // Not sure about the test in this case.
+
+  // We are testing that we fall into the print (to screen) warning condition
+  // Can we catch what is printe to screen and validate the text?
+  SECTION("NUBASE table is a different size to the AME table")
+  {
+    MassTable table(2016);
+    NUBASE::Data nubase_1("", 2016);
+    NUBASE::Data nubase_2("", 2016);
+    table.nubaseDataTable.emplace_back(nubase_1);
+    table.nubaseDataTable.emplace_back(nubase_2);
+    AME::Data ame_1("", 2016);
+    table.ameDataTable.emplace_back(ame_1);
+
+    REQUIRE(table.mergeData());
+  }
+
+  // We are testing that if no matching isotope is found, we print it's details to screen
+  // Again, can we catch what is being printed and validate?
+  SECTION("No matching isotope is found")
+  {
+    MassTable table(2012);
+    NUBASE::Data nubase_1("", 2012);
+    nubase_1.A = 50;
+    nubase_1.Z = 25;
+    NUBASE::Data nubase_2("", 2012);
+    nubase_2.A = 100;
+    nubase_2.Z = 60;
+    table.nubaseDataTable.emplace_back(nubase_1);
+    table.nubaseDataTable.emplace_back(nubase_2);
+    AME::Data ame_1("", 2012);
+    ame_1.A = 5;
+    ame_1.Z = 2;
+    table.ameDataTable.emplace_back(ame_1);
+
+    REQUIRE(table.mergeData(1));
+  }
+}
