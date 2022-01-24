@@ -429,6 +429,7 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
   }
 }
 
+
 TEST_CASE("Merge AME and NUBASE data", "[MassTable]")
 {
   // Not sure about the test in this case.
@@ -468,4 +469,17 @@ TEST_CASE("Merge AME and NUBASE data", "[MassTable]")
 
     REQUIRE(table.mergeData(1));
   }
+}
+
+
+TEST_CASE("Output a json file", "[MassTable]")
+{
+  // Not sure about this test
+  // We are just testing that the code runs, there is no check it does what we want it to do
+  MassTable table(2016);
+  NUBASE::Data nubase_1("", 2016);
+  table.nubaseDataTable.emplace_back(nubase_1);
+  [[maybe_unused]] const auto i = table.mergeData();
+
+  REQUIRE(table.outputTableToJSON());
 }
