@@ -478,7 +478,16 @@ TEST_CASE("Output a json file", "[MassTable]")
   // We are just testing that the code runs, there is no check it does what we want it to do
   MassTable table(2016);
   NUBASE::Data nubase_1("", 2016);
+  nubase_1.A           = 50;
+  nubase_1.Z           = 25;
+  nubase_1.mass_excess = 123.456;
   table.nubaseDataTable.emplace_back(nubase_1);
+  AME::Data ame_1("", 2012);
+  ame_1.A           = 50;
+  ame_1.Z           = 25;
+  ame_1.mass_excess = 124.689;
+  table.ameDataTable.emplace_back(ame_1);
+
   [[maybe_unused]] const auto i = table.mergeData();
 
   REQUIRE(table.outputTableToJSON());
