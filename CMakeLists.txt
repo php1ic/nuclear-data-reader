@@ -83,7 +83,7 @@ else()
 endif()
 
 # Use a compile time definition to set the path to the data files
-add_compile_definitions(${PROJECT_NAME} PRIVATE NDR_DATA_PATH=\"${PROJECT_SOURCE_DIR}/data/\")
+add_compile_definitions(NDR_DATA_PATH=\"${PROJECT_SOURCE_DIR}/data/\")
 message(STATUS "Setting the data path as: ${PROJECT_SOURCE_DIR}/data")
 
 # Where are the header files
