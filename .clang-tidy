@@ -1,5 +1,6 @@
 ---
 Checks: '*,
+-altera-*,
 -fuchsia-*,
 -cppcoreguidelines-avoid-magic-numbers,
 -cppcoreguidelines-macro-usage,
