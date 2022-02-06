@@ -399,7 +399,7 @@ bool MassTable::readNUBASE(const std::filesystem::path& nubaseTable)
 }
 
 
-bool MassTable::mergeData(const uint8_t verbosity) const
+bool MassTable::mergeData() const
 {
   fmt::print("Merging AME and NUBASE data <--");
   if (ameDataTable.size() != nubaseDataTable.size())
@@ -420,10 +420,7 @@ bool MassTable::mergeData(const uint8_t verbosity) const
           // Isotope(AME, NUBASE))
           fullDataTable.emplace_back(Isotope(*ame, nubase));
         }
-      else if (verbosity > 0)
-        {
-          fmt::print("{} {}\n", nubase.A, nubase.Z);
-        }
+      // fmt::print("{} {}\n", nubase.A, nubase.Z);
     }
   fmt::print("--> done\n");
   return true;

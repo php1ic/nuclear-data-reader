@@ -125,7 +125,7 @@ public:
    * \return[TRUE] Successful merge
    * \return[FALSE] TBD
    */
-  [[nodiscard]] bool mergeData(const uint8_t verbosity = 0) const;
+  [[nodiscard]] bool mergeData() const;
 
   /**
    * Read a single line of the NUBASE data table for isotopic information

@@ -467,7 +467,7 @@ TEST_CASE("Merge AME and NUBASE data", "[MassTable]")
     ame_1.Z = 2;
     table.ameDataTable.emplace_back(ame_1);
 
-    REQUIRE(table.mergeData(1));
+    REQUIRE(table.mergeData());
   }
 }
 

@@ -133,7 +133,7 @@ public:
    *
    * \return The symbol as a std:string
    */
-  [[nodiscard]] static std::string_view ZToSymbol(const uint16_t Z, const uint8_t verbosity = 0);
+  [[nodiscard]] static std::string_view ZToSymbol(const uint16_t Z);
 
   /**
    * Convert elemental symbol to proton number
@@ -142,7 +142,7 @@ public:
    *
    * \return The proton number as an int
    */
-  [[nodiscard]] static uint16_t SymbolToZ(std::string_view symbol, const uint8_t verbosity = 0);
+  [[nodiscard]] static uint16_t SymbolToZ(std::string_view symbol);
 
   /**
    * Convert any type from it's string(_view) representation to the given type.

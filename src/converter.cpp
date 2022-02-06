@@ -1,4 +1,3 @@
-
 #include "nuclear-data-reader/converter.hpp"
 
 #include <string_view>
@@ -12,7 +11,7 @@
 #include <vector>
 
 
-std::string_view Converter::ZToSymbol(const uint16_t Z, const uint8_t verbosity)
+std::string_view Converter::ZToSymbol(const uint16_t Z)
 {
   const auto it =
       std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [Z](const auto& element) { return element.second == Z; });
@@ -20,10 +19,7 @@ std::string_view Converter::ZToSymbol(const uint16_t Z, const uint8_t verbosity)
   return [&]() -> std::string_view {
     if (it == symbolZmap.end())
       {
-        if (verbosity > 0)
-          {
-            fmt::print("\n**WARNING**: {} is not a valid proton number\n", Z);
-          }
+        // fmt::print("\n**WARNING**: {} is not a valid proton number\n", Z);
         return std::string_view{ "Xy" };
       }
 
@@ -32,7 +28,7 @@ std::string_view Converter::ZToSymbol(const uint16_t Z, const uint8_t verbosity)
 }
 
 
-uint16_t Converter::SymbolToZ(const std::string_view symbol, const uint8_t verbosity)
+uint16_t Converter::SymbolToZ(const std::string_view symbol)
 {
   const auto it = std::find_if(
       symbolZmap.cbegin(), symbolZmap.cend(), [symbol](const auto& element) { return element.first == symbol; });
@@ -40,10 +36,7 @@ uint16_t Converter::SymbolToZ(const std::string_view symbol, const uint8_t verbo
   return [&]() -> uint16_t {
     if (it == symbolZmap.end())
       {
-        if (verbosity > 0)
-          {
-            fmt::print("\n**WARNING**: {} is not a valid symbol\n", symbol);
-          }
+        // fmt::print("\n**WARNING**: {} is not a valid symbol\n", symbol);
         return uint8_t{ 200 };
       }
 

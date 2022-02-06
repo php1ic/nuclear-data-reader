@@ -22,8 +22,6 @@ TEST_CASE("Symbol -> Z", "[Converter]")
       REQUIRE(Converter::SymbolToZ("ab") == 200);
       REQUIRE(Converter::SymbolToZ("IS") == 200);
     }
-
-    SECTION("Verbose failure on invalid synbol") { REQUIRE(Converter::SymbolToZ("Xy", 1) == 200); }
   }
 }
 
@@ -44,8 +42,6 @@ TEST_CASE("Z -> Symbol", "[Converter]")
       REQUIRE(Converter::ZToSymbol(-2) == "Xy");
       REQUIRE(Converter::ZToSymbol(120) == "Xy");
     }
-
-    SECTION("Verbose failure on invalid proton number") { REQUIRE(Converter::ZToSymbol(-2, 1) == "Xy"); }
   }
 }
 
