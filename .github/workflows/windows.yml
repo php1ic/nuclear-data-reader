@@ -8,6 +8,7 @@ on: #[push, pull_request]
       - 'data/**'
       - 'scripts/**'
       - '.github/workflows/linux.yml'
+      - '.lgtm.yml'
 
 jobs:
   windows-build:
