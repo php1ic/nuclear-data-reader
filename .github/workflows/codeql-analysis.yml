@@ -24,6 +24,8 @@ jobs:
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
+        with:
+          languages: cpp
 
       - name: Build the project
         uses: github/codeql-action/autobuild@v1
