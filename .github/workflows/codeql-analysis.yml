@@ -34,4 +34,4 @@ jobs:
         #   cmake --build ./build
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-actions/analyse@v1
+        uses: github/codeql-action/analyse@v1
