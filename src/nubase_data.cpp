@@ -39,22 +39,19 @@ void NUBASE::Data::setSpinParity() const
   // the values to unknown and get out.
   if (full_data.size() <= position.START_SPIN || full_data.at(position.START_SPIN) == ' ')
     {
-      J  = 100.0;
-      pi = pi_exp = J_exp = J_tent = 2;
-
+      setDefaultSpinParityValues();
       return;
     }
 
   // Easiest to extract values by stripping away bits after use
   std::string jpi = full_data.substr(position.START_SPIN, (position.END_SPIN - position.START_SPIN));
+  fmt::print("JPI - {}\n", jpi);
 
   // Some values are set as words (high, low, mix, spmix, fsmix, am)
   // Don't want this so set to 'unknown' and get out.
-  if (isalpha(jpi[0]) != 0)
+  if (std::isalpha(jpi.at(0)) != 0)
     {
-      J  = 100.0;
-      pi = pi_exp = J_exp = J_tent = 2;
-
+      setDefaultSpinParityValues();
       return;
     }
 
@@ -110,9 +107,7 @@ void NUBASE::Data::setSpinParity() const
   // Set to 'unknown' and get out.
   if (jpi.find('+') == std::string::npos && jpi.find('-') == std::string::npos)
     {
-      J  = 100.0;
-      pi = pi_exp = J_exp = J_tent = 2;
-
+      setDefaultSpinParityValues();
       return;
     }
 

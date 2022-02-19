@@ -301,6 +301,19 @@ namespace NUBASE
     }
 
     /**
+     * Set the default values for the spin parity and other values associated with it
+     *
+     * \param Nothing
+     *
+     * \return Nothing
+     */
+    inline void setDefaultSpinParityValues() const
+    {
+      J  = 100.0;
+      pi = pi_exp = J_exp = J_tent = 2;
+    }
+
+    /**
      * Extract the spin and parity from the data file
      *
      * \param Nothing
