@@ -267,7 +267,7 @@ void NUBASE::Data::setHalfLife() const
   const std::string noUnit{ "no_units" };
 
   std::string lifetime =
-      (full_data.size() < static_cast<uint8_t>(position.START_HALFLIFEVALUE - 1))
+      (full_data.size() + 1 < position.START_HALFLIFEVALUE)
           ? noUnit
           : full_data.substr(position.START_HALFLIFEVALUE, (position.END_HALFLIFEVALUE - position.START_HALFLIFEVALUE));
 
