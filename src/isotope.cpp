@@ -1,6 +1,7 @@
 #include "nuclear-data-reader/isotope.hpp"
 
 #include "nuclear-data-reader/converter.hpp"
+#include "nuclear-data-reader/nubase_data.hpp"
 
 #include <fmt/format.h>
 
@@ -67,7 +68,7 @@ std::string Isotope::writeAsJSON(const bool human_readable) const
                      nubase.N,
                      nubase.symbol,
                      nubase.decay,
-                     static_cast<uint8_t>(nubase.exp),
+                     (nubase.exp == NUBASE::Measured::EXPERIMENTAL) ? 0 : 1,
                      Converter::FloatToNdp(nubase.mass_excess, NDP),
                      Converter::FloatToNdp(nubase.dmass_excess, NDP),
                      Converter::FloatToNdp(ame.mass_excess, NDP),
