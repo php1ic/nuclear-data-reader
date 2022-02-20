@@ -247,14 +247,16 @@ TEST_CASE("Read spin parity of the state", "[NUBASEData]")
     gs03_isotope.setSpinParity();
 
     REQUIRE(gs03_isotope.J == Approx(1.0));
-    REQUIRE(gs03_isotope.pi == 0);
-    REQUIRE(gs03_isotope.J_tent == 0);
+    REQUIRE(gs03_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
+    REQUIRE(gs03_isotope.pi == NUBASE::Parity::POSITIVE);
+    REQUIRE(gs03_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
 
     isomer03_isotope.setSpinParity();
 
     REQUIRE(isomer03_isotope.J == Approx(0.5));
-    REQUIRE(isomer03_isotope.pi == 1);
-    REQUIRE(isomer03_isotope.J_tent == 0);
+    REQUIRE(isomer03_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
+    REQUIRE(isomer03_isotope.pi == NUBASE::Parity::NEGATIVE);
+    REQUIRE(isomer03_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
   }
 
   SECTION("Post 2020")
@@ -270,14 +272,16 @@ TEST_CASE("Read spin parity of the state", "[NUBASEData]")
     gs20_isotope.setSpinParity();
 
     REQUIRE(gs20_isotope.J == Approx(0));
-    REQUIRE(gs20_isotope.pi == 0);
-    REQUIRE(gs20_isotope.J_tent == 0);
+    REQUIRE(gs20_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
+    REQUIRE(gs20_isotope.pi == NUBASE::Parity::POSITIVE);
+    REQUIRE(gs20_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
 
     isomer20_isotope.setSpinParity();
 
     REQUIRE(isomer20_isotope.J == Approx(1));
-    REQUIRE(isomer20_isotope.pi == 1);
-    REQUIRE(isomer20_isotope.J_tent == 0);
+    REQUIRE(isomer20_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
+    REQUIRE(isomer20_isotope.pi == NUBASE::Parity::NEGATIVE);
+    REQUIRE(isomer20_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
   }
 }
 

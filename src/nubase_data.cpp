@@ -90,8 +90,10 @@ void NUBASE::Data::setSpinParity() const
 
   // Extract full assignment into a separated string and remove parts as we assign properties
   std::string jpi = full_data.substr(position.START_SPIN, (position.END_SPIN - position.START_SPIN));
-  // Assume we have measured the spin. This value will be altered if required
-  J_exp = Measured::EXPERIMENTAL;
+  // Assume we have measured the spin and parity
+  // We'll alter these if it's not true
+  J_exp  = Measured::EXPERIMENTAL;
+  pi_exp = Measured::EXPERIMENTAL;
 
   // Some values are set as words (high, low, mix, spmix, fsmix, am)
   // Don't want this so set all properties to default and get out.
@@ -128,8 +130,7 @@ void NUBASE::Data::setSpinParity() const
   // What is the parity of the state
   if (jpi.ends_with('-') || jpi.ends_with('+'))
     {
-      pi     = jpi.ends_with('-') ? Parity::NEGATIVE : Parity::POSITIVE;
-      pi_exp = Measured::EXPERIMENTAL;
+      pi = jpi.ends_with('-') ? Parity::NEGATIVE : Parity::POSITIVE;
       jpi.pop_back();
     }
   // If no parity symbol, set to 'unknown'

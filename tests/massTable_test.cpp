@@ -1,3 +1,4 @@
+#include "nuclear-data-reader/nubase_data.hpp"
 #define CATCH_CONFIG_ENABLE_CHRONO_STRINGMAKER
 
 #include "nuclear-data-reader/massTable.hpp"
@@ -369,8 +370,9 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     REQUIRE(nubase.hl == Converter::minutes{ 2.3 });
     REQUIRE(nubase.hl_error == Converter::minutes{ 0.2 });
     REQUIRE(nubase.J == Approx(0.5));
-    REQUIRE(nubase.J_exp == 0);
-    REQUIRE(nubase.J_tent == 1);
+    REQUIRE(nubase.J_exp == NUBASE::Measured::THEORETICAL);
+    REQUIRE(nubase.pi == NUBASE::Parity::POSITIVE);
+    REQUIRE(nubase.pi_exp == NUBASE::Measured::THEORETICAL);
     REQUIRE_FALSE(nubase.decay.compare("B+"));
   }
 
@@ -409,8 +411,9 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     REQUIRE(nubase.hl == Converter::seconds{ 1.0e24 });
     REQUIRE(nubase.hl_error == Converter::seconds{ 1.0 });
     REQUIRE(nubase.J == Approx(0.0));
-    REQUIRE(nubase.J_exp == 0);
-    REQUIRE(nubase.J_tent == 0);
+    REQUIRE(nubase.J_exp == NUBASE::Measured::EXPERIMENTAL);
+    REQUIRE(nubase.pi == NUBASE::Parity::POSITIVE);
+    REQUIRE(nubase.pi_exp == NUBASE::Measured::EXPERIMENTAL);
     REQUIRE_FALSE(nubase.decay.compare("stable"));
     REQUIRE(table.pnSide.at(50));
   }
