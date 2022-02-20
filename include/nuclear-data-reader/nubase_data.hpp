@@ -30,11 +30,41 @@ namespace NUBASE
     STABLE  = 2
   };
 
+  // FIXME: Spin parity also has tentative values inferred from TNN (Trends in Neighbouiring Nuclides)
+  //        We should be able to add this as an option without too much effort
   enum class Measured : uint8_t
   {
     EXPERIMENTAL = 0,
     THEORETICAL  = 1
   };
+
+  static inline std::string printMeasured(const Measured value)
+  {
+    return value == Measured::EXPERIMENTAL ? "Experimental" : "Theoretical";
+  }
+
+  enum class Parity : uint8_t
+  {
+    POSITIVE = 0,
+    NEGATIVE = 1,
+    UNKOWN   = 2
+  };
+
+  static inline std::string printParity(const Parity value)
+  {
+    return [=]() -> std::string {
+      switch (value)
+        {
+          case Parity::POSITIVE:
+            return "Positive";
+          case Parity::NEGATIVE:
+            return "Negative";
+          case Parity::UNKOWN:
+          default:
+            return "Unknown";
+        }
+    }();
+  }
 
   class Data
   {
@@ -53,23 +83,24 @@ namespace NUBASE
     mutable LinePosition position;
 
     /// Is the isotope experimental or extrapolated/theoretical
-    mutable Measured exp{ Measured::EXPERIMENTAL };
+    mutable Measured exp{ Measured::THEORETICAL };
+    /// Is the parity of the spin state experimental
+    mutable Measured pi_exp{ Measured::THEORETICAL };
+    /// Is the spin value of the state experimental
+    mutable Measured J_exp{ Measured::EXPERIMENTAL };
+
+    /// The parity of the spin state
+    mutable Parity pi{ Parity::UNKOWN };
+
+    /// The state level
+    mutable uint8_t level{ 0 };
+
     /// The mass number
     mutable uint16_t A{ 0 };
     /// The proton number
     mutable uint16_t Z{ 0 };
     /// The neutron number
     mutable uint16_t N{ 0 };
-    /// The state level
-    mutable uint8_t level{ 0 };
-    /// The parity of the spin state
-    mutable uint8_t pi{ 0 };
-    /// Is the parity of the spin state experimental
-    mutable uint8_t pi_exp{ 0 };
-    /// The spin value of the state
-    mutable uint8_t J_exp{ 0 };
-    /// Is the spin value experimental
-    mutable uint8_t J_tent{ 0 };
     /// The discovery year to use if non is given
     mutable uint16_t DEFAULT_YEAR{ 1900 };
     /// What year was the isotope discovered
@@ -80,7 +111,7 @@ namespace NUBASE
     /// Error on the mass excess from the NUBASE table
     mutable double dmass_excess{ 1.0e4 };
     /// Spin parity of the isotope
-    mutable double J{ 0.0 };
+    mutable double J{ 100.0 };
 
     /// Half life of the isotope
     mutable std::chrono::duration<double> hl{};
@@ -307,11 +338,23 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    inline void setDefaultSpinParityValues() const
+    inline void setAllSpinParityValuesAsUnknown() const
     {
-      J  = 100.0;
-      pi = pi_exp = J_exp = J_tent = 2;
+      J     = 100.0;
+      J_exp = Measured::THEORETICAL;
+
+      pi     = Parity::UNKOWN;
+      pi_exp = Measured::THEORETICAL;
     }
+
+    /**
+     * Convert obnoxiously singular spin parity values into ones that can be parsed with a relatively simple algorithm
+     *
+     * \param std::string The spin parity value from the file
+     *
+     * \return
+     */
+    std::string cleanSpinParityString(std::string& spin_parity) const;
 
     /**
      * Extract the spin and parity from the data file

@@ -24,194 +24,122 @@ double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
 }
 
 
-void NUBASE::Data::setSpinParity() const
+std::string NUBASE::Data::cleanSpinParityString(std::string& spin_parity) const
 {
-  // This is dirty.
-
-  // Do this prior to replacing all '#' with ' '
-  // As a general rule, the first value of spin and/or parity will be taken
-
-  // The information starts at character position.START_SPIN(79), so if the line is not at least that
-  // size set values to 'unknown' and get out.
-  // OR
-  // The isotope can have no spin/parity, but a decay method, in which case we
-  // pass the above condition but there is no need to do any processing. Set
-  // the values to unknown and get out.
-  if (full_data.size() <= position.START_SPIN || full_data.at(position.START_SPIN) == ' ')
-    {
-      setDefaultSpinParityValues();
-      return;
-    }
-
-  // Easiest to extract values by stripping away bits after use
-  std::string jpi = full_data.substr(position.START_SPIN, (position.END_SPIN - position.START_SPIN));
-  fmt::print("JPI - {}\n", jpi);
-
-  // Some values are set as words (high, low, mix, spmix, fsmix, am)
-  // Don't want this so set to 'unknown' and get out.
-  if (std::isalpha(jpi.at(0)) != 0)
-    {
-      setDefaultSpinParityValues();
-      return;
-    }
-
-  // trim trailing spaces
-  if (const auto endpos = jpi.find_last_not_of(' '); std::string::npos != endpos)
-    {
-      jpi = jpi.substr(0, endpos + 1);
-    }
-
   // HACKS for those nuclei with non-unique assignments.
-  //
-  // 42Sc isomer 5 has (1+ to 4+) change to (1+)
-  if (jpi.find("(1+ to 4+)") != std::string::npos)
+
+  // Remove 'unhelpful' characters
+  if (spin_parity.find('>') != std::string::npos)
     {
-      jpi.replace(3, jpi.length(), ")");
+      spin_parity.erase(spin_parity.find('>'), 1);
     }
-  // 71Se isomer 1 has 1/2- to 9/2- change to 9/2-
-  if (jpi.find("1/2- to 9/2-") != std::string::npos)
+  else if (spin_parity.find('<') != std::string::npos)
     {
-      jpi.replace(4, jpi.length(), " ");
-    }
-  // 142Ho has (6 to 9) change to (6)
-  if (jpi.find("(6 to 9)") != std::string::npos)
-    {
-      jpi.replace(2, jpi.length(), ")");
+      spin_parity.erase(spin_parity.find('<'), 1);
     }
   // 131I isomer 2 has (19/2+..23/2+) change to (19/2+)
-  if (jpi.find("(19/2+..23/2+)") != std::string::npos)
+  else if (spin_parity.find("(19/2+..23/2+)") != std::string::npos)
     {
-      jpi.replace(6, jpi.length(), ")");
+      spin_parity.replace(6, spin_parity.length(), ")");
     }
   // 118Rh has gs J=4-10, take as 4
-  if (jpi.find("(4-10)") != std::string::npos)
+  else if (spin_parity.find("(4-10)") != std::string::npos)
     {
-      jpi.erase(jpi.find("(4-10)") + 1, 3);
+      spin_parity.erase(spin_parity.find("(4-10)") + 1, 3);
     }
-  // Remove 'unhelpful' characters
-  if (jpi.find('>') != std::string::npos)
+  // 176Tam has no J value, just (+). Executive decision; tentative 0+
+  else if (spin_parity.substr(0, 3) == "(+)")
     {
-      jpi.erase(jpi.find('>'), 1);
+      spin_parity = "(0+)";
     }
-  if (jpi.find('<') != std::string::npos)
+  // 71Se isomer 1 has 1/2- to 9/2- change to 9/2-
+  else if (spin_parity.find("1/2-to9/2-") != std::string::npos)
     {
-      jpi.erase(jpi.find('<'), 1);
+      spin_parity.replace(4, spin_parity.length(), "");
     }
-  // 176Tam has no J value, just (+). Easiest to say both are unknown
-  if (jpi.substr(0, 3) == "(+)")
+  // 42Sc isomer 5 has (1+ to 4+) change to (1+)
+  else if (spin_parity.find("(1+to4+)") != std::string::npos)
     {
-      jpi = "?";
+      spin_parity.replace(3, spin_parity.length(), ")");
+    }
+  // 142Ho has (6 to 9) change to (6)
+  else if (spin_parity.find("(6to9)") != std::string::npos)
+    {
+      spin_parity.replace(2, spin_parity.length(), ")");
     }
 
-  // If no parity is in the copied section then there is no assignment
-  // Set to 'unknown' and get out.
-  if (jpi.find('+') == std::string::npos && jpi.find('-') == std::string::npos)
+  return spin_parity;
+}
+
+
+void NUBASE::Data::setSpinParity() const
+{
+  // The first value of spin and/or parity will be taken
+
+  // The information starts at character position.START_SPIN(79),
+  // so if the line is not at least that length, set values to 'unknown' and get out.
+  // OR
+  // The isotope can have no spin/parity, but a decay method, in which case we
+  // pass the above condition but there is no need to do any processing.
+  // Set all properties to default and get out.
+  if (full_data.size() <= position.START_SPIN || full_data.at(position.START_SPIN) == ' ')
     {
-      setDefaultSpinParityValues();
+      setAllSpinParityValuesAsUnknown();
       return;
     }
 
-  // Take only the first parity if two are specified for the same state
-  if (jpi.find('+') != std::string::npos && jpi.find('-') != std::string::npos)
+  // Extract full assignment into a separated string and remove parts as we assign properties
+  std::string jpi = full_data.substr(position.START_SPIN, (position.END_SPIN - position.START_SPIN));
+  // Assume we have measured the spin. This value will be altered if required
+  J_exp = Measured::EXPERIMENTAL;
+
+  // Some values are set as words (high, low, mix, spmix, fsmix, am)
+  // Don't want this so set all properties to default and get out.
+  if (std::isalpha(jpi.at(0)) != 0)
     {
-      if (jpi.find_first_of('+') > jpi.find_first_of('-'))
-        {
-          jpi.erase(jpi.find('+'), 1);
-        }
-      else
-        {
-          jpi.erase(jpi.find('-'), 1);
-        }
+      setAllSpinParityValuesAsUnknown();
+      return;
     }
 
-  // Member pi is the parity (0)+ve or (1)-ve
-  // Member pi_exp is the state experimental(0) or theory/extrapolated(1)
-  // We will remove the sign once we record it.
-  if (jpi.find('+') != std::string::npos)
-    {
-      pi = 0;
-      bool experimental{ false };
-      do
-        {
-          if (jpi.size() > (jpi.find('+') + 1) && jpi.at(jpi.find('+') + 1) == '#')
-            {
-              jpi.erase(jpi.find('+'), 2);
-            }
-          else
-            {
-              jpi.erase(jpi.find('+'), 1);
-              experimental = true;
-            }
-        }
-      while (jpi.find('+') != std::string::npos);
+  // Remove all white space
+  jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
 
-      pi_exp = experimental ? 0 : 1;
-    }
-  else if (jpi.find('-') != std::string::npos)
-    {
-      pi = 1;
-      bool experimental{ false };
-      do
-        {
-          if (jpi.size() > (jpi.find('-') + 1) && jpi.at(jpi.find('-') + 1) == '#')
-            {
-              jpi.erase(jpi.find('-'), 2);
-            }
-          else
-            {
-              jpi.erase(jpi.find('-'), 1);
-              experimental = true;
-            }
-        }
-      while (jpi.find('-') != std::string::npos);
+  // Convert overly complicated assignments into more parseable ones
+  jpi = cleanSpinParityString(jpi);
 
-      pi_exp = experimental ? 0 : 1;
+  // Brackets mean tentative values and hash (#) means theoretical
+  // FIXME: It's likely that any and all # characters has been removed by the time this function is run.
+  // For the moment, we will call both of those theoretical.
+  // If there is an opening ( then there will be also be a closing ) so don't bother checking
+  if (jpi.find('(') != std::string::npos || jpi.find('#') != std::string::npos)
+    {
+      std::erase_if(jpi, [](const char c) { return c == '(' || c == ')' || c == '#'; });
+      pi_exp = Measured::THEORETICAL;
+      J_exp  = Measured::THEORETICAL;
     }
 
-  // Stripping away the +/- will leave some () so remove them
-  if (jpi.find("()") != std::string::npos)
+  // We are only storing one value per isotope.
+  // For those with multiple values, separated by a comma, drop everything after the first comma
+  if (const auto pos = jpi.find(','); pos != std::string::npos)
     {
-      jpi.erase(jpi.find("()"), 2);
+      jpi = jpi.substr(0, pos);
     }
 
-  // Member J_tent shows either definite(0) or tentative(1) assignment
-  if (jpi.find('(') != std::string::npos)
+  // What is the parity of the state
+  if (jpi.ends_with('-') || jpi.ends_with('+'))
     {
-      jpi.erase(jpi.find('('), 1);
-      jpi.erase(jpi.find(')'), 1);
-      J_tent = 1;
+      pi     = jpi.ends_with('-') ? Parity::NEGATIVE : Parity::POSITIVE;
+      pi_exp = Measured::EXPERIMENTAL;
+      jpi.pop_back();
     }
+  // If no parity symbol, set to 'unknown'
   else
     {
-      J_tent = 0;
+      pi = Parity::UNKOWN;
     }
 
-  // If multiple spins are given, take only the first
-  if (jpi.find(',') != std::string::npos)
-    {
-      jpi.erase(jpi.find(','));
-    }
-
-  // Member J_exp either experiment(0) or theory/extrapolated(1) assigment
-  if (jpi.find('#') != std::string::npos)
-    {
-      jpi.erase(jpi.find('#'), 1);
-      J_exp = 1;
-    }
-  else
-    {
-      J_exp = 0;
-    }
-
-  // Member J stores the spin as a double
-  if (jpi.find('/') == std::string::npos)
-    {
-      J = Converter::StringToNum<double>(jpi, 0, jpi.length());
-    }
-  else
-    {
-      J = 0.5 * Converter::StringToNum<double>(jpi, 0, jpi.find('/'));
-    }
+  // Our string should now only be a number. Either x or x/2.
+  J = (jpi.ends_with("/2")) ? 0.5 * std::stod(jpi.substr(0, jpi.find('/'))) : std::stod(jpi);
 }
 
 

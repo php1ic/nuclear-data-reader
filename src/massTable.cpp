@@ -315,6 +315,8 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 {
   NUBASE::Data data(line, year);
 
+  data.setSpinParity();
+
   data.setExperimental();
 
   data.setA();
@@ -332,8 +334,6 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 
   data.setMassExcess();
   data.setMassExcessError();
-
-  data.setSpinParity();
 
   data.setHalfLife();
 
