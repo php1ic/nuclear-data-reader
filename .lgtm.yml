@@ -5,10 +5,13 @@ extraction:
   cpp:
     prepare:
       packages:
+        - build-essential
         - clang-12
+        - llvm
         - llvm-12-dev
         - llvm-12-runtime
         - libtbb2
+        - libtbb-dev
         - ninja-build
     configure:
       command:
