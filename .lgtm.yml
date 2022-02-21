@@ -5,7 +5,10 @@ extraction:
   cpp:
     prepare:
       packages:
-        - ccache
+        - clang-12
+        - llvm-12-dev
+        - llvm-12-runtime
+        - libtbb2
         - ninja-build
     configure:
       command:
