@@ -41,14 +41,14 @@ std::string NUBASE::Data::cleanSpinParityString(std::string& spin_parity) const
   // 118Rh has gs J=(4-10), take as 4
   else if (const auto pos = spin_parity.find("(4-10)"); pos != std::string::npos)
     {
-      spin_parity.erase(pos + 1, 3);
+      spin_parity.erase(pos + 2, 3);
     }
   // 176Tam has no J value, just (+). Executive decision; tentative 0+
   else if (spin_parity.substr(0, 3) == "(+)")
     {
       spin_parity = "(0+)";
     }
-  // 71Se isomer 1 has 1/2- to 9/2- change to 9/2-
+  // 71Se isomer 1 has 1/2- to 9/2- change to 1/2-
   else if (spin_parity.find("1/2-to9/2-") != std::string::npos)
     {
       spin_parity.replace(4, spin_parity.length(), "");
