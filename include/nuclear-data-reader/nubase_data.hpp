@@ -47,7 +47,7 @@ namespace NUBASE
   {
     POSITIVE = 0,
     NEGATIVE = 1,
-    UNKOWN   = 2
+    UNKNOWN  = 2
   };
 
   static inline std::string printParity(const Parity value)
@@ -59,7 +59,7 @@ namespace NUBASE
             return "Positive";
           case Parity::NEGATIVE:
             return "Negative";
-          case Parity::UNKOWN:
+          case Parity::UNKNOWN:
           default:
             return "Unknown";
         }
@@ -90,7 +90,7 @@ namespace NUBASE
     mutable Measured J_exp{ Measured::EXPERIMENTAL };
 
     /// The parity of the spin state
-    mutable Parity pi{ Parity::UNKOWN };
+    mutable Parity pi{ Parity::UNKNOWN };
 
     /// The state level
     mutable uint8_t level{ 0 };
@@ -343,7 +343,7 @@ namespace NUBASE
       J     = 100.0;
       J_exp = Measured::THEORETICAL;
 
-      pi     = Parity::UNKOWN;
+      pi     = Parity::UNKNOWN;
       pi_exp = Measured::THEORETICAL;
     }
 
@@ -354,7 +354,7 @@ namespace NUBASE
      *
      * \return
      */
-    std::string cleanSpinParityString(std::string& spin_parity) const;
+    [[nodiscard]] std::string cleanSpinParityString(std::string& spin_parity) const;
 
     /**
      * Extract the spin and parity from the data file

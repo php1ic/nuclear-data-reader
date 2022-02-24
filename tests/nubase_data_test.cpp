@@ -230,6 +230,36 @@ TEST_CASE("Read and set measured or theoretical", "[NUBASEData]")
 }
 
 
+TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
+{
+  SECTION("131I 2nd isomer")
+  {
+    NUBASE::Data iso("131 0492   131Inn -64040       70      4100      70     BD   320     ms 60     (19/2+..23/2+)94  "
+                     "         B->99;B-n=0.028 5;IT<1",
+                     2003);
+    std::string jpi = iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+    REQUIRE(iso.cleanSpinParityString(jpi) == "(19/2+)");
+  }
+}
+
+
+TEST_CASE("Set all spin and parity values to unknown", "[NUBASEData]")
+{
+  NUBASE::Data iso("", 2003);
+  iso.J      = 5.0;
+  iso.J_exp  = NUBASE::Measured::EXPERIMENTAL;
+  iso.pi     = NUBASE::Parity::POSITIVE;
+  iso.pi_exp = NUBASE::Measured::EXPERIMENTAL;
+
+  iso.setAllSpinParityValuesAsUnknown();
+
+  REQUIRE(iso.J == Approx(100.0));
+  REQUIRE(iso.J_exp == NUBASE::Measured::THEORETICAL);
+  REQUIRE(iso.pi == NUBASE::Parity::UNKNOWN);
+  REQUIRE(iso.pi_exp == NUBASE::Measured::THEORETICAL);
+}
+
+
 TEST_CASE("Read spin parity of the state", "[NUBASEData]")
 {
   SECTION("Pre 2020")

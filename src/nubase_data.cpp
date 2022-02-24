@@ -132,7 +132,7 @@ void NUBASE::Data::setSpinParity() const
   // If no parity symbol, set to 'unknown'
   else
     {
-      pi = Parity::UNKOWN;
+      pi = Parity::UNKNOWN;
     }
 
   // Our string should now only be a number. Either x or x/2.
