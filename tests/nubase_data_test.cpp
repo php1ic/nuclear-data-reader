@@ -232,77 +232,132 @@ TEST_CASE("Read and set measured or theoretical", "[NUBASEData]")
 
 TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
 {
-  SECTION("131I 2nd isomer")
+  SECTION("2003")
   {
-    NUBASE::Data iso("131 0492   131Inn -64040       70      4100      70     BD   320     ms 60     (19/2+..23/2+)94  "
-                     "         B->99;B-n=0.028 5;IT<1",
-                     2003);
-    std::string jpi = iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-    // Remove all white space
-    jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+    SECTION("131I 2nd isomer")
+    {
+      NUBASE::Data iso(
+          "131 0492   131Inn -64040       70      4100      70     BD   320     ms 60     (19/2+..23/2+)94  "
+          "         B->99;B-n=0.028 5;IT<1",
+          2003);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
 
-    REQUIRE(iso.cleanSpinParityString(jpi) == "(19/2+)");
+      REQUIRE(iso.cleanSpinParityString(jpi) == "(19/2+)");
+    }
+
+    SECTION("118Rh")
+    {
+      NUBASE::Data iso(
+          "118 0450   118Rh  -65140#     500#                           310     ms 30     (4-10)(+#)    97 "
+          "00Jo18tjd B-=100",
+          2003);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+
+      REQUIRE(iso.cleanSpinParityString(jpi) == "(4)(+#)");
+    }
+
+    SECTION("176Ta 1st isomer")
+    {
+      NUBASE::Data iso(
+          "176 0731   176Tam -51270       30       103.0     1.0          1.1   ms 0.1    (+)           98  "
+          "         IT=100",
+          2003);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+
+      REQUIRE(iso.cleanSpinParityString(jpi) == "(0+)");
+    }
+
+    SECTION("71Se 1st isomer")
+    {
+      NUBASE::Data iso(
+          "071 0341   71Sem  -63070       30        48.79    0.05         5.6   us 0.7    1/2- to 9/2-  93  "
+          "         IT=100",
+          2003);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+
+      REQUIRE(iso.cleanSpinParityString(jpi) == "1/2-");
+    }
+
+    SECTION("42Sc 5th isomer")
+    {
+      NUBASE::Data iso(
+          "042 0215   42Scr  -26044.91     0.26   6076.33    0.08  RQ                     (1+ to 4+)    01  "
+          "         IT=100",
+          2003);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+
+      REQUIRE(iso.cleanSpinParityString(jpi) == "(1+)");
+    }
+
+    SECTION("142Ho")
+    {
+      NUBASE::Data iso(
+          "142 0670   142Ho  -37470#     500#                           400     ms 100    (6 to 9)      02 "
+          "B+~100;B+p=?;p~0",
+          2003);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+
+      REQUIRE(iso.cleanSpinParityString(jpi) == "(6)");
+    }
   }
 
-  SECTION("118Rh")
+  SECTION("2012")
   {
-    NUBASE::Data iso("118 0450   118Rh  -65140#     500#                           310     ms 30     (4-10)(+#)    97 "
-                     "00Jo18tjd B-=100",
-                     2003);
-    std::string jpi = iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-    // Remove all white space
-    jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+    SECTION("38P")
+    {
+      NUBASE::Data iso(
+          "038 0150   38P    -14670       90                            640     ms 140    (0- to 4-)    08  "
+          "        1971 B-=100;B-n=12 5",
+          2012);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
 
-    REQUIRE(iso.cleanSpinParityString(jpi) == "(4)(+#)");
+      REQUIRE(iso.cleanSpinParityString(jpi) == "(0-)");
+    }
+
+    SECTION("118Agm")
+    {
+      NUBASE::Data iso("118 0471W  118Agm -79508.0      2.5      45.79    0.09        ~0.1   us        0(-) to 2(-)  "
+                       "95          1989 IT=100",
+                       2012);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+
+      REQUIRE(iso.cleanSpinParityString(jpi) == "0(-)");
+    }
+
+    SECTION("35Sxi")
+    {
+      NUBASE::Data iso("035 0168   35Sxi  -19691       10      9155      10     RQ              T=5/2  (1/2:9/2)+    "
+                       "11          1975",
+                       2012);
+      std::string jpi =
+          iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+
+      REQUIRE(iso.cleanSpinParityString(jpi) == "(1/2)+");
+    }
   }
 
-  SECTION("176Ta 1st isomer")
-  {
-    NUBASE::Data iso("176 0731   176Tam -51270       30       103.0     1.0          1.1   ms 0.1    (+)           98  "
-                     "         IT=100",
-                     2003);
-    std::string jpi = iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-    // Remove all white space
-    jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+  // Nothing additonal to test but leave here commented to show we have just not bothered
+  // SECTION("2016") {}
 
-    REQUIRE(iso.cleanSpinParityString(jpi) == "(0+)");
-  }
-
-  SECTION("71Se 1st isomer")
-  {
-    NUBASE::Data iso("071 0341   71Sem  -63070       30        48.79    0.05         5.6   us 0.7    1/2- to 9/2-  93  "
-                     "         IT=100",
-                     2003);
-    std::string jpi = iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-    // Remove all white space
-    jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
-    REQUIRE(iso.cleanSpinParityString(jpi) == "1/2-");
-  }
-
-  SECTION("42Sc 5th isomer")
-  {
-    NUBASE::Data iso("042 0215   42Scr  -26044.91     0.26   6076.33    0.08  RQ                     (1+ to 4+)    01  "
-                     "         IT=100",
-                     2003);
-    std::string jpi = iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-    // Remove all white space
-    jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
-    REQUIRE(iso.cleanSpinParityString(jpi) == "(1+)");
-  }
-
-  SECTION("142Ho")
-  {
-    NUBASE::Data iso("142 0670   142Ho  -37470#     500#                           400     ms 100    (6 to 9)      02 "
-                     "B+~100;B+p=?;p~0",
-                     2003);
-    std::string jpi = iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-    // Remove all white space
-    jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
-    REQUIRE(iso.cleanSpinParityString(jpi) == "(6)");
-  }
+  // Nothing additonal to test but leave here commented to show we have just not bothered
+  // SECTION("2020") {}
 }
 
 

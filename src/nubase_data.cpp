@@ -27,9 +27,8 @@ double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
 std::string NUBASE::Data::cleanSpinParityString(std::string& spin_parity) const
 {
   // HACKS for those nuclei with non-unique assignments.
-
   // Remove 'unhelpful' characters
-  if (const auto pos = spin_parity.find_first_of("<>"); pos != std::string::npos)
+  if (const auto pos = spin_parity.find_first_of("<>*"); pos != std::string::npos)
     {
       spin_parity.erase(pos, 1);
     }
@@ -53,16 +52,36 @@ std::string NUBASE::Data::cleanSpinParityString(std::string& spin_parity) const
     {
       spin_parity.replace(4, spin_parity.length(), "");
     }
-  // 42Sc isomer 5 has (1+ to 4+) change to (1+)
-  else if (spin_parity.find("(1+to4+)") != std::string::npos)
-    {
-      spin_parity.replace(3, spin_parity.length(), ")");
-    }
   // 142Ho has (6 to 9) change to (6)
   else if (spin_parity.find("(6to9)") != std::string::npos)
     {
       spin_parity.replace(2, spin_parity.length(), ")");
     }
+  // Same string in both 2003 and 2012
+  // 42Sc isomer 5 has (1+ to 4+) change to (1+)
+  if (spin_parity.find("(1+to4+)") != std::string::npos)
+    {
+      spin_parity.replace(3, spin_parity.length(), ")");
+    }
+  // 38P has (0- to 4-) change to (0-)
+  if (spin_parity.find("0-to4-") != std::string::npos)
+    {
+      spin_parity.replace(3, spin_parity.length(), ")");
+    }
+  // 118Agm has 0(-) to 2(-) change to 0(-)
+  else if (spin_parity.find("0(-)to2(-)") != std::string::npos)
+    {
+      spin_parity.erase(4);
+    }
+  // 35Sxi has (1/2:9/2)+ change to (1/2)+
+  else if (spin_parity.find("(1/2:9/2)+") != std::string::npos)
+    {
+      spin_parity.replace(4, spin_parity.length(), ")+");
+    }
+  // 2016
+  // Nothing additional to what has already been done
+  // 2020
+  // Nothing additional to what has already been done
 
   return spin_parity;
 }
@@ -98,6 +117,21 @@ void NUBASE::Data::setSpinParity() const
       setAllSpinParityValuesAsUnknown();
       return;
     }
+
+  // Remove more random substrings that we aren't going to parse/use
+  if (const auto pos = jpi.find("frg"); pos != std::string::npos)
+    {
+      jpi.erase(pos);
+    }
+  else if (const auto pos = jpi.find("T="); pos != std::string::npos)
+    {
+      jpi.erase(pos);
+    }
+  else if (const auto pos = jpi.find("am"); pos != std::string::npos)
+    {
+      jpi.erase(pos);
+    }
+
 
   // Remove all white space
   jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
