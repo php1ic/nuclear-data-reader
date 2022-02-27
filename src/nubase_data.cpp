@@ -1,6 +1,7 @@
 #include "nuclear-data-reader/nubase_data.hpp"
 
 #include "nuclear-data-reader/nubase_line_position.hpp"
+#include <string_view>
 
 #include <fmt/format.h>
 
@@ -119,19 +120,13 @@ void NUBASE::Data::setSpinParity() const
     }
 
   // Remove more random substrings that we aren't going to parse/use
-  if (const auto pos = jpi.find("frg"); pos != std::string::npos)
+  constexpr std::array<std::string_view, 3> randoms{ "frg", "T=", "am" };
+  if (const auto it =
+          std::find_if(randoms.cbegin(), randoms.cend(), [=](auto s) { return jpi.find(s) != std::string_view::npos; });
+      it != randoms.cend())
     {
-      jpi.erase(pos);
+      jpi.erase(jpi.find(*it));
     }
-  else if (const auto pos = jpi.find("T="); pos != std::string::npos)
-    {
-      jpi.erase(pos);
-    }
-  else if (const auto pos = jpi.find("am"); pos != std::string::npos)
-    {
-      jpi.erase(pos);
-    }
-
 
   // Remove all white space
   jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
