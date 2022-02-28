@@ -187,24 +187,24 @@ void NUBASE::Data::setExperimental() const
 
 void NUBASE::Data::setIsomerData(std::vector<NUBASE::Data>& nuc) const
 {
-  // Loop from the penultimate isotope towards the beginning.
+  // Loop backwards through the existing isotopes to look for the correct ground state
   // Original order is ground state followed by ascending states,
   // theoretically we could just modify nuc.back(), but that's not safe
-  for (auto previous = nuc.rbegin(); previous != nuc.rend(); ++previous)
+  if (auto ground_state = std::find_if(
+          nuc.rbegin(), nuc.rend(), [this](const auto& isotope) { return A == isotope.A && Z == isotope.Z; });
+      ground_state != nuc.rend())
     {
-      if (A == previous->A && Z == previous->Z)
-        {
-          const auto energy = setIsomerEnergy();
-          const auto error  = setIsomerEnergyError();
+      const auto energy = setIsomerEnergy();
+      const auto error  = setIsomerEnergyError();
 
-          // Some isomers(3 in total) are measured via beta difference so come out -ve
-          previous->energy_levels.emplace_back(State(level, energy < 0.0 ? energy : std::fabs(energy), error));
-          return;
-        }
+      // Some isomers(3 in total) are measured via beta difference so come out -ve
+      ground_state->energy_levels.emplace_back(State(level, energy < 0.0 ? energy : std::fabs(energy), error));
     }
-
-  // Should never get here
-  fmt::print(stderr, "**WARNING**: This isomer has no matching ground-state\n");
+  else
+    {
+      // Should never get here
+      fmt::print(stderr, "**WARNING**: This isomer has no matching ground-state\n");
+    }
 }
 
 
