@@ -89,6 +89,25 @@ message(STATUS "Setting the data path as: ${PROJECT_SOURCE_DIR}/data")
 # Where are the header files
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include/)
 
+# Allow the use of pre-compiled headers
+# Get a list of the most used headers with the following command, run from the root of the dir,
+# grep -h "^#include <" ./{src,include/nuclear-data-reader}/*  | sort | uniq -c | sort -nr
+# Somewhat randomly pick the top 6 headers used in the project. Top 6 are used at least 4 times
+option(NDR_PCH "Enable pre-compiled headers" OFF)
+if(NDR_PCH)
+  message(STATUS "[Precompiled Headers] Enabling precompiled headers")
+  target_precompile_headers(project_options INTERFACE
+    <cstdint>
+    <limits>
+    <algorithm>
+    <string>
+    <vector>
+    <string_view>
+    )
+else()
+  message(STATUS "[Precompiled Headers] Not using precompiled headers")
+endif()
+
 target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE
