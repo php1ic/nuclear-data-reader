@@ -16,32 +16,18 @@ std::string_view Converter::ZToSymbol(const uint16_t Z)
   const auto it =
       std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [Z](const auto& element) { return element.second == Z; });
 
-  return [&]() -> std::string_view {
-    if (it == symbolZmap.end())
-      {
-        // fmt::print("\n**WARNING**: {} is not a valid proton number\n", Z);
-        return std::string_view{ "Xy" };
-      }
-
-    return it->first;
-  }();
+  return (it == symbolZmap.cend()) ? std::string_view{ "Xy" } : it->first;
 }
 
 
 uint16_t Converter::SymbolToZ(const std::string_view symbol)
 {
+  // FIXME: Check that the string format matches that in the map,
+  // i.e. first character capital letter, 2nd (if it exists) lower case ^[A-Z]{1}[a-z]?$
   const auto it = std::find_if(
       symbolZmap.cbegin(), symbolZmap.cend(), [symbol](const auto& element) { return element.first == symbol; });
 
-  return [&]() -> uint16_t {
-    if (it == symbolZmap.end())
-      {
-        // fmt::print("\n**WARNING**: {} is not a valid symbol\n", symbol);
-        return uint8_t{ 200 };
-      }
-
-    return it->second;
-  }();
+  return (it == symbolZmap.cend()) ? uint16_t{ 200 } : it->second;
 }
 
 
