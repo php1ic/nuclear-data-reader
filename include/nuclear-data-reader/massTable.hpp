@@ -101,7 +101,7 @@ public:
    */
   [[nodiscard]] inline bool checkValidYear(const uint16_t _year) const
   {
-    return (std::find(valid_years.cbegin(), valid_years.cend(), _year) != valid_years.end());
+    return (std::find(valid_years.cbegin(), valid_years.cend(), _year) != valid_years.cend());
   }
 
   /**
@@ -114,7 +114,7 @@ public:
    */
   [[nodiscard]] inline bool checkValidYear() const
   {
-    return (std::find(valid_years.cbegin(), valid_years.cend(), year) != valid_years.end());
+    return (std::find(valid_years.cbegin(), valid_years.cend(), year) != valid_years.cend());
   }
 
   /**
