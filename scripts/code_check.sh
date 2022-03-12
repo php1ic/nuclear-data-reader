@@ -29,7 +29,7 @@ includes="${rootdir}/include"
 ${CODECHECKER} \
     --enable=all \
     --inconclusive \
-    --std=c++17 \
+    --std=c++20 \
     --suppress=missingIncludeSystem \
     -I"${includes}" \
     "${sources}"/*.cpp
