@@ -59,20 +59,64 @@ TEST_CASE("Float -> string", "[Converter]")
   REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Equals("null"));
 }
 
-
 TEST_CASE("Trim a string", "[Converter]")
 {
-  std::string_view space{ "     567   " };
-  REQUIRE(Converter::TrimString(space) == "567");
+  SECTION("Leading")
+  {
+    std::string_view space{ "     123   " };
+    REQUIRE(Converter::TrimStart(space) == "123   ");
 
-  std::string_view leading_space{ "     963.2" };
-  REQUIRE(Converter::TrimString(leading_space) == "963.2");
+    std::string_view none{ "full" };
+    REQUIRE(Converter::TrimStart(none) == "full");
 
-  std::string_view trailing_space{ "abc123   " };
-  REQUIRE(Converter::TrimString(trailing_space) == "abc123");
+    std::string_view random{ "~~~<" };
+    REQUIRE(Converter::TrimStart(random, "~") == "<");
 
-  std::string_view different_char{ "___asdf___" };
-  REQUIRE(Converter::TrimString(different_char, "_") == "asdf");
+    std::string_view no_match{ "9876" };
+    REQUIRE(Converter::TrimStart(no_match, " ") == "9876");
+
+    std::string_view empty{ "   " };
+    REQUIRE(Converter::TrimStart(empty, " ") == "");
+
+    std::string_view nothing{ "" };
+    REQUIRE(Converter::TrimStart(nothing, " ") == "");
+  }
+
+  SECTION("Trailing")
+  {
+    std::string_view space{ "     123   " };
+    REQUIRE(Converter::TrimEnd(space) == "     123");
+
+    std::string_view none{ "full" };
+    REQUIRE(Converter::TrimEnd(none) == "full");
+
+    std::string_view random{ ">#####" };
+    REQUIRE(Converter::TrimEnd(random, "#") == ">");
+
+    std::string_view no_match{ "9876" };
+    REQUIRE(Converter::TrimEnd(no_match, " ") == "9876");
+
+    std::string_view nothing{ "" };
+    REQUIRE(Converter::TrimEnd(nothing, " ") == "");
+
+    std::string_view empty{ "   " };
+    REQUIRE(Converter::TrimEnd(empty, " ") == "");
+  }
+
+  SECTION("Surrounding")
+  {
+    std::string_view space{ "     567   " };
+    REQUIRE(Converter::TrimString(space) == "567");
+
+    std::string_view leading_space{ "     963.2" };
+    REQUIRE(Converter::TrimString(leading_space) == "963.2");
+
+    std::string_view trailing_space{ "abc123   " };
+    REQUIRE(Converter::TrimString(trailing_space) == "abc123");
+
+    std::string_view different_char{ "___asdf___" };
+    REQUIRE(Converter::TrimString(different_char, "_") == "asdf");
+  }
 }
 
 

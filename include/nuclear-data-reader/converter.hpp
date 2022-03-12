@@ -189,22 +189,54 @@ public:
   }
 
   /**
-   * Trim leading and trailing repeated characters from the given std::string_view
+   * Trim leading repeated characters form the given string
    *
    * \param The string_view to trim
    * \param The repeated character to remove (default is a space character)
    *
-   * \return The original string with the characters removed
+   * \return The original string with the character(s) removed
    */
-  [[nodiscard]] static std::string_view TrimString(std::string_view str, std::string_view trim_character = " ")
+  [[nodiscard]] static std::string_view TrimStart(std::string_view str, const std::string_view trim_character = " ")
   {
     str.remove_prefix(std::min(str.find_first_not_of(trim_character), str.size()));
-    const auto pos = str.find(trim_character);
+    return str;
+  }
+
+  /**
+   * Trim tailing repeated characters form the given string
+   *
+   * \param The string_view to trim
+   * \param The repeated character to remove (default is a space character)
+   *
+   * \return The original string with the character(s) removed
+   */
+  [[nodiscard]] static std::string_view TrimEnd(std::string_view str, const std::string_view trim_character = " ")
+  {
+    const auto pos = str.find_last_not_of(trim_character);
     if (pos != std::string_view::npos)
       {
-        str.remove_suffix(str.size() - pos);
+        str.remove_suffix(str.size() - (pos + 1));
       }
+    else
+      {
+        str = "";
+      }
+
     return str;
+  }
+
+  /**
+   * Trim leading and trailing repeated characters from the given std::string_view
+   * Note that any occurance of the character 'inside' the string are not removed
+   *
+   * \param The string_view to trim
+   * \param The repeated character to remove (default is a space character)
+   *
+   * \return The original string with the character(s) removed
+   */
+  [[nodiscard]] static std::string_view TrimString(std::string_view str, const std::string_view trim_character = " ")
+  {
+    return Converter::TrimEnd(Converter::TrimStart(str, trim_character), trim_character);
   }
 
   /**
