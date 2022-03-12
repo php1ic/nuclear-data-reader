@@ -159,11 +159,12 @@ public:
    * \return[failure] The max value of the type requested
    */
   template<typename T>
-  [[nodiscard]] static constexpr T StringToNum(std::string_view str, const uint8_t start, const uint8_t end) noexcept
+  [[nodiscard]] static constexpr T
+  StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
   {
-    auto number = NumberAsString(str, start, end);
+    const auto number = NumberAsString(str, start, end);
     T value;
-    auto [ptr, ec]{ std::from_chars(number.data(), number.data() + number.size(), value) };
+    const auto [ptr, ec]{ std::from_chars(number.data(), number.data() + number.size(), value) };
     return ec == std::errc() ? value : std::numeric_limits<T>::max();
   }
 
@@ -179,9 +180,9 @@ public:
    * \return The substring as described above
    */
   [[nodiscard]] static std::string_view
-  NumberAsString(std::string_view fullString, const uint8_t start, const uint8_t end)
+  NumberAsString(const std::string_view fullString, const uint8_t start, const uint8_t end)
   {
-    auto number = TrimString(fullString.substr(start, end - start));
+    const auto number = TrimString(fullString.substr(start, end - start));
 
     return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
                                                                                                            : number;
