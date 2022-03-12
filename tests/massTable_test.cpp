@@ -106,7 +106,7 @@ TEST_CASE("Absolute paths are constructed", "[MassTable]")
 }
 
 
-TEST_CASE("Try to read non-existant file", "[MassTable]")
+TEST_CASE("Try to read non-existent file", "[MassTable]")
 {
   MassTable table(2003);
   table.setFilePaths();
@@ -175,7 +175,7 @@ TEST_CASE("Validate the requested table year", "[MassTable]")
     REQUIRE(table.year == 2003);
   }
 
-  SECTION("Construction is correct but ammendment of the year is not")
+  SECTION("Construction is correct but amendment of the year is not")
   {
     const MassTable table(2012);
     REQUIRE_FALSE(table.setTableYear(2000));

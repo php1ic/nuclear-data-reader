@@ -326,7 +326,7 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 
   data.setState();
 
-  // For the non ground-state entires we have enough data to attach this level to the appropriate isotope
+  // For the non ground-state entries we have enough data to attach this level to the appropriate isotope
   if (data.level > 0)
     {
       return data;

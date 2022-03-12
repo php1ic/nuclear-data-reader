@@ -94,7 +94,7 @@ public:
   /**
    * Check that the given year corresponds to one that we have a mass table for
    *
-   * \param The year we wnat to check
+   * \param The year we want to check
    *
    * \return[TRUE] A valid year
    * \return[FALSE] An invalid year

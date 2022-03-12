@@ -44,14 +44,14 @@ The data contained within is freely available as ASCII files, all of which are i
 The newer tables are available on the [AMDC](https://www-nds.iaea.org/amdc/) website, and the [historic](http://amdc.in2p3.fr/) page can be used to find older ones.
 
 
-## Aquiring
+## Acquiring
 
-Simplest way to aquire the repo is to clone it.
+Simplest way to acquire the repo is to clone it.
 The project makes use of [fmt](https://github.com/fmtlib/fmt) and [Catch2](https://github.com/catchorg/Catch2) via submodules so they need to be initialised.
 The below is enough to get you started.
 
 ```
-$ git clone -recurse-submodules https://github.com/php1ic/nuclear-data-reader.git
+$ git clone --recurse-submodules https://github.com/php1ic/nuclear-data-reader.git
 ```
 
 

@@ -353,10 +353,10 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
     }
   }
 
-  // Nothing additonal to test but leave here commented to show we have just not bothered
+  // Nothing additional to test but leave here commented to show we have just not bothered
   // SECTION("2016") {}
 
-  // Nothing additonal to test but leave here commented to show we have just not bothered
+  // Nothing additional to test but leave here commented to show we have just not bothered
   // SECTION("2020") {}
 }
 
@@ -939,7 +939,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
       REQUIRE_THAT(isomer03_isotope.decay, Catch::Matches("IT"));
     }
 
-    SECTION("Convert guess into unkown")
+    SECTION("Convert guess into unknown")
     {
       NUBASE::Data data{ "223 0830   223Bi   32140#     400#                             1#     s >300ns 9/2-#         "
                          "11 10Al24i  2009 B- ?;B-n ?",
@@ -990,7 +990,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
       REQUIRE_THAT(isomer20_isotope.decay, Catch::Matches("IT"));
     }
 
-    SECTION("Convert guess into unkown")
+    SECTION("Convert guess into unknown")
     {
       NUBASE::Data data{ "183 0700   183Yb  -35000#       400#                                   30#     s >300ns "
                          "3/2-#         16          2012 B- ?",

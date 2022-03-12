@@ -84,7 +84,7 @@ public:
   };
 
   /**
-   * Get the hash of a const char* so we can use a swtich statement on std::string_view
+   * Get the hash of a const char* so we can use a switch statement on std::string_view
    * https://learnmoderncpp.com/2020/06/01/strings-as-switch-case-labels/
    *
    * \param The 'string' to take the hash of
@@ -193,7 +193,7 @@ public:
    * \param The string_view to trim
    * \param The repeated character to remove (default is a space character)
    *
-   * \return The orginal string with the characters removed
+   * \return The original string with the characters removed
    */
   [[nodiscard]] static std::string_view TrimString(std::string_view str, std::string_view trim_character = " ")
   {
@@ -208,7 +208,7 @@ public:
 
   /**
    * Convert a floating point number to a std::string with the specified number of decimal places.
-   * We store 'null' values as the max value a double can take. Iif that's the case, return 'null' as a sring
+   * We store 'null' values as the max value a double can take. If that's the case, return 'null' as a string
    *
    * \param number The number to convert
    * \param numDP The number of decimal points to include in the output string

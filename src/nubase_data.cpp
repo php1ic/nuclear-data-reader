@@ -15,7 +15,7 @@ double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
   // 12C has an mass excess of 0.0 by definition.
   // This is the only place it currently trips us up and this path does not always happen so, in terms of doing as
   // little work as possible, this is the best place to check and make adjustments.
-  // The value we set does not matter as the error on the value is also 0.0 so relative error is guarenteed to be 0.0
+  // The value we set does not matter as the error on the value is also 0.0 so relative error is guaranteed to be 0.0
   if (A == 12 && Z == 6)
     {
       mass_excess = 0.0001;
@@ -265,7 +265,7 @@ void NUBASE::Data::setDecayMode() const
 
   // The string format is ... complicated, see Section 2.5 of the 2016 paper
   // 10.1088/1674-1137/41/3/030001
-  // Let's be relatively simple and take upto the first ';' only
+  // Let's be relatively simple and take up to the first ';' only
   if (Decay.find(';') != std::string::npos)
     {
       Decay.erase(Decay.find(';'));
