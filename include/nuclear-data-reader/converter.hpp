@@ -219,7 +219,7 @@ public:
       }
     else
       {
-        str = "";
+        str = std::string_view{};
       }
 
     return str;

@@ -240,14 +240,8 @@ namespace NUBASE
      */
     inline void setHalfLifeUnit() const
     {
-      halflife_unit =
-          full_data.substr(position.START_HALFLIFEUNIT, position.END_HALFLIFEUNIT - position.START_HALFLIFEUNIT);
-
-      // Trim leading white space
-      halflife_unit.erase(halflife_unit.begin(),
-                          std::find_if(halflife_unit.begin(), halflife_unit.end(), [](const auto ch) {
-                            return (std::isspace(ch) == 0);
-                          }));
+      halflife_unit = Converter::TrimStart(
+          full_data.substr(position.START_HALFLIFEUNIT, position.END_HALFLIFEUNIT - position.START_HALFLIFEUNIT), " ");
     }
 
 
