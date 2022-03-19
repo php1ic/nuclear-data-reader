@@ -29,9 +29,9 @@ std::string NUBASE::Data::cleanSpinParityString(std::string& spin_parity) const
 {
   // HACKS for those nuclei with non-unique assignments.
   // Remove 'unhelpful' characters
-  if (const auto pos = spin_parity.find_first_of("<>*"); pos != std::string::npos)
+  if (const auto unwanted = spin_parity.find_first_of("<>*"); unwanted != std::string::npos)
     {
-      spin_parity.erase(pos, 1);
+      spin_parity.erase(unwanted, 1);
     }
   // 131I isomer 2 has (19/2+..23/2+) change to (19/2+)
   else if (spin_parity.find("(19/2+..23/2+)") != std::string::npos)
@@ -39,9 +39,9 @@ std::string NUBASE::Data::cleanSpinParityString(std::string& spin_parity) const
       spin_parity.replace(6, spin_parity.length(), ")");
     }
   // 118Rh has gs J=(4-10), take as 4
-  else if (const auto pos = spin_parity.find("(4-10)"); pos != std::string::npos)
+  else if (const auto spin_alter = spin_parity.find("(4-10)"); spin_alter != std::string::npos)
     {
-      spin_parity.erase(pos + 2, 3);
+      spin_parity.erase(spin_alter + 2, 3);
     }
   // 176Tam has no J value, just (+). Executive decision; tentative 0+
   else if (spin_parity.substr(0, 3) == "(+)")

@@ -13,7 +13,7 @@ function(set_project_warnings project_name)
     -Wall
     -Wextra
     -Wpedantic
-    #-Wshadow # {fmt} uses -Wno-shadow so breaks CI. I want CI to be green
+    -Wshadow
     -Wnon-virtual-dtor
     -Woverloaded-virtual
     -Wnull-dereference
@@ -21,8 +21,8 @@ function(set_project_warnings project_name)
     -Wcast-align
     -Wfloat-equal
     -Wunused
-    #-Wconversion # STL containers uses size_t so this gives lots of warnings
-    #-Wsign-conversion # STL containers uses size_t so this gives lots of warnings
+    # -Wconversion # STL containers uses size_t so this gives lots of warnings
+    # -Wsign-conversion # STL containers uses size_t so this gives lots of warnings
     )
 
   if (WARNINGS_AS_ERRORS)

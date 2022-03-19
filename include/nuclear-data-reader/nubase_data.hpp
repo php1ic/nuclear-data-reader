@@ -258,7 +258,7 @@ namespace NUBASE
           full_data.substr(position.START_HALFLIFEERROR, (position.END_HALFLIFEERROR - position.START_HALFLIFEERROR));
       std::replace(hle.begin(), hle.end(), '>', ' ');
       std::replace(hle.begin(), hle.end(), '<', ' ');
-      return Converter::StringToNum<double>(hle, 0, hle.size());
+      return Converter::StringToNum<double>(hle, 0, static_cast<uint8_t>(hle.size()));
     }
 
     /**
