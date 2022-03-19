@@ -21,8 +21,8 @@ function(set_project_warnings project_name)
     -Wcast-align
     -Wfloat-equal
     -Wunused
-    # -Wconversion # STL containers uses size_t so this gives lots of warnings
-    # -Wsign-conversion # STL containers uses size_t so this gives lots of warnings
+    -Wconversion
+    -Wsign-conversion
     )
 
   if (WARNINGS_AS_ERRORS)

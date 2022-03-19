@@ -39,7 +39,9 @@ TEST_CASE("Z -> Symbol", "[Converter]")
   {
     SECTION("Quiet failure on invalid proton number")
     {
-      REQUIRE(Converter::ZToSymbol(-2) == "Xy");
+      // Replicate a -ve number being passed
+      // If we do pass a -ve number, we get a compiler warning about conversion
+      REQUIRE(Converter::ZToSymbol(65534) == "Xy");
       REQUIRE(Converter::ZToSymbol(120) == "Xy");
     }
   }

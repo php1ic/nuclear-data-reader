@@ -97,7 +97,7 @@ public:
     uint64_t c{};
     for (auto p = s; *p != 0; ++p, ++c)
       {
-        hash += *p << c;
+        hash += static_cast<uint64_t>(*p) << c;
       }
     return hash;
   }
