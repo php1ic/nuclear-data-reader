@@ -1,8 +1,7 @@
-#define CATCH_CONFIG_ENABLE_CHRONO_STRINGMAKER
-
 #include "nuclear-data-reader/nubase_data.hpp"
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_all.hpp>
 
 
 // TEST_CASE("", "[Isotope]")
