@@ -26,7 +26,7 @@ public:
   Isotope(const Isotope&)     = default;
   Isotope(Isotope&&) noexcept = default;
 
-  Isotope& operator=(const Isotope&) = default;
+  Isotope& operator=(const Isotope&)     = default;
   Isotope& operator=(Isotope&&) noexcept = default;
 
   ~Isotope() = default;
