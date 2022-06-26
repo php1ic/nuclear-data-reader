@@ -36,7 +36,7 @@ public:
   Converter(const Converter&)     = default;
   Converter(Converter&&) noexcept = default;
 
-  Converter& operator=(const Converter&) = default;
+  Converter& operator=(const Converter&)     = default;
   Converter& operator=(Converter&&) noexcept = default;
 
   ~Converter() = default;
@@ -133,7 +133,7 @@ public:
    *
    * \return The symbol as a std:string
    */
-  [[nodiscard]] static std::string_view ZToSymbol(const uint16_t Z);
+  [[nodiscard]] static std::string_view ZToSymbol(const uint16_t proton_number);
 
   /**
    * Convert elemental symbol to proton number

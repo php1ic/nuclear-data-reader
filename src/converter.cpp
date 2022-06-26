@@ -11,12 +11,13 @@
 #include <vector>
 
 
-std::string_view Converter::ZToSymbol(const uint16_t Z)
+std::string_view Converter::ZToSymbol(const uint16_t proton_number)
 {
-  const auto it =
-      std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [Z](const auto& element) { return element.second == Z; });
+  const auto symbol = std::find_if(symbolZmap.cbegin(), symbolZmap.cend(), [proton_number](const auto& element) {
+    return element.second == proton_number;
+  });
 
-  return (it == symbolZmap.cend()) ? std::string_view{ "Xy" } : it->first;
+  return (symbol == symbolZmap.cend()) ? std::string_view{ "Xy" } : symbol->first;
 }
 
 
@@ -24,10 +25,10 @@ uint16_t Converter::SymbolToZ(const std::string_view symbol)
 {
   // FIXME: Check that the string format matches that in the map,
   // i.e. first character capital letter, 2nd (if it exists) lower case ^[A-Z]{1}[a-z]?$
-  const auto it = std::find_if(
+  const auto proton_number = std::find_if(
       symbolZmap.cbegin(), symbolZmap.cend(), [symbol](const auto& element) { return element.first == symbol; });
 
-  return (it == symbolZmap.cend()) ? uint16_t{ 200 } : it->second;
+  return (proton_number == symbolZmap.cend()) ? uint16_t{ 200 } : proton_number->second;
 }
 
 
