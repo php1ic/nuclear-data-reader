@@ -2,7 +2,7 @@
 
 #include "nuclear-data-reader/nubase_data.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 
 // TEST_CASE("", "[Isotope]")
@@ -15,7 +15,7 @@ TEST_CASE("Set Symbol", "[NUBASEData]")
   NUBASE::Data gs03_isotope("", 2003);
 
   gs03_isotope.setSymbol("Pb");
-  REQUIRE_THAT(gs03_isotope.symbol, Catch::Matches("Pb"));
+  REQUIRE_THAT(gs03_isotope.symbol, Catch::Matchers::Matches("Pb"));
 }
 
 
@@ -69,8 +69,8 @@ TEST_CASE("Set State", "[NUBASEData]")
 
       isomer03_isotope.setIsomerData(table);
       REQUIRE(table.front().energy_levels.size() == 1);
-      REQUIRE(table.front().energy_levels.front().energy == Approx(200));
-      REQUIRE(table.front().energy_levels.front().error == Approx(40));
+      REQUIRE(table.front().energy_levels.front().energy == Catch::Approx(200));
+      REQUIRE(table.front().energy_levels.front().error == Catch::Approx(40));
       REQUIRE(table.front().energy_levels.front().level == 1);
     }
   }
@@ -121,8 +121,8 @@ TEST_CASE("Set State", "[NUBASEData]")
 
       isomer20_isotope.setIsomerData(table);
       REQUIRE(table.front().energy_levels.size() == 1);
-      REQUIRE(table.front().energy_levels.front().energy == Approx(229));
-      REQUIRE(table.front().energy_levels.front().error == Approx(22));
+      REQUIRE(table.front().energy_levels.front().energy == Catch::Approx(229));
+      REQUIRE(table.front().energy_levels.front().error == Catch::Approx(22));
       REQUIRE(table.front().energy_levels.front().level == 1);
     }
   }
@@ -134,8 +134,8 @@ TEST_CASE("State object is created correctly", "[NUBASEData]")
   auto level = NUBASE::Data::State(0, 1.2345, 0.321);
 
   REQUIRE(level.level == 0);
-  REQUIRE(level.energy == Approx(1.2345));
-  REQUIRE(level.error == Approx(0.321));
+  REQUIRE(level.energy == Catch::Approx(1.2345));
+  REQUIRE(level.error == Catch::Approx(0.321));
 }
 
 
@@ -147,7 +147,7 @@ TEST_CASE("Set IsomerEnergy", "[NUBASEData]")
                                   "         97           B-=100",
                                   2003);
 
-    REQUIRE(isomer03_isotope.setIsomerEnergy() == Approx(340.0));
+    REQUIRE(isomer03_isotope.setIsomerEnergy() == Catch::Approx(340.0));
   }
 
   SECTION("Post 2020")
@@ -156,7 +156,7 @@ TEST_CASE("Set IsomerEnergy", "[NUBASEData]")
                                   "    1+#           12          2011 B-~100;IT ?;B-n=1.3 4",
                                   2020);
 
-    REQUIRE(isomer20_isotope.setIsomerEnergy() == Approx(160));
+    REQUIRE(isomer20_isotope.setIsomerEnergy() == Catch::Approx(160));
   }
 }
 
@@ -169,7 +169,7 @@ TEST_CASE("Set IsomerEnergyError", "[NUBASEData]")
                                   "(12-)         99           IT=100",
                                   2003);
 
-    REQUIRE(isomer03_isotope.setIsomerEnergyError() == Approx(0.19));
+    REQUIRE(isomer03_isotope.setIsomerEnergyError() == Catch::Approx(0.19));
   }
 
   SECTION("Post 2020")
@@ -178,7 +178,7 @@ TEST_CASE("Set IsomerEnergyError", "[NUBASEData]")
                                   "    (8-)          19          1994 IT=100",
                                   2020);
 
-    REQUIRE(isomer20_isotope.setIsomerEnergyError() == Approx(1.1));
+    REQUIRE(isomer20_isotope.setIsomerEnergyError() == Catch::Approx(1.1));
   }
 }
 
@@ -371,7 +371,7 @@ TEST_CASE("Set all spin and parity values to unknown", "[NUBASEData]")
 
   iso.setAllSpinParityValuesAsUnknown();
 
-  REQUIRE(iso.J == Approx(100.0));
+  REQUIRE(iso.J == Catch::Approx(100.0));
   REQUIRE(iso.J_exp == NUBASE::Measured::THEORETICAL);
   REQUIRE(iso.pi == NUBASE::Parity::UNKNOWN);
   REQUIRE(iso.pi_exp == NUBASE::Measured::THEORETICAL);
@@ -394,14 +394,14 @@ TEST_CASE("Read spin parity of the state", "[NUBASEData]")
 
     gs03_isotope.setSpinParity();
 
-    REQUIRE(gs03_isotope.J == Approx(1.0));
+    REQUIRE(gs03_isotope.J == Catch::Approx(1.0));
     REQUIRE(gs03_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
     REQUIRE(gs03_isotope.pi == NUBASE::Parity::POSITIVE);
     REQUIRE(gs03_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
 
     isomer03_isotope.setSpinParity();
 
-    REQUIRE(isomer03_isotope.J == Approx(0.5));
+    REQUIRE(isomer03_isotope.J == Catch::Approx(0.5));
     REQUIRE(isomer03_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
     REQUIRE(isomer03_isotope.pi == NUBASE::Parity::NEGATIVE);
     REQUIRE(isomer03_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
@@ -419,14 +419,14 @@ TEST_CASE("Read spin parity of the state", "[NUBASEData]")
 
     gs20_isotope.setSpinParity();
 
-    REQUIRE(gs20_isotope.J == Approx(0));
+    REQUIRE(gs20_isotope.J == Catch::Approx(0));
     REQUIRE(gs20_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
     REQUIRE(gs20_isotope.pi == NUBASE::Parity::POSITIVE);
     REQUIRE(gs20_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
 
     isomer20_isotope.setSpinParity();
 
-    REQUIRE(isomer20_isotope.J == Approx(1));
+    REQUIRE(isomer20_isotope.J == Catch::Approx(1));
     REQUIRE(isomer20_isotope.J_exp == NUBASE::Measured::EXPERIMENTAL);
     REQUIRE(isomer20_isotope.pi == NUBASE::Parity::NEGATIVE);
     REQUIRE(isomer20_isotope.pi_exp == NUBASE::Measured::EXPERIMENTAL);
@@ -444,7 +444,7 @@ TEST_CASE("Read half-life unit", "[NUBASEData]")
 
     gs03_isotope.setHalfLifeUnit();
 
-    REQUIRE_THAT(gs03_isotope.halflife_unit, Catch::Matches("My"));
+    REQUIRE_THAT(gs03_isotope.halflife_unit, Catch::Matchers::Matches("My"));
   }
 
   SECTION("Post 2020")
@@ -456,7 +456,7 @@ TEST_CASE("Read half-life unit", "[NUBASEData]")
 
     gs20_isotope.setHalfLifeUnit();
 
-    REQUIRE_THAT(gs20_isotope.halflife_unit, Catch::Matches("ns"));
+    REQUIRE_THAT(gs20_isotope.halflife_unit, Catch::Matchers::Matches("ns"));
   }
 }
 
@@ -933,10 +933,10 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
 
 
       gs03_isotope.setDecayMode();
-      REQUIRE_THAT(gs03_isotope.decay, Catch::Matches("B-"));
+      REQUIRE_THAT(gs03_isotope.decay, Catch::Matchers::Matches("B-"));
 
       isomer03_isotope.setDecayMode();
-      REQUIRE_THAT(isomer03_isotope.decay, Catch::Matches("IT"));
+      REQUIRE_THAT(isomer03_isotope.decay, Catch::Matchers::Matches("IT"));
     }
 
     SECTION("Convert guess into unknown")
@@ -946,7 +946,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                          2003 };
 
       data.setDecayMode();
-      REQUIRE_THAT(data.decay, Catch::Matches("unknown"));
+      REQUIRE_THAT(data.decay, Catch::Matchers::Matches("unknown"));
     }
 
     SECTION("Convert e+ -> B+")
@@ -984,10 +984,10 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
 
 
       gs20_isotope.setDecayMode();
-      REQUIRE_THAT(gs20_isotope.decay, Catch::Matches("EC"));
+      REQUIRE_THAT(gs20_isotope.decay, Catch::Matchers::Matches("EC"));
 
       isomer20_isotope.setDecayMode();
-      REQUIRE_THAT(isomer20_isotope.decay, Catch::Matches("IT"));
+      REQUIRE_THAT(isomer20_isotope.decay, Catch::Matchers::Matches("IT"));
     }
 
     SECTION("Convert guess into unknown")
@@ -997,7 +997,7 @@ TEST_CASE("Read the major decay mode", "[NUBASEData]")
                          2020 };
 
       data.setDecayMode();
-      REQUIRE_THAT(data.decay, Catch::Matches("unknown"));
+      REQUIRE_THAT(data.decay, Catch::Matchers::Matches("unknown"));
     }
 
     // Scenario doesn't exist for the major decay mode in 2020 data
@@ -1139,7 +1139,7 @@ TEST_CASE("Read mass excess", "[NUBASEData]")
 
     gs03_isotope.setMassExcess();
 
-    REQUIRE(gs03_isotope.mass_excess == Approx(-64980.8));
+    REQUIRE(gs03_isotope.mass_excess == Catch::Approx(-64980.8));
   }
 
   SECTION("Post 2020")
@@ -1150,7 +1150,7 @@ TEST_CASE("Read mass excess", "[NUBASEData]")
 
     gs20_isotope.setMassExcess();
 
-    REQUIRE(gs20_isotope.mass_excess == Approx(3019.893));
+    REQUIRE(gs20_isotope.mass_excess == Catch::Approx(3019.893));
   }
 }
 
@@ -1163,7 +1163,7 @@ TEST_CASE("Read mass excess error", "[NUBASEData]")
                               "     01          1967 B+=100",
                               2003);
     gs03_isotope.setMassExcessError();
-    REQUIRE(gs03_isotope.dmass_excess == Approx(9));
+    REQUIRE(gs03_isotope.dmass_excess == Catch::Approx(9));
   }
 
   SECTION("Post 2020")
@@ -1172,7 +1172,7 @@ TEST_CASE("Read mass excess error", "[NUBASEData]")
                               "5/2-*         98          1954 B-=100",
                               2020);
     gs20_isotope.setMassExcessError();
-    REQUIRE(gs20_isotope.dmass_excess == Approx(1.5));
+    REQUIRE(gs20_isotope.dmass_excess == Catch::Approx(1.5));
   }
 }
 
@@ -1190,8 +1190,8 @@ TEST_CASE("Calculate relative error on mass excess", "[NUBASEData]")
       gs03_isotope.setMassExcess();
       gs03_isotope.setMassExcessError();
 
-      REQUIRE(gs03_isotope.getRelativeMassExcessError(1.0e-7) == Approx(std::fabs(28.0 / -83766.0)));
-      REQUIRE(gs03_isotope.getRelativeMassExcessError(0.1) == Approx(0.1));
+      REQUIRE(gs03_isotope.getRelativeMassExcessError(1.0e-7) == Catch::Approx(std::fabs(28.0 / -83766.0)));
+      REQUIRE(gs03_isotope.getRelativeMassExcessError(0.1) == Catch::Approx(0.1));
     }
 
     SECTION("12C and it's annoying 0.0 ME is handled correctly")
@@ -1205,7 +1205,7 @@ TEST_CASE("Calculate relative error on mass excess", "[NUBASEData]")
       nubase03_12C_isotope.setMassExcess();
       nubase03_12C_isotope.setMassExcessError();
 
-      REQUIRE(nubase03_12C_isotope.getRelativeMassExcessError(1.0e-5) == Approx(1.0e-5));
+      REQUIRE(nubase03_12C_isotope.getRelativeMassExcessError(1.0e-5) == Catch::Approx(1.0e-5));
     }
   }
 
@@ -1220,8 +1220,8 @@ TEST_CASE("Calculate relative error on mass excess", "[NUBASEData]")
       gs20_isotope.setMassExcess();
       gs20_isotope.setMassExcessError();
 
-      REQUIRE(gs20_isotope.getRelativeMassExcessError(1.0e-7) == Approx(std::fabs(23.0 / -22093.0)));
-      REQUIRE(gs20_isotope.getRelativeMassExcessError(0.1) == Approx(0.1));
+      REQUIRE(gs20_isotope.getRelativeMassExcessError(1.0e-7) == Catch::Approx(std::fabs(23.0 / -22093.0)));
+      REQUIRE(gs20_isotope.getRelativeMassExcessError(0.1) == Catch::Approx(0.1));
     }
 
     SECTION("12C and it's annoying 0.0 ME is handled correctly")
@@ -1235,7 +1235,7 @@ TEST_CASE("Calculate relative error on mass excess", "[NUBASEData]")
       nubase20_12C_isotope.setMassExcess();
       nubase20_12C_isotope.setMassExcessError();
 
-      REQUIRE(nubase20_12C_isotope.getRelativeMassExcessError(1.0e-5) == Approx(1.0e-5));
+      REQUIRE(nubase20_12C_isotope.getRelativeMassExcessError(1.0e-5) == Catch::Approx(1.0e-5));
     }
   }
 }

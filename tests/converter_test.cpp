@@ -2,7 +2,7 @@
 
 #include "nuclear-data-reader/converter.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 
 TEST_CASE("Symbol -> Z", "[Converter]")
@@ -57,8 +57,8 @@ TEST_CASE("Floating point comparison", "[Converter]")
 
 TEST_CASE("Float -> string", "[Converter]")
 {
-  REQUIRE_THAT(Converter::FloatToNdp(1.234, 3), Catch::Equals("1.234"));
-  REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Equals("null"));
+  REQUIRE_THAT(Converter::FloatToNdp(1.234, 3), Catch::Matchers::Equals("1.234"));
+  REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Matchers::Equals("null"));
 }
 
 TEST_CASE("Trim a string", "[Converter]")
@@ -127,13 +127,13 @@ TEST_CASE("Generic string -> value", "[Converter]")
   SECTION("Double")
   {
     std::string_view d_str{ "987.654" };
-    REQUIRE(Converter::StringToNum<double>(d_str, 0, 7) == Approx(987.654));
+    REQUIRE(Converter::StringToNum<double>(d_str, 0, 7) == Catch::Approx(987.654));
   }
 
   SECTION("Float")
   {
     std::string_view f_str{ "abc987.654abc" };
-    REQUIRE(Converter::StringToNum<float>(f_str, 3, 10) == Approx(987.654));
+    REQUIRE(Converter::StringToNum<float>(f_str, 3, 10) == Catch::Approx(987.654));
   }
 
   SECTION("uint8_t")
@@ -151,11 +151,11 @@ TEST_CASE("Generic string -> value", "[Converter]")
   SECTION("No number")
   {
     std::string_view e_str{ "   *   " };
-    REQUIRE(Converter::StringToNum<double>(e_str, 0, 7) == Approx(std::numeric_limits<double>::max()));
+    REQUIRE(Converter::StringToNum<double>(e_str, 0, 7) == Catch::Approx(std::numeric_limits<double>::max()));
 
     // Be specific, and verbose, so initialise with empty string
     std::string_view b_str{ "" };
-    REQUIRE(Converter::StringToNum<int>(b_str, 0, 5) == Approx(std::numeric_limits<int>::max()));
+    REQUIRE(Converter::StringToNum<int>(b_str, 0, 5) == Catch::Approx(std::numeric_limits<int>::max()));
   }
 }
 

@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include "nuclear-data-reader/ame_data.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 // Lines from the files were picked at random with the `shuf` command
 // $ shuf -n1 FILE
@@ -164,7 +164,7 @@ TEST_CASE("Mass Excess", "[AMEData]")
                             "33.674 210 995536.544     22.652" };
     const AME::Data data(line, 2003);
     data.setMassExcess();
-    REQUIRE(data.mass_excess == Approx(-4157.682));
+    REQUIRE(data.mass_excess == Catch::Approx(-4157.682));
   }
 
   SECTION("Post 2020")
@@ -173,7 +173,7 @@ TEST_CASE("Mass Excess", "[AMEData]")
                             "-5182.9513    30.3243  174 951381.000      30.000" };
     const AME::Data data(line, 2020);
     data.setMassExcess();
-    REQUIRE(data.mass_excess == Approx(-45288.213));
+    REQUIRE(data.mass_excess == Catch::Approx(-45288.213));
   }
 }
 
@@ -186,7 +186,7 @@ TEST_CASE("Error on mass excess", "[AMEData]")
                             "0.001   1 008664.91574    0.00056" };
     const AME::Data data(line, 2003);
     data.setMassExcessError();
-    REQUIRE(data.dmass_excess == Approx(0.00053));
+    REQUIRE(data.dmass_excess == Catch::Approx(0.00053));
   }
 
   SECTION("Post 2020")
@@ -195,7 +195,7 @@ TEST_CASE("Error on mass excess", "[AMEData]")
                             "      583#       86 969007#        537#" };
     const AME::Data data(line, 2020);
     data.setMassExcessError();
-    REQUIRE(data.dmass_excess == Approx(500.0));
+    REQUIRE(data.dmass_excess == Catch::Approx(500.0));
   }
 }
 
@@ -214,7 +214,7 @@ TEST_CASE("Relative mass excess error", "[AMEData]")
       constexpr double min{ 1.0e-7 };
       data.setMassExcess();
       data.setMassExcessError();
-      REQUIRE(data.getRelativeMassExcessError(min) == Approx(0.024635));
+      REQUIRE(data.getRelativeMassExcessError(min) == Catch::Approx(0.024635));
     }
 
     SECTION("Post 2020")
@@ -225,7 +225,7 @@ TEST_CASE("Relative mass excess error", "[AMEData]")
       constexpr double min{ 1.0e-7 };
       data.setMassExcess();
       data.setMassExcessError();
-      REQUIRE(data.getRelativeMassExcessError(min) == Approx(0.0000153925));
+      REQUIRE(data.getRelativeMassExcessError(min) == Catch::Approx(0.0000153925));
     }
   }
 
@@ -243,7 +243,7 @@ TEST_CASE("Relative mass excess error", "[AMEData]")
       data.setZ();
       data.setMassExcess();
       data.setMassExcessError();
-      REQUIRE(data.getRelativeMassExcessError(min) == Approx(min));
+      REQUIRE(data.getRelativeMassExcessError(min) == Catch::Approx(min));
     }
 
     SECTION("Post 2020")
@@ -256,7 +256,7 @@ TEST_CASE("Relative mass excess error", "[AMEData]")
       data.setZ();
       data.setMassExcess();
       data.setMassExcessError();
-      REQUIRE(data.getRelativeMassExcessError(min) == Approx(min));
+      REQUIRE(data.getRelativeMassExcessError(min) == Catch::Approx(min));
     }
   }
 }
@@ -316,7 +316,7 @@ TEST_CASE("Binding energy per A", "[AMEData]")
                             "13.983  98 924636.204     26.185" };
     const AME::Data data(line, 2003);
     data.setBindingEnergyPerA();
-    REQUIRE(data.binding_energy_per_A == Approx(8472.220));
+    REQUIRE(data.binding_energy_per_A == Catch::Approx(8472.220));
   }
 
   SECTION("Post 2020")
@@ -325,7 +325,7 @@ TEST_CASE("Binding energy per A", "[AMEData]")
                             "      705#      271 133782#        634#" };
     const AME::Data data(line, 2020);
     data.setBindingEnergyPerA();
-    REQUIRE(data.binding_energy_per_A == Approx(7305));
+    REQUIRE(data.binding_energy_per_A == Catch::Approx(7305));
   }
 }
 
@@ -338,7 +338,7 @@ TEST_CASE("Error on binding energy per A", "[AMEData]")
                             "2.837  84 911789.737      0.012" };
     const AME::Data data(line, 2003);
     data.setBindingEnergyPerAError();
-    REQUIRE(data.dbinding_energy_per_A == Approx(0.0));
+    REQUIRE(data.dbinding_energy_per_A == Catch::Approx(0.0));
   }
 
   SECTION("Post 2020")
@@ -347,7 +347,7 @@ TEST_CASE("Error on binding energy per A", "[AMEData]")
                             "-3290.0000    15.0000  159 925203.578       0.751" };
     const AME::Data data(line, 2020);
     data.setBindingEnergyPerAError();
-    REQUIRE(data.dbinding_energy_per_A == Approx(0.0044));
+    REQUIRE(data.dbinding_energy_per_A == Catch::Approx(0.0044));
   }
 }
 
@@ -360,7 +360,7 @@ TEST_CASE("Beta decay energy", "[AMEData]")
                             "1.829 139 909477.645      2.592" };
     const AME::Data data(line, 2003);
     data.setBetaDecayEnergy();
-    REQUIRE(data.beta_decay_energy == Approx(3762.248));
+    REQUIRE(data.beta_decay_energy == Catch::Approx(3762.248));
   }
 
   SECTION("Post 2020")
@@ -369,7 +369,7 @@ TEST_CASE("Beta decay energy", "[AMEData]")
                             "-6755.1411     4.4114   83 913419.118       1.334" };
     const AME::Data data(line, 2020);
     data.setBetaDecayEnergy();
-    REQUIRE(data.beta_decay_energy == Approx(-6755.1411));
+    REQUIRE(data.beta_decay_energy == Catch::Approx(-6755.1411));
   }
 }
 
@@ -382,7 +382,7 @@ TEST_CASE("Error on beta decay energy", "[AMEData]")
                             "196#    135 928275.527     13.416" };
     const AME::Data data(line, 2003);
     data.setBetaDecayEnergyError();
-    REQUIRE(data.dbeta_decay_energy == Approx(196));
+    REQUIRE(data.dbeta_decay_energy == Catch::Approx(196));
   }
 
   SECTION("Post 2020")
@@ -391,7 +391,7 @@ TEST_CASE("Error on beta decay energy", "[AMEData]")
                             "      447#       66 979313#        429#" };
     const AME::Data data(line, 2020);
     data.setBetaDecayEnergyError();
-    REQUIRE(data.dbeta_decay_energy == Approx(447));
+    REQUIRE(data.dbeta_decay_energy == Catch::Approx(447));
   }
 }
 
@@ -404,7 +404,7 @@ TEST_CASE("Atomic mass", "[AMEData]")
                             "249#    252 088976.521     13.948" };
     const AME::Data data(line, 2003);
     data.setAtomicMass();
-    REQUIRE(data.atomic_mass == Approx(88976.521));
+    REQUIRE(data.atomic_mass == Catch::Approx(88976.521));
   }
 
   SECTION("Post 2020")
@@ -413,7 +413,7 @@ TEST_CASE("Atomic mass", "[AMEData]")
                             "      307#      166 981671.973      19.694" };
     const AME::Data data(line, 2020);
     data.setAtomicMass();
-    REQUIRE(data.atomic_mass == Approx(981671.973));
+    REQUIRE(data.atomic_mass == Catch::Approx(981671.973));
   }
 }
 
@@ -426,7 +426,7 @@ TEST_CASE("Error on atomic mass", "[AMEData]")
                             "110.439  27 007589.903    118.501" };
     const AME::Data data(line, 2003);
     data.setAtomicMassError();
-    REQUIRE(data.datomic_mass == Approx(118.501));
+    REQUIRE(data.datomic_mass == Catch::Approx(118.501));
   }
 
   SECTION("Post 2020")
@@ -435,7 +435,7 @@ TEST_CASE("Error on atomic mass", "[AMEData]")
                             "      445#      134 941870#        210#" };
     const AME::Data data(line, 2020);
     data.setAtomicMassError();
-    REQUIRE(data.datomic_mass == Approx(210));
+    REQUIRE(data.datomic_mass == Catch::Approx(210));
   }
 }
 
@@ -448,7 +448,7 @@ TEST_CASE("Two neutron separation energy", "[AMEData]")
                             "-9329.24    6.89  -9340.56    7.20" };
     const AME::Data data(line, 2003);
     data.setTwoNeutronSeparationEnergy();
-    REQUIRE(data.s_2n == Approx(17476.39));
+    REQUIRE(data.s_2n == Catch::Approx(17476.39));
   }
 
   SECTION("Post 2020")
@@ -457,7 +457,7 @@ TEST_CASE("Two neutron separation energy", "[AMEData]")
                             "-9309.1742   12.4688  -3993.7623   10.0095 -13524.5593   14.5741" };
     const AME::Data data(line, 2020);
     data.setTwoNeutronSeparationEnergy();
-    REQUIRE(data.s_2n == Approx(16326.0512));
+    REQUIRE(data.s_2n == Catch::Approx(16326.0512));
   }
 }
 
@@ -472,7 +472,7 @@ TEST_CASE("Error on two neutron separation energy", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setTwoNeutronSeparationEnergyError();
-    REQUIRE(data.ds_2n == Approx(15.84));
+    REQUIRE(data.ds_2n == Catch::Approx(15.84));
   }
 
   SECTION("Post 2020")
@@ -481,7 +481,7 @@ TEST_CASE("Error on two neutron separation energy", "[AMEData]")
                             "-2743.1898    6.2505  -9879.0523   32.0195  -7908.1479    3.6209" };
     const AME::Data data(line, 2020);
     data.setTwoNeutronSeparationEnergyError();
-    REQUIRE(data.ds_2n == Approx(3.5638));
+    REQUIRE(data.ds_2n == Catch::Approx(3.5638));
   }
 }
 
@@ -495,7 +495,7 @@ TEST_CASE("Two proton separation energy", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setTwoProtonSeparationEnergy();
-    REQUIRE(data.s_2p == Approx(2254));
+    REQUIRE(data.s_2p == Catch::Approx(2254));
   }
 
   SECTION("Post 2020")
@@ -504,7 +504,7 @@ TEST_CASE("Two proton separation energy", "[AMEData]")
                             "18273.7719    4.3492 -29147#      400#       6813.9437    3.9001" };
     const AME::Data data(line, 2020);
     data.setTwoProtonSeparationEnergy();
-    REQUIRE(data.s_2p == Approx(30451.7968));
+    REQUIRE(data.s_2p == Catch::Approx(30451.7968));
   }
 }
 
@@ -517,7 +517,7 @@ TEST_CASE("Error on two proton separation energy", "[AMEData]")
                             "3884.96   44.01 -19834#    200#" };
     const AME::Data data(line, 2003);
     data.setTwoProtonSeparationEnergyError();
-    REQUIRE(data.ds_2p == Approx(46.58));
+    REQUIRE(data.ds_2p == Catch::Approx(46.58));
   }
 
   SECTION("Post 2020")
@@ -526,7 +526,7 @@ TEST_CASE("Error on two proton separation energy", "[AMEData]")
                             "34303.7458  266.2130      *                 14635.6061  266.2373" };
     const AME::Data data(line, 2020);
     data.setTwoProtonSeparationEnergyError();
-    REQUIRE(data.ds_2p == Approx(std::numeric_limits<double>::max()));
+    REQUIRE(data.ds_2p == Catch::Approx(std::numeric_limits<double>::max()));
   }
 }
 
@@ -541,7 +541,7 @@ TEST_CASE("Q alpha", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setQAlphaEnergy();
-    REQUIRE(data.q_a == Approx(-127.45));
+    REQUIRE(data.q_a == Catch::Approx(-127.45));
   }
 
   SECTION("Post 2020")
@@ -550,7 +550,7 @@ TEST_CASE("Q alpha", "[AMEData]")
                             "  100#      -6223#      359#      -5422.7153    2.9980" };
     const AME::Data data(line, 2020);
     data.setQAlphaEnergy();
-    REQUIRE(data.q_a == Approx(6617.229));
+    REQUIRE(data.q_a == Catch::Approx(6617.229));
   }
 }
 
@@ -563,7 +563,7 @@ TEST_CASE("Error on Q alpha", "[AMEData]")
                             "-19036.83   79.54 -11015.66    1.29" };
     const AME::Data data(line, 2003);
     data.setQAlphaEnergyError();
-    REQUIRE(data.dq_a == Approx(0.11));
+    REQUIRE(data.dq_a == Catch::Approx(0.11));
   }
 
   SECTION("Post 2020")
@@ -572,7 +572,7 @@ TEST_CASE("Error on Q alpha", "[AMEData]")
                             "20140.3165  104.9863 -34377#      707#       7003.8851  104.9974" };
     const AME::Data data(line, 2020);
     data.setQAlphaEnergyError();
-    REQUIRE(data.dq_a == Approx(413));
+    REQUIRE(data.dq_a == Catch::Approx(413));
   }
 }
 
@@ -585,7 +585,7 @@ TEST_CASE("Q double beta", "[AMEData]")
                             "-9097.99   50.01  -6669.66    0.89" };
     const AME::Data data(line, 2003);
     data.setQDoubleBetaMinusEnergy();
-    REQUIRE(data.q_2bm == Approx(-456.39));
+    REQUIRE(data.q_2bm == Catch::Approx(-456.39));
   }
 
   SECTION("Post 2020")
@@ -594,7 +594,7 @@ TEST_CASE("Q double beta", "[AMEData]")
                             "  711#      -1947#      840#      -8277#      710#" };
     const AME::Data data(line, 2020);
     data.setQDoubleBetaMinusEnergy();
-    REQUIRE(data.q_2bm == Approx(-5987));
+    REQUIRE(data.q_2bm == Catch::Approx(-5987));
   }
 }
 
@@ -609,7 +609,7 @@ TEST_CASE("Error on Q double beta", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setQDoubleBetaMinusEnergyError();
-    REQUIRE(data.dq_2bm == Approx(700));
+    REQUIRE(data.dq_2bm == Catch::Approx(700));
   }
 
   SECTION("Post 2020")
@@ -618,7 +618,7 @@ TEST_CASE("Error on Q double beta", "[AMEData]")
                             "  812#          *                 -6610#      761#" };
     const AME::Data data(line, 2020);
     data.setQDoubleBetaMinusEnergyError();
-    REQUIRE(data.dq_2bm == Approx(812));
+    REQUIRE(data.dq_2bm == Catch::Approx(812));
   }
 }
 
@@ -632,7 +632,7 @@ TEST_CASE("Q ep", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setQEpsilonPEnergy();
-    REQUIRE(data.q_ep == Approx(19095.50));
+    REQUIRE(data.q_ep == Catch::Approx(19095.50));
   }
 
   SECTION("Post 2020")
@@ -641,7 +641,7 @@ TEST_CASE("Q ep", "[AMEData]")
                             "-8962.6255    8.1923  -4705.3092    3.4830 -15578.1804    4.7534" };
     const AME::Data data(line, 2020);
     data.setQEpsilonPEnergy();
-    REQUIRE(data.q_ep == Approx(-4705.3092));
+    REQUIRE(data.q_ep == Catch::Approx(-4705.3092));
   }
 }
 
@@ -655,7 +655,7 @@ TEST_CASE("Error on Q ep", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setQEpsilonPEnergyError();
-    REQUIRE(data.dq_ep == Approx(std::numeric_limits<double>::max()));
+    REQUIRE(data.dq_ep == Catch::Approx(std::numeric_limits<double>::max()));
   }
 
   SECTION("Post 2020")
@@ -664,7 +664,7 @@ TEST_CASE("Error on Q ep", "[AMEData]")
                             "-2336.7573    6.5908  -7117.3410    8.1535  -6874.2711    4.1393" };
     const AME::Data data(line, 2020);
     data.setQEpsilonPEnergyError();
-    REQUIRE(data.dq_ep == Approx(8.1535));
+    REQUIRE(data.dq_ep == Catch::Approx(8.1535));
   }
 }
 
@@ -677,7 +677,7 @@ TEST_CASE("Q B- n", "[AMEData]")
                             "-3956.49    2.19 -13532.05    8.51" };
     const AME::Data data(line, 2003);
     data.setQBetaMinusNEnergy();
-    REQUIRE(data.q_bm_n == Approx(-13532.05));
+    REQUIRE(data.q_bm_n == Catch::Approx(-13532.05));
   }
 
   SECTION("Post 2020")
@@ -686,7 +686,7 @@ TEST_CASE("Q B- n", "[AMEData]")
                             "  191#      -2479#       53#      -9445#      188#" };
     const AME::Data data(line, 2020);
     data.setQBetaMinusNEnergy();
-    REQUIRE(data.q_bm_n == Approx(-9445));
+    REQUIRE(data.q_bm_n == Catch::Approx(-9445));
   }
 }
 
@@ -699,7 +699,7 @@ TEST_CASE("Error on Q B- n", "[AMEData]")
                             "1209.17   28.12 -17338#    299#" };
     const AME::Data data(line, 2003);
     data.setQBetaMinusNEnergyError();
-    REQUIRE(data.dq_bm_n == Approx(299));
+    REQUIRE(data.dq_bm_n == Catch::Approx(299));
   }
 
   SECTION("Post 2020")
@@ -708,7 +708,7 @@ TEST_CASE("Error on Q B- n", "[AMEData]")
                             "11893.0373    3.1671 -22387.0248    4.3492   1922.2456    3.1806" };
     const AME::Data data(line, 2020);
     data.setQBetaMinusNEnergyError();
-    REQUIRE(data.dq_bm_n == Approx(3.1806));
+    REQUIRE(data.dq_bm_n == Catch::Approx(3.1806));
   }
 }
 
@@ -721,7 +721,7 @@ TEST_CASE("One neutron separation energy", "[AMEData]")
                             "9091.46   16.01  12554.77   18.35" };
     const AME::Data data(line, 2003);
     data.setOneNeutronSeparationEnergy();
-    REQUIRE(data.s_n == Approx(9755.50));
+    REQUIRE(data.s_n == Catch::Approx(9755.50));
   }
 
   SECTION("Post 2020")
@@ -730,7 +730,7 @@ TEST_CASE("One neutron separation energy", "[AMEData]")
                             "17321.2932    1.8957  14360.6860    2.1336  11173.2521    6.2704" };
     const AME::Data data(line, 2020);
     data.setOneNeutronSeparationEnergy();
-    REQUIRE(data.s_n == Approx(4330.1448));
+    REQUIRE(data.s_n == Catch::Approx(4330.1448));
   }
 }
 
@@ -743,7 +743,7 @@ TEST_CASE("Error on one neutron separation energy", "[AMEData]")
                             "8769.67   12.92  13521.60   23.70" };
     const AME::Data data(line, 2003);
     data.setOneNeutronSeparationEnergyError();
-    REQUIRE(data.ds_n == Approx(184.61));
+    REQUIRE(data.ds_n == Catch::Approx(184.61));
   }
 
   SECTION("Post 2020")
@@ -752,7 +752,7 @@ TEST_CASE("Error on one neutron separation energy", "[AMEData]")
                             "5824.9221  137.4131   2798.1368   95.8342  -5932.4313  183.3491" };
     const AME::Data data(line, 2020);
     data.setOneNeutronSeparationEnergyError();
-    REQUIRE(data.ds_n == Approx(2.1726));
+    REQUIRE(data.ds_n == Catch::Approx(2.1726));
   }
 }
 
@@ -767,7 +767,7 @@ TEST_CASE("One proton separation energy", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setOneProtonSeparationEnergy();
-    REQUIRE(data.s_p == Approx(-440.10));
+    REQUIRE(data.s_p == Catch::Approx(-440.10));
   }
 
   SECTION("Post 2020")
@@ -776,7 +776,7 @@ TEST_CASE("One proton separation energy", "[AMEData]")
                             "8956.5023   20.4006   7743.0766   20.4244  -4011.0925   21.3273" };
     const AME::Data data(line, 2020);
     data.setOneProtonSeparationEnergy();
-    REQUIRE(data.s_p == Approx(11831.4984));
+    REQUIRE(data.s_p == Catch::Approx(11831.4984));
   }
 }
 
@@ -789,7 +789,7 @@ TEST_CASE("Error on one proton separation energy", "[AMEData]")
                             "123.99    0.17    341.34    5.00" };
     const AME::Data data(line, 2003);
     data.setOneProtonSeparationEnergyError();
-    REQUIRE(data.ds_p == Approx(0.19));
+    REQUIRE(data.ds_p == Catch::Approx(0.19));
   }
 
   SECTION("Post 2020")
@@ -798,7 +798,7 @@ TEST_CASE("Error on one proton separation energy", "[AMEData]")
                             "  528#      -1369#      582#      11814#      499#" };
     const AME::Data data(line, 2020);
     data.setOneProtonSeparationEnergyError();
-    REQUIRE(data.ds_p == Approx(545));
+    REQUIRE(data.ds_p == Catch::Approx(545));
   }
 }
 
@@ -811,7 +811,7 @@ TEST_CASE("Q value on quadruple Beta minus", "[AMEData]")
                             "11137.63    9.52  15901.21    5.54" };
     const AME::Data data(line, 2003);
     data.setQQuadrupleBetaMinusEnergy();
-    REQUIRE(data.q_4bm == Approx(-17817.13));
+    REQUIRE(data.q_4bm == Catch::Approx(-17817.13));
   }
 
   SECTION("Post 2020")
@@ -820,7 +820,7 @@ TEST_CASE("Q value on quadruple Beta minus", "[AMEData]")
                             "11651.2916    2.4290   8463.5331    2.9609   1186.5692    3.7723" };
     const AME::Data data(line, 2020);
     data.setQQuadrupleBetaMinusEnergy();
-    REQUIRE(data.q_4bm == Approx(14941.8349));
+    REQUIRE(data.q_4bm == Catch::Approx(14941.8349));
   }
 }
 
@@ -833,7 +833,7 @@ TEST_CASE("Error on Q value of quadruple Beta minus", "[AMEData]")
                             "7567.83   24.00  15371.74   29.67" };
     const AME::Data data(line, 2003);
     data.setQQuadrupleBetaMinusEnergyError();
-    REQUIRE(data.dq_4bm == Approx(std::numeric_limits<double>::max()));
+    REQUIRE(data.dq_4bm == Catch::Approx(std::numeric_limits<double>::max()));
   }
 
   SECTION("Post 2020")
@@ -842,7 +842,7 @@ TEST_CASE("Error on Q value of quadruple Beta minus", "[AMEData]")
                             "14822.8161   21.4990   6361.7064   35.8173  16242.0946   22.5546" };
     const AME::Data data(line, 2020);
     data.setQQuadrupleBetaMinusEnergyError();
-    REQUIRE(data.dq_4bm == Approx(307));
+    REQUIRE(data.dq_4bm == Catch::Approx(307));
   }
 }
 
@@ -855,7 +855,7 @@ TEST_CASE("Q value of d alpha", "[AMEData]")
                             "-6239#    422#     8702#    357#" };
     const AME::Data data(line, 2003);
     data.setQDAlphaEnergy();
-    REQUIRE(data.q_da == Approx(7730));
+    REQUIRE(data.q_da == Catch::Approx(7730));
   }
 
   SECTION("Post 2020")
@@ -864,7 +864,7 @@ TEST_CASE("Q value of d alpha", "[AMEData]")
                             "  280#       2404#      361#      11774#      280#" };
     const AME::Data data(line, 2020);
     data.setQDAlphaEnergy();
-    REQUIRE(data.q_da == Approx(10504));
+    REQUIRE(data.q_da == Catch::Approx(10504));
   }
 }
 
@@ -877,7 +877,7 @@ TEST_CASE("Error on Q value of d alpha", "[AMEData]")
                             "56.31   33.46   4852.60   12.13" };
     const AME::Data data(line, 2003);
     data.setQDAlphaEnergyError();
-    REQUIRE(data.dq_da == Approx(51.44));
+    REQUIRE(data.dq_da == Catch::Approx(51.44));
   }
 
   SECTION("Post 2020")
@@ -886,7 +886,7 @@ TEST_CASE("Error on Q value of d alpha", "[AMEData]")
                             "  707#       3864#      640#      -9224#      583#" };
     const AME::Data data(line, 2020);
     data.setQDAlphaEnergyError();
-    REQUIRE(data.dq_da == Approx(707));
+    REQUIRE(data.dq_da == Catch::Approx(707));
   }
 }
 
@@ -899,7 +899,7 @@ TEST_CASE("Q value of p alpha", "[AMEData]")
                             "-952#    372#     9444#    297#" };
     const AME::Data data(line, 2003);
     data.setQPAlphaEnergy();
-    REQUIRE(data.q_pa == Approx(-952));
+    REQUIRE(data.q_pa == Catch::Approx(-952));
   }
 
   SECTION("Post 2020")
@@ -908,7 +908,7 @@ TEST_CASE("Q value of p alpha", "[AMEData]")
                             "  343#      10228#      343#      16143#      297#" };
     const AME::Data data(line, 2020);
     data.setQPAlphaEnergy();
-    REQUIRE(data.q_pa == Approx(10228));
+    REQUIRE(data.q_pa == Catch::Approx(10228));
   }
 }
 
@@ -922,7 +922,7 @@ TEST_CASE("Error on Q value of p alpha", "[AMEData]")
     };
     const AME::Data data(line, 2003);
     data.setQPAlphaEnergyError();
-    REQUIRE(data.dq_pa == Approx(988));
+    REQUIRE(data.dq_pa == Catch::Approx(988));
   }
 
   SECTION("Post 2020")
@@ -931,7 +931,7 @@ TEST_CASE("Error on Q value of p alpha", "[AMEData]")
                             "4100.6358   14.9467   2860.6485    7.4107  -6823.3336   36.5675" };
     const AME::Data data(line, 2020);
     data.setQPAlphaEnergyError();
-    REQUIRE(data.dq_pa == Approx(7.4107));
+    REQUIRE(data.dq_pa == Catch::Approx(7.4107));
   }
 }
 
@@ -944,7 +944,7 @@ TEST_CASE("Q value on n alpha", "[AMEData]")
                             "6629.02   67.26   4604.44  124.56" };
     const AME::Data data(line, 2003);
     data.setQNAlphaEnergy();
-    REQUIRE(data.q_na == Approx(4604.44));
+    REQUIRE(data.q_na == Catch::Approx(4604.44));
   }
 
   SECTION("Post 2020")
@@ -953,7 +953,7 @@ TEST_CASE("Q value on n alpha", "[AMEData]")
                             "  201#       8190.8755  150.9526  15467.8491   57.3909" };
     const AME::Data data(line, 2020);
     data.setQNAlphaEnergy();
-    REQUIRE(data.q_na == Approx(15467.8491));
+    REQUIRE(data.q_na == Catch::Approx(15467.8491));
   }
 }
 
@@ -966,7 +966,7 @@ TEST_CASE("Error on Q value of n alpha", "[AMEData]")
                             "11401#    413#    -2588#    566#" };
     const AME::Data data(line, 2003);
     data.setQNAlphaEnergyError();
-    REQUIRE(data.dq_na == Approx(566));
+    REQUIRE(data.dq_na == Catch::Approx(566));
   }
 
   SECTION("Post 2020")
@@ -975,7 +975,7 @@ TEST_CASE("Error on Q value of n alpha", "[AMEData]")
                             "11982.5943   13.7412   3787.1606   14.5849  10495.8520   11.4377" };
     const AME::Data data(line, 2020);
     data.setQNAlphaEnergyError();
-    REQUIRE(data.dq_na == Approx(11.4377));
+    REQUIRE(data.dq_na == Catch::Approx(11.4377));
   }
 }
 

@@ -3,7 +3,7 @@
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/massTable.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 
 TEST_CASE("A json item is correctly output", "[Isotope]")
