@@ -91,13 +91,13 @@ public:
    *
    * \return The hash of the input parameter
    */
-  static constexpr inline auto string_hash(const char* s)
+  static constexpr inline auto string_hash(const char* the_string)
   {
     uint64_t hash{};
-    uint64_t c{};
-    for (auto p = s; *p != 0; ++p, ++c)
+    uint64_t dummy{};
+    for (auto ptr = the_string; *ptr != 0; ++ptr, ++dummy)
       {
-        hash += static_cast<uint64_t>(*p) << c;
+        hash += static_cast<uint64_t>(*ptr) << dummy;
       }
     return hash;
   }
@@ -117,13 +117,13 @@ public:
    */
   template<class T>
   static constexpr typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-  almost_equal(const T x, const T y, const uint8_t ulp = 1) noexcept
+  almost_equal(const T lhs, const T rhs, const uint8_t ulp = 1) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
-    return std::fabs(x - y) <= std::numeric_limits<T>::epsilon() * std::fabs(x + y) * ulp
+    return std::fabs(lhs - rhs) <= std::numeric_limits<T>::epsilon() * std::fabs(lhs + rhs) * ulp
            // unless the result is subnormal
-           || std::fabs(x - y) < std::numeric_limits<T>::min();
+           || std::fabs(lhs - rhs) < std::numeric_limits<T>::min();
   }
 
   /**
@@ -264,9 +264,9 @@ public:
 
 
 /// string literal to force the hashing of the string
-constexpr inline auto operator"" _sh(const char* s, size_t /*unused*/)
+constexpr inline auto operator"" _sh(const char* the_string, size_t /*unused*/)
 {
-  return Converter::string_hash(s);
+  return Converter::string_hash(the_string);
 }
 
 #endif // CONVERTER_HPP
