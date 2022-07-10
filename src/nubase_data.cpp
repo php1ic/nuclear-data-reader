@@ -121,15 +121,18 @@ void NUBASE::Data::setSpinParity() const
 
   // Remove more random substrings that we aren't going to parse/use
   constexpr std::array<std::string_view, 3> randoms{ "frg", "T=", "am" };
-  if (const auto it =
-          std::find_if(randoms.cbegin(), randoms.cend(), [=](auto s) { return jpi.find(s) != std::string_view::npos; });
-      it != randoms.cend())
+  if (const auto str_pos =
+          std::find_if(randoms.cbegin(),
+                       randoms.cend(),
+                       [=](const auto character) { return jpi.find(character) != std::string_view::npos; });
+      str_pos != randoms.cend())
     {
-      jpi.erase(jpi.find(*it));
+      jpi.erase(jpi.find(*str_pos));
     }
 
   // Remove all white space
-  jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+  jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const auto character) { return std::isspace(character); }),
+            jpi.end());
 
   // Convert overly complicated assignments into more parseable ones
   jpi = cleanSpinParityString(jpi);
@@ -140,7 +143,7 @@ void NUBASE::Data::setSpinParity() const
   // If there is an opening ( then there will be also be a closing ) so don't bother checking
   if (jpi.find('(') != std::string::npos || jpi.find('#') != std::string::npos)
     {
-      std::erase_if(jpi, [](const char c) { return c == '(' || c == ')' || c == '#'; });
+      std::erase_if(jpi, [](const auto character) { return character == '(' || character == ')' || character == '#'; });
       pi_exp = Measured::THEORETICAL;
       J_exp  = Measured::THEORETICAL;
     }
@@ -240,8 +243,8 @@ void NUBASE::Data::setHalfLife() const
 
   // Not currently interested in approximations or limits
   std::string_view remove{ "<>~" };
-  std::transform(lifetime.begin(), lifetime.end(), lifetime.begin(), [remove](const char c) {
-    return remove.find(c) != std::string::npos ? ' ' : c;
+  std::transform(lifetime.begin(), lifetime.end(), lifetime.begin(), [remove](const auto character) {
+    return remove.find(character) != std::string::npos ? ' ' : character;
   });
 
   // Get the numerical part of the half life that we can use to create a chrono value later
