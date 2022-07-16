@@ -1,5 +1,6 @@
 #include "nuclear-data-reader/converter.hpp"
 
+#include <catch2/benchmark/catch_benchmark_all.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_all.hpp>
 
@@ -159,23 +160,23 @@ TEST_CASE("Generic string -> value", "[Converter]")
 }
 
 
-// TEST_CASE("", "[.Benchmark]")
-// {
-//   SECTION("Double")
-//   {
-//     BENCHMARK_ADVANCED("Double charconv")(Catch::Benchmark::Chronometer meter)
-//     {
-//       std::string_view sv_str{ "987.654" };
-//       meter.measure([&sv_str]() { return Converter::StringToNum<double>(sv_str, 0, 7); });
-//     };
-//   }
-//
-//   SECTION("Integer")
-//   {
-//     BENCHMARK_ADVANCED("Int charconv")(Catch::Benchmark::Chronometer meter)
-//     {
-//       std::string_view sv_str{ "123" };
-//       meter.measure([&sv_str]() { return Converter::StringToNum<uint8_t>(sv_str, 0, 3); });
-//     };
-//   }
-// }
+TEST_CASE("", "[.Benchmark]")
+{
+  SECTION("Double")
+  {
+    BENCHMARK_ADVANCED("Double charconv")(Catch::Benchmark::Chronometer meter)
+    {
+      std::string_view sv_str{ "987.654" };
+      meter.measure([&sv_str]() { return Converter::StringToNum<double>(sv_str, 0, 7); });
+    };
+  }
+
+  SECTION("Integer")
+  {
+    BENCHMARK_ADVANCED("Int charconv")(Catch::Benchmark::Chronometer meter)
+    {
+      std::string_view sv_str{ "123" };
+      meter.measure([&sv_str]() { return Converter::StringToNum<uint8_t>(sv_str, 0, 3); });
+    };
+  }
+}
