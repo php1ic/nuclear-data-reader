@@ -241,8 +241,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
           2003);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "(19/2+)");
     }
 
@@ -254,8 +253,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
           2003);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "(4)(+#)");
     }
 
@@ -267,8 +265,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
           2003);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "(0+)");
     }
 
@@ -280,7 +277,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
           2003);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
 
       REQUIRE(iso.cleanSpinParityString(jpi) == "1/2-");
     }
@@ -293,8 +290,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
           2003);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "(1+)");
     }
 
@@ -306,8 +302,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
           2003);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "(6)");
     }
   }
@@ -322,8 +317,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
           2012);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "(0-)");
     }
 
@@ -334,8 +328,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
                        2012);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "0(-)");
     }
 
@@ -346,8 +339,7 @@ TEST_CASE("Clean complicated spin parity format ", "[NUBASEData]")
                        2012);
       std::string jpi =
           iso.full_data.substr(iso.position.START_SPIN, (iso.position.END_SPIN - iso.position.START_SPIN));
-      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), [](const char c) { return std::isspace(c); }), jpi.end());
-
+      jpi.erase(std::remove_if(jpi.begin(), jpi.end(), ::isspace), jpi.end());
       REQUIRE(iso.cleanSpinParityString(jpi) == "(1/2)+");
     }
   }
