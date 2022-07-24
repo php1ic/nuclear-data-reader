@@ -1,0 +1,128 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 13,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "description": "Base config using Ninja generator",
+            "hidden": true,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            },
+            "warnings": {
+                "dev": false,
+                "uninitialized": true
+            }
+        },
+        {
+            "name": "base-debug",
+            "description": "Debug config inherting Ninja config",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "NDR_UNIT_TESTS": "ON"
+            }
+        },
+        {
+            "name": "base-release",
+            "description": "Release config inherting Ninja config",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "gcc-Debug",
+            "displayName": "GCC Debug build config",
+            "inherits": "base-debug",
+            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "gcc-Debug-coverage",
+            "displayName": "GCC Debug build config with testing and coverage metrics",
+            "inherits": [ "gcc-Debug" ],
+            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++",
+                "NDR_CODE_COVERAGE": "ON"
+            }
+        },
+        {
+            "name": "gcc-Release",
+            "displayName": "GCC Release build config",
+            "inherits": [ "base-release" ],
+            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "clang-Debug",
+            "displayName": "clang Debug build config",
+            "inherits": [ "base-debug" ],
+            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "clang-Release",
+            "displayName": "clang Release build config",
+            "inherits": [ "base-release" ],
+            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc-Debug",
+            "displayName" : "GCC Debug build step",
+            "configurePreset": "gcc-Debug"
+        },
+        {
+            "name": "gcc-Release",
+            "displayName" : "GCC Release build step",
+            "configurePreset": "gcc-Release"
+        },
+        {
+            "name": "clang-Debug",
+            "displayName" : "clang Debug build step",
+            "configurePreset": "clang-Debug"
+        },
+        {
+            "name": "clang-Release",
+            "displayName" : "clang Release build step",
+            "configurePreset": "clang-Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "gcc-Debug",
+            "displayName": "GCC Debug test step",
+            "configurePreset": "gcc-Debug",
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "clang-Debug",
+            "displayName": "clang Debug test step",
+            "configurePreset": "clang-Debug",
+            "execution": {
+                "jobs": 2
+            }
+        }
+    ]
+}
