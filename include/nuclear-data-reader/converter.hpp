@@ -91,7 +91,7 @@ public:
    *
    * \return The hash of the input parameter
    */
-  static constexpr inline auto string_hash(const char* the_string)
+  [[nodiscard]] static constexpr inline auto string_hash(const char* the_string)
   {
     uint64_t hash{};
     uint64_t dummy{};
@@ -116,7 +116,7 @@ public:
    * \return[false] The numbers are not equal
    */
   template<class T>
-  static constexpr typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+  [[nodiscard]] static constexpr typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
   almost_equal(const T lhs, const T rhs, const uint8_t ulp = 1) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
@@ -263,7 +263,7 @@ public:
 
 
 /// string literal to force the hashing of the string
-constexpr inline auto operator"" _sh(const char* the_string, size_t /*unused*/)
+[[nodiscard]] constexpr inline auto operator"" _sh(const char* the_string, size_t /*unused*/)
 {
   return Converter::string_hash(the_string);
 }
