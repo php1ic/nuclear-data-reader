@@ -212,8 +212,7 @@ public:
    */
   [[nodiscard]] static std::string_view TrimEnd(std::string_view str, const std::string_view trim_character = " ")
   {
-    const auto pos = str.find_last_not_of(trim_character);
-    if (pos != std::string_view::npos)
+    if (const auto pos = str.find_last_not_of(trim_character); pos != std::string_view::npos)
       {
         str.remove_suffix(str.size() - (pos + 1));
       }
