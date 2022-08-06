@@ -42,7 +42,7 @@
             "name": "gcc-Debug",
             "displayName": "GCC Debug build config",
             "inherits": "base-debug",
-            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "g++"
             }
@@ -51,7 +51,7 @@
             "name": "gcc-Debug-coverage",
             "displayName": "GCC Debug build config with testing and coverage metrics",
             "inherits": [ "gcc-Debug" ],
-            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "g++",
                 "NDR_CODE_COVERAGE": "ON"
@@ -61,7 +61,7 @@
             "name": "gcc-Release",
             "displayName": "GCC Release build config",
             "inherits": [ "base-release" ],
-            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "g++"
             }
@@ -70,7 +70,7 @@
             "name": "clang-Debug",
             "displayName": "clang Debug build config",
             "inherits": [ "base-debug" ],
-            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "clang++"
             }
@@ -79,7 +79,7 @@
             "name": "clang-Release",
             "displayName": "clang Release build config",
             "inherits": [ "base-release" ],
-            "binaryDir": "${sourceDir}/build-dev/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "clang++"
             }
