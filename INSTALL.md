@@ -4,23 +4,37 @@
 ## [CMake](https://cmake.org/)
 
 In-source builds are blocked so compilation needs to be done in a separate build directory.
-I prefer entirely separate from the source so that is what these commands do.
-Assuming we are currently in the root of the project, the following will build the executable.
+Assuming we are currently in the root of the project, the following will build the library.
 
 ```bash
-cd ../ && mkdir build && cd build
-cmake ../nuclear-data-reader
+mkdir build && cd build
+cmake ../
 make
 ```
 Or, to be build tool agnostic, again from the source root
 ```bash
-cmake -H. -B../build
-cmake --build ../build
+cmake -H. -B./build
+cmake --build ./build
 ```
 
-This will create a *bin/* directory (inside the build directory) and place the executable inside.
+The option `CMAKE_INSTALL_PREFIX` can be passed to cmake to specify the install location as required.
 
-The option `CMAKE_INSTALL_PREFIX` can be passed to cmake to specify the install location if required.
+As part of the build, the library is coded to read files located in */your/build/path/nuclear-data-reader/data/*.
 
-As part of the build, the binary is coded to read files located in */your/build/path/nuclear-data-reader/data/*.
-Thus the executable can be copied into one of your $PATH directories and it will still be able to find the necessary files.
+# Presets
+
+CMake introduced [preset](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html) in 3.19 to allow simpler, and shared, configs.
+If you have a new enough version of CMake, you can do all or one of the following to configure, build and test.
+```bash
+# Configure
+cmake --preset <configure-preset>
+# Build
+cmake --build --preset <build-preset>
+# Test
+cmake --preset <test-preset>
+```
+
+All presets are defined and set up in [CMakePresets.json](./CMakePresets.json) and can be listed with
+```bash
+cmake --list-presets
+```
