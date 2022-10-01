@@ -20,3 +20,21 @@ cmake --build ./build
 The option `CMAKE_INSTALL_PREFIX` can be passed to cmake to specify the install location as required.
 
 As part of the build, the library is coded to read files located in */your/build/path/nuclear-data-reader/data/*.
+
+# Presets
+
+CMake introduced [preset](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html) in 3.19 to allow simpler, and shared, configs.
+If you have a new enough version of CMake, you can do all or one of the following to configure, build and test.
+```bash
+# Configure
+cmake --preset <configure-preset>
+# Build
+cmake --build --preset <build-preset>
+# Test
+cmake --preset <test-preset>
+```
+
+All presets are defined and set up in [CMakePresets.json](./CMakePresets.json) and can be listed with
+```bash
+cmake --list-presets
+```
