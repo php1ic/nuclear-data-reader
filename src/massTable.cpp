@@ -321,7 +321,7 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 
   data.setA();
   data.setZ();
-  data.setSymbol(Converter::ZToSymbol(data.Z));
+  data.setSymbol(Converter::ZToSymbol(data.Z).value());
   data.setN();
 
   data.setState();

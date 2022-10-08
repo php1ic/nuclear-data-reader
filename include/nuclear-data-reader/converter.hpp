@@ -22,6 +22,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <optional>
 #include <ratio>
 #include <string>
 #include <utility>
@@ -133,7 +134,7 @@ public:
    *
    * \return The symbol as a std:string
    */
-  [[nodiscard]] static std::string_view ZToSymbol(const uint16_t proton_number);
+  [[nodiscard]] static std::optional<std::string_view> ZToSymbol(const uint16_t proton_number);
 
   /**
    * Convert elemental symbol to proton number
@@ -142,7 +143,7 @@ public:
    *
    * \return The proton number as an int
    */
-  [[nodiscard]] static uint16_t SymbolToZ(std::string_view symbol);
+  [[nodiscard]] static std::optional<uint16_t> SymbolToZ(std::string_view symbol);
 
   /**
    * Convert any type from it's string(_view) representation to the given type.

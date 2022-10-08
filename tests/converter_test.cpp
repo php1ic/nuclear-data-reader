@@ -18,9 +18,9 @@ TEST_CASE("Symbol -> Z", "[Converter]")
   {
     SECTION("Quiet failure on invalid symbol")
     {
-      REQUIRE(Converter::SymbolToZ("Xy") == 200);
-      REQUIRE(Converter::SymbolToZ("ab") == 200);
-      REQUIRE(Converter::SymbolToZ("IS") == 200);
+      REQUIRE(Converter::SymbolToZ("Xy") == std::optional<uint16_t>{});
+      REQUIRE(Converter::SymbolToZ("ab") == std::optional<uint16_t>{});
+      REQUIRE(Converter::SymbolToZ("IS") == std::optional<uint16_t>{});
     }
   }
 }
@@ -41,8 +41,8 @@ TEST_CASE("Z -> Symbol", "[Converter]")
     {
       // Replicate a -ve number being passed
       // If we do pass a -ve number, we get a compiler warning about conversion
-      REQUIRE(Converter::ZToSymbol(65534) == "Xy");
-      REQUIRE(Converter::ZToSymbol(120) == "Xy");
+      REQUIRE(Converter::ZToSymbol(65534) == std::optional<std::string_view>{});
+      REQUIRE(Converter::ZToSymbol(120) == std::optional<std::string_view>{});
     }
   }
 }
