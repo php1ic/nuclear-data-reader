@@ -19,7 +19,7 @@
 
 ## Introduction
 
-The Nuclear Data reader is aimed at parsing and readeing the various files that have been published related to atomic nuclear data.
+The Nuclear Data reader is aimed at parsing and reading the various files that have been published related to atomic nuclear data.
 The format of the files is unique so takes some effort to parse.
 
 No guarantee is supplied with regards to the accuracy of the data presented.

@@ -31,7 +31,7 @@ cmake --preset <configure-preset>
 # Build
 cmake --build --preset <build-preset>
 # Test
-cmake --preset <test-preset>
+ctest --preset <test-preset>
 ```
 
 All presets are defined and set up in [CMakePresets.json](./CMakePresets.json) and can be listed with
