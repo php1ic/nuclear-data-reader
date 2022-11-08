@@ -79,16 +79,13 @@ public:
    */
   [[nodiscard]] inline bool setTableYear(const uint16_t _year) const noexcept
   {
-    const uint16_t original_year = year;
-    year                         = _year;
-
-    if (!checkValidYear())
+    if (checkValidYear(_year))
       {
-        year = original_year;
-        return false;
+        year = _year;
+        return true;
       }
 
-    return true;
+    return false;
   }
 
   /**
