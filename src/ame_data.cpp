@@ -20,8 +20,7 @@ double AME::Data::getRelativeMassExcessError(const double min_allowed) const
 
 void AME::Data::setExperimental() const
 {
-  // Member exp has 0(experiment) or 1(theory/extrapolation) value
-  // Will use mass excess for criteria, the last digit is char AME::LinePosition::END_DME
+  // Will use mass excess for the measured, or not, criteria, the last digit is char AME::LinePosition::END_DME
   // so if there is a '#' but it's after this we will still say experimental
   const auto measured = full_data.find_first_of('#');
 

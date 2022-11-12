@@ -418,10 +418,8 @@ bool MassTable::mergeData() const
 
       if (ame != ameDataTable.cend())
         {
-          // Isotope(AME, NUBASE))
           fullDataTable.emplace_back(Isotope(*ame, nubase));
         }
-      // fmt::print("{} {}\n", nubase.A, nubase.Z);
     }
   fmt::print("--> done\n");
   return true;

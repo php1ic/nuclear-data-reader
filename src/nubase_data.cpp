@@ -174,8 +174,7 @@ void NUBASE::Data::setSpinParity() const
 
 void NUBASE::Data::setExperimental() const
 {
-  // Member exp has false(experiment) or true(theory/extrapolation) value
-  // Will use mass excess for criteria, the last digit is char position.END_DME (38)
+  // Will use mass excess for the measured, or not, criteria, the last digit is char position.END_DME
   // so if there is a '#' but it's after this we will still say experimental
   const auto measured = full_data.find_first_of('#');
 
