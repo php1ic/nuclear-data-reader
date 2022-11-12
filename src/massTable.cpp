@@ -119,17 +119,18 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
   const AME::Data data(line, year);
 
   // A & Z are in the same place for both reaction files, but lets not assume they will be forever
-  const auto A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
-  const auto Z = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
+  const auto other_A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
+  const auto other_Z = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
 
   // Look for the correct isotope in the existing data table
-  auto isotope = std::find_if(
-      ameDataTable.begin(), ameDataTable.end(), [A, Z](const auto& ame) -> bool { return (ame.A == A && ame.Z == Z); });
+  auto isotope = std::find_if(ameDataTable.begin(), ameDataTable.end(), [other_A, other_Z](const auto& ame) -> bool {
+    return (ame.A == other_A && ame.Z == other_Z);
+  });
 
   // Get out if it doesn't exist
   if (isotope == ameDataTable.end())
     {
-      fmt::print("**WARNING**: No matching mass data found for A={}, Z={}\n", A, Z);
+      fmt::print("**WARNING**: No matching mass data found for A={}, Z={}\n", other_A, other_Z);
       return ameDataTable.end();
     }
 
