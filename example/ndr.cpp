@@ -12,7 +12,7 @@ int main()
 
       if (table.populateInternalMassTable())
         {
-          auto ignore = table.outputTableToJSON();
+          [[maybe_unused]] auto ignore = table.outputTableToJSON();
         }
     }
 
