@@ -322,8 +322,18 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 
   data.setA();
   data.setZ();
-  data.setSymbol(Converter::ZToSymbol(data.Z).value());
   data.setN();
+
+  // Confirm a valid Z value has been read before trying to get it's symbol
+  if (const auto symbol = Converter::ZToSymbol(data.Z); symbol)
+    {
+      data.setSymbol(symbol.value());
+    }
+  // Set the symbol as an obviously wrong value if an invalid Z was read
+  else
+    {
+      data.setSymbol("Xx");
+    }
 
   data.setState();
 
