@@ -9,18 +9,18 @@ TEST_CASE("Symbol -> Z", "[Converter]")
 {
   SECTION("A valid isotope symbol is given")
   {
-    REQUIRE(Converter::SymbolToZ("He") == 2);
-    REQUIRE(Converter::SymbolToZ("C") == 6);
-    REQUIRE(Converter::SymbolToZ("Ag") == 47);
+    REQUIRE(Converter::SymbolToZ("He").value() == 2);
+    REQUIRE(Converter::SymbolToZ("C").value() == 6);
+    REQUIRE(Converter::SymbolToZ("Ag").value() == 47);
   }
 
   SECTION("An invalid isotope symbol is given")
   {
     SECTION("Quiet failure on invalid symbol")
     {
-      REQUIRE(Converter::SymbolToZ("Xy") == std::optional<uint16_t>{});
-      REQUIRE(Converter::SymbolToZ("ab") == std::optional<uint16_t>{});
-      REQUIRE(Converter::SymbolToZ("IS") == std::optional<uint16_t>{});
+      REQUIRE_FALSE(Converter::SymbolToZ("Xy").has_value());
+      REQUIRE_FALSE(Converter::SymbolToZ("ab").has_value());
+      REQUIRE_FALSE(Converter::SymbolToZ("IS").has_value());
     }
   }
 }
@@ -30,9 +30,9 @@ TEST_CASE("Z -> Symbol", "[Converter]")
 {
   SECTION("A valid proton number is given")
   {
-    REQUIRE(Converter::ZToSymbol(1) == "H");
-    REQUIRE(Converter::ZToSymbol(23) == "V");
-    REQUIRE(Converter::ZToSymbol(45) == "Rh");
+    REQUIRE_FALSE(Converter::ZToSymbol(1).value().compare("H"));
+    REQUIRE_FALSE(Converter::ZToSymbol(23).value().compare("V"));
+    REQUIRE_FALSE(Converter::ZToSymbol(45).value().compare("Rh"));
   }
 
   SECTION("An invalid proton number is given")
@@ -41,8 +41,8 @@ TEST_CASE("Z -> Symbol", "[Converter]")
     {
       // Replicate a -ve number being passed
       // If we do pass a -ve number, we get a compiler warning about conversion
-      REQUIRE(Converter::ZToSymbol(65534) == std::optional<std::string_view>{});
-      REQUIRE(Converter::ZToSymbol(120) == std::optional<std::string_view>{});
+      REQUIRE_FALSE(Converter::ZToSymbol(65534).has_value());
+      REQUIRE_FALSE(Converter::ZToSymbol(120).has_value());
     }
   }
 }
@@ -61,63 +61,64 @@ TEST_CASE("Float -> string", "[Converter]")
   REQUIRE_THAT(Converter::FloatToNdp(std::numeric_limits<double>::max(), 2), Catch::Matchers::Equals("null"));
 }
 
+
 TEST_CASE("Trim a string", "[Converter]")
 {
   SECTION("Leading")
   {
     std::string_view space{ "     123   " };
-    REQUIRE(Converter::TrimStart(space) == "123   ");
+    REQUIRE_FALSE(Converter::TrimStart(space).compare("123   "));
 
     std::string_view none{ "full" };
-    REQUIRE(Converter::TrimStart(none) == "full");
+    REQUIRE_FALSE(Converter::TrimStart(none).compare("full"));
 
     std::string_view random{ "~~~<" };
-    REQUIRE(Converter::TrimStart(random, "~") == "<");
+    REQUIRE_FALSE(Converter::TrimStart(random, "~").compare("<"));
 
     std::string_view no_match{ "9876" };
-    REQUIRE(Converter::TrimStart(no_match, " ") == "9876");
+    REQUIRE_FALSE(Converter::TrimStart(no_match, " ").compare("9876"));
 
     std::string_view empty{ "   " };
-    REQUIRE(Converter::TrimStart(empty, " ") == "");
+    REQUIRE(Converter::TrimStart(empty, " ").empty());
 
-    std::string_view nothing{ "" };
-    REQUIRE(Converter::TrimStart(nothing, " ") == "");
+    std::string_view nothing{ "" }; // NOLINT
+    REQUIRE(Converter::TrimStart(nothing, " ").empty());
   }
 
   SECTION("Trailing")
   {
     std::string_view space{ "     123   " };
-    REQUIRE(Converter::TrimEnd(space) == "     123");
+    REQUIRE_FALSE(Converter::TrimEnd(space).compare("     123"));
 
     std::string_view none{ "full" };
-    REQUIRE(Converter::TrimEnd(none) == "full");
+    REQUIRE_FALSE(Converter::TrimEnd(none).compare("full"));
 
     std::string_view random{ ">#####" };
-    REQUIRE(Converter::TrimEnd(random, "#") == ">");
+    REQUIRE_FALSE(Converter::TrimEnd(random, "#").compare(">"));
 
     std::string_view no_match{ "9876" };
-    REQUIRE(Converter::TrimEnd(no_match, " ") == "9876");
+    REQUIRE_FALSE(Converter::TrimEnd(no_match, " ").compare("9876"));
 
-    std::string_view nothing{ "" };
-    REQUIRE(Converter::TrimEnd(nothing, " ") == "");
+    std::string_view nothing{ "" }; // NOLINT
+    REQUIRE(Converter::TrimEnd(nothing, " ").empty());
 
     std::string_view empty{ "   " };
-    REQUIRE(Converter::TrimEnd(empty, " ") == "");
+    REQUIRE(Converter::TrimEnd(empty, " ").empty());
   }
 
   SECTION("Surrounding")
   {
     std::string_view space{ "     567   " };
-    REQUIRE(Converter::TrimString(space) == "567");
+    REQUIRE_FALSE(Converter::TrimString(space).compare("567"));
 
     std::string_view leading_space{ "     963.2" };
-    REQUIRE(Converter::TrimString(leading_space) == "963.2");
+    REQUIRE_FALSE(Converter::TrimString(leading_space).compare("963.2"));
 
     std::string_view trailing_space{ "abc123   " };
-    REQUIRE(Converter::TrimString(trailing_space) == "abc123");
+    REQUIRE_FALSE(Converter::TrimString(trailing_space).compare("abc123"));
 
     std::string_view different_char{ "___asdf___" };
-    REQUIRE(Converter::TrimString(different_char, "_") == "asdf");
+    REQUIRE_FALSE(Converter::TrimString(different_char, "_").compare("asdf"));
   }
 }
 
@@ -154,7 +155,7 @@ TEST_CASE("Generic string -> value", "[Converter]")
     REQUIRE(Converter::StringToNum<double>(e_str, 0, 7) == Catch::Approx(std::numeric_limits<double>::max()));
 
     // Be specific, and verbose, so initialise with empty string
-    std::string_view b_str{ "" };
+    std::string_view b_str{ "" }; // NOLINT
     REQUIRE(Converter::StringToNum<int>(b_str, 0, 5) == Catch::Approx(std::numeric_limits<int>::max()));
   }
 }
