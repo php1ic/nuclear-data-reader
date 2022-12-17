@@ -117,7 +117,7 @@ public:
    * \return[true] The numbers equal
    * \return[false] The numbers are not equal
    */
-  template<typename T, typename std::enable_if_t<std::is_floating_point<T>::value, bool> = true>
+  template<typename T, typename std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
   [[nodiscard]] static constexpr bool almost_equal(const T lhs, const T rhs, const uint8_t ulp = 1) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
@@ -170,9 +170,10 @@ public:
   }
 
   /**
-   * Extract the part of the string <fullString> from <start> to <end>
-   * if it's all spaces or contains the '*' character return an empty string
-   * Otherwise, return the substring
+   * Extract the part of the string <fullString> from <start> to <end>, but
+   * if the substring is all spaces, or contains the '*' character, return an empty string.
+   * Similarly, if the difference between <start> and <end> is negative, return an empty string.
+   * Otherwise, return the substring requested.
    *
    * \param The string to extract the value from
    * \param The first character position
@@ -183,10 +184,16 @@ public:
   [[nodiscard]] static std::string_view
   NumberAsString(const std::string_view fullString, const uint8_t start, const uint8_t end)
   {
+    if (end < start)
+      {
+        return std::string_view{};
+      }
+
     const auto number = TrimString(fullString.substr(start, end - start));
 
-    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos) ? ""
-                                                                                                           : number;
+    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos)
+               ? std::string_view{}
+               : number;
   }
 
   /**
