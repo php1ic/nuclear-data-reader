@@ -14,6 +14,7 @@
 #define CONVERTER_HPP
 
 #include <string_view>
+#include <type_traits>
 
 #include <algorithm>
 #include <array>
@@ -116,9 +117,8 @@ public:
    * \return[true] The numbers equal
    * \return[false] The numbers are not equal
    */
-  template<class T>
-  [[nodiscard]] static constexpr typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-  almost_equal(const T lhs, const T rhs, const uint8_t ulp = 1) noexcept
+  template<typename T, typename std::enable_if_t<std::is_floating_point<T>::value, bool> = true>
+  [[nodiscard]] static constexpr bool almost_equal(const T lhs, const T rhs, const uint8_t ulp = 1) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
