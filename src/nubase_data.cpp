@@ -152,7 +152,7 @@ void NUBASE::Data::setSpinParity() const
   // For those with multiple values, separated by a comma, drop everything after the first comma
   if (const auto pos = jpi.find(','); pos != std::string::npos)
     {
-      jpi = jpi.substr(0, pos);
+      jpi.resize(pos);
     }
 
   // What is the parity of the state
