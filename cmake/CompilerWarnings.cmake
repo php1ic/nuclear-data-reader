@@ -1,5 +1,5 @@
 function(set_project_warnings project_name)
-  option(NDR_WARNINGS_AS_ERROR "Treat Compiler warnings as errors" TRUE)
+  option(NDR_WARNINGS_AS_ERRORS "Treat Compiler warnings as errors" ON)
 
   # I don't currently have access to a windows machine to test these,
   # so rather than trial and error pushing to trigger appveyor and check
@@ -25,7 +25,7 @@ function(set_project_warnings project_name)
     -Wsign-conversion
     )
 
-  if (WARNINGS_AS_ERRORS)
+  if (NDR_WARNINGS_AS_ERRORS)
     set(CLANG_WARNINGS ${CLANG_WARNINGS} -Werror)
     set(MSVC_WARNINGS ${MSVC_WARNINGS} /WX)
   endif()
