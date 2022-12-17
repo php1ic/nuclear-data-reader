@@ -200,7 +200,7 @@ void NUBASE::Data::setIsomerData(std::vector<NUBASE::Data>& nuc) const
       const auto error  = setIsomerEnergyError();
 
       // Some isomers(3 in total) are measured via beta difference so come out -ve
-      ground_state->energy_levels.emplace_back(State(level, energy < 0.0 ? energy : std::fabs(energy), error));
+      ground_state->energy_levels.emplace_back(level, energy < 0.0 ? energy : std::fabs(energy), error);
     }
   else
     {
