@@ -166,13 +166,13 @@ TEST_CASE("Substring extraction", "[Converter]")
   SECTION("End is before start")
   {
     std::string_view t_string{ "irrelevant" };
-    REQUIRE(Converter::NumberAsString(t_string, 2, 1).empty());
+    REQUIRE(Converter::NumberAsString(t_string, 2U, 1U).empty());
   }
 
   SECTION("Start is after end")
   {
     std::string_view t_string{ "irrelevant" };
-    REQUIRE(Converter::NumberAsString(t_string, 5, 4).empty());
+    REQUIRE(Converter::NumberAsString(t_string, 5U, 4U).empty());
   }
 }
 

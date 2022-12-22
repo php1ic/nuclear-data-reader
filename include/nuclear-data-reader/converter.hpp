@@ -21,6 +21,7 @@
 #include <charconv>
 #include <chrono>
 #include <cmath>
+#include <concepts>
 #include <cstdint>
 #include <limits>
 #include <optional>
@@ -117,7 +118,8 @@ public:
    * \return[true] The numbers equal
    * \return[false] The numbers are not equal
    */
-  template<typename T, typename std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
+  template<typename T>
+    requires std::floating_point<T>
   [[nodiscard]] static constexpr bool almost_equal(const T lhs, const T rhs, const uint8_t ulp = 1) noexcept
   {
     // the machine epsilon has to be scaled to the magnitude of the values used
@@ -181,17 +183,18 @@ public:
    *
    * \return The substring as described above
    */
-  [[nodiscard]] static std::string_view
-  NumberAsString(const std::string_view fullString, const uint8_t start, const uint8_t end)
+  template<typename T, typename U>
+    requires std::unsigned_integral<T> && std::unsigned_integral<U>
+  [[nodiscard]] static std::string_view NumberAsString(const std::string_view fullString, const T start, const U end)
   {
-    if (end < start)
+    if (end <= start)
       {
         return std::string_view{};
       }
 
     const auto number = TrimString(fullString.substr(start, end - start));
 
-    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string::npos)
+    return (std::all_of(number.cbegin(), number.cend(), isspace) || number.find('*') != std::string_view::npos)
                ? std::string_view{}
                : number;
   }
