@@ -16,6 +16,8 @@
 #include <string_view>
 #include <type_traits>
 
+#include <fmt/format.h>
+
 #include <algorithm>
 #include <array>
 #include <charconv>
@@ -259,7 +261,13 @@ public:
    * \return A std:string of the input number, truncated to the required precision
    * \return A std::string with contents "null" if number is std::numeric_limits<double>::max()
    */
-  [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept;
+  template<typename T>
+    requires std::floating_point<T>
+  [[nodiscard]] static std::string FloatToNdp(const T number, const uint8_t numDP = 1) noexcept
+  {
+    return Converter::almost_equal(number, std::numeric_limits<T>::max()) ? "null"
+                                                                          : fmt::format("{:.{}f}", number, numDP);
+  }
 
   /**
    * Convert a numeric value and it's unit to a chrono::duration.
