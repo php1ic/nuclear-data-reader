@@ -168,7 +168,7 @@ public:
   StringToNum(const std::string_view str, const uint8_t start, const uint8_t end) noexcept
   {
     const auto number = NumberAsString(str, start, end);
-    T value;
+    T value{};
     const auto [ptr, ec]{ std::from_chars(number.data(), number.data() + number.size(), value) };
     return ec == std::errc() ? value : std::numeric_limits<T>::max();
   }
