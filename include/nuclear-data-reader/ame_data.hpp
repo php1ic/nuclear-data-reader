@@ -194,7 +194,7 @@ namespace AME
     /**
      * Extract the mass excess from a AME formatted line
      *
-     * \param The line to extract the mass excess from
+     * \param Nothing 
      *
      * \return Nothing
      */
@@ -206,7 +206,7 @@ namespace AME
     /**
      * Extract the error on the mass excess from a AME formatted line
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -246,7 +246,7 @@ namespace AME
     /**
      * Extract the binding energy per A
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -259,7 +259,7 @@ namespace AME
     /**
      * Extract the error on the binding energy per A
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -272,7 +272,7 @@ namespace AME
     /**
      * Extract the beta decay energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -285,7 +285,7 @@ namespace AME
     /**
      * Extract the error on the beta decay energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -298,7 +298,7 @@ namespace AME
     /**
      * Extract the atomic mass
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -310,7 +310,7 @@ namespace AME
     /**
      * Extract the error on atomic mass
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -323,7 +323,7 @@ namespace AME
     /**
      * Extract the 2 neutron separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -335,7 +335,7 @@ namespace AME
     /**
      * Extract the error on the 2 neutron separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -347,7 +347,7 @@ namespace AME
     /**
      * Extract the 2 proton separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -359,7 +359,7 @@ namespace AME
     /**
      * Extract the error on the 2 proton separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -371,7 +371,7 @@ namespace AME
     /**
      * Extract the Q alpha energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -383,7 +383,7 @@ namespace AME
     /**
      * Extract the error on Q alpha energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -395,7 +395,7 @@ namespace AME
     /**
      * Extract the double beta minus Q-value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -407,7 +407,7 @@ namespace AME
     /**
      * Extract the error on the double beta minus Q-value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -419,7 +419,7 @@ namespace AME
     /**
      * Extract the epsilon p Q-value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -431,7 +431,7 @@ namespace AME
     /**
      * Extract the error on the epsilon p Q-value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -443,7 +443,7 @@ namespace AME
     /**
      * Extract the beta minus n Q-value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -455,7 +455,7 @@ namespace AME
     /**
      * Extract the error on beta minus n Q-value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -467,7 +467,7 @@ namespace AME
     /**
      * Extract the 1 neutron separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -479,7 +479,7 @@ namespace AME
     /**
      * Extract the error on the 1 neutron separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -491,7 +491,7 @@ namespace AME
     /**
      * Extract the 1 proton separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -503,7 +503,7 @@ namespace AME
     /**
      * Extract the error on the 1 proton separation energy
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -515,7 +515,7 @@ namespace AME
     /**
      * Extract the 4 beta minus Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -527,7 +527,7 @@ namespace AME
     /**
      * Extract the error on 4 beta minus Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -539,7 +539,7 @@ namespace AME
     /**
      * Extract the d alpha Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -551,7 +551,7 @@ namespace AME
     /**
      * Extract the error on the d alpha Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -563,7 +563,7 @@ namespace AME
     /**
      * Extract the p alpha Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -575,7 +575,7 @@ namespace AME
     /**
      * Extract the error on the p alpha Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -587,7 +587,7 @@ namespace AME
     /**
      * Extract the n alpha Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -599,7 +599,7 @@ namespace AME
     /**
      * Extract the n alpha Q value
      *
-     * \param The line to extract the value from
+     * \param Nothing
      *
      * \return Nothing
      */
