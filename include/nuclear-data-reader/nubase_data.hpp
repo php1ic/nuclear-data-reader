@@ -292,7 +292,7 @@ namespace NUBASE
     /**
      * Extract the state/level from the data file
      *
-     * \param The value to be set (N.B. pass by reference)
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -304,7 +304,7 @@ namespace NUBASE
     /**
      * Extract the energy of the level from the data file
      *
-     * \param The value to be set (N.B. pass by reference)
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -316,7 +316,7 @@ namespace NUBASE
     /**
      * Extract the error on the energy of the state
      *
-     * \param The value to be set (N.B. pass by reference)
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -363,7 +363,6 @@ namespace NUBASE
      * Extract the isomeric data; level, energy and error on energy
      *
      * \param The data read so far to allow us to populate the necessary state
-     * \param The state we are getting information about
      *
      * \return Nothing
      */
@@ -381,7 +380,7 @@ namespace NUBASE
     /**
      * Extract the decay mode from the data file
      *
-     * \param The year of the data file being read
+     * \param Nothing
      *
      * \return Nothing
      */
@@ -390,7 +389,7 @@ namespace NUBASE
     /**
      * Set the rich flag for the isotope
      *
-     * \param Container that keeps track of if we have read a stable isotope for this Z value
+     * \param Boolean flag to signify is we have seen a stable isotope so far while reading the file
      *
      * \return Nothing
      */
