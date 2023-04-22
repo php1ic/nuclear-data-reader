@@ -5,7 +5,7 @@ if(NDR_ENABLE_CPPCHECK)
     set(CMAKE_CXX_CPPCHECK
         ${CPPCHECK}
         --enable=all
-        --std=c++17
+        --std=c++20
         --template="[{severity}][{id}] {message} {callstack} \(On {file}:{line}\)"
         --suppress=missingInclude
         --inline-suppr
