@@ -9,8 +9,9 @@ if ( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR} )
   message(FATAL_ERROR "In-source build attempt detected")
 endif()
 
-# code coverage as a link option arrived in 3.13
-cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+# Reporting checks arrived in 3.17
+# https://cmake.org/cmake/help/latest/command/message.html#reporting-checks
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 message(STATUS "CMake version: ${CMAKE_VERSION}")
 
 # Put all binaries in a their standard locations
