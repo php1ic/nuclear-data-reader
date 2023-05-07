@@ -15,7 +15,7 @@ if(NDR_ENABLE_CPPCHECK)
         -I ${PROJECT_SOURCE_DIR}/external/Catch2/single_include
         -I ${PROJECT_SOURCE_DIR}/external/fmt/include
         )
-      message(STATUS "[cppcheck] Configuring to use the binary ${CMAKE_CXX_CPPCHECK}")
+      message(STATUS "[cppcheck] Configuring to use the binary ${CPPCHECK}")
   else()
     message(SEND_ERROR "[cppcheck] Requested but executable not found")
   endif()
