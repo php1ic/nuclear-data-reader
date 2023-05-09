@@ -308,9 +308,9 @@ void NUBASE::Data::setDecayMode() const
 }
 
 
-void NUBASE::Data::setNeutronOrProtonRich(const bool pnSide) const noexcept
+void NUBASE::Data::setNeutronOrProtonRich(const bool is_neutron_rich) const noexcept
 {
-  rich = (!pnSide)             ? NUBASE::Richness::PROTON
+  rich = (!is_neutron_rich)    ? NUBASE::Richness::PROTON
          : (decay == "stable") ? NUBASE::Richness::STABLE
                                : NUBASE::Richness::NEUTRON;
 

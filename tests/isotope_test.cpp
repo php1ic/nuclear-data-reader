@@ -66,8 +66,8 @@ TEST_CASE("A json item is correctly output", "[Isotope]")
 //  nubase_gs03_isotope.setSpinParity();
 //  nubase_gs03_isotope.setHalfLife();
 //  nubase_gs03_isotope.decay = "stable";
-//  // nubase_gs03_isotope.setDecayMode(pnSide, table_year);
-//  // nubase_gs03_isotope.setNeutronOrProtonRich(pnSide);
+//  // nubase_gs03_isotope.setDecayMode(neutron_rich, table_year);
+//  // nubase_gs03_isotope.setNeutronOrProtonRich(neutron_rich);
 //
 //  std::string line{
 //    "10,3,7,Li,stable,0,true,33051.0,15.0,-4737.00141,0.00016,2.00e-21,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1900"

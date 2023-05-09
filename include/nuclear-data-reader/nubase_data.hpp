@@ -393,7 +393,7 @@ namespace NUBASE
      *
      * \return Nothing
      */
-    void setNeutronOrProtonRich(const bool pnSide) const noexcept;
+    void setNeutronOrProtonRich(const bool is_neutron_rich) const noexcept;
   };
 } // namespace NUBASE
 

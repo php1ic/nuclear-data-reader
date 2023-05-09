@@ -24,7 +24,7 @@ class MassTable
 public:
   explicit MassTable(const uint16_t _year) : year(_year)
   {
-    pnSide.fill(false);
+    neutron_rich.fill(false);
 
     // If a bad year is given, default to the latest
     if (!checkValidYear())
@@ -53,7 +53,7 @@ public:
   /// The max Z value of any isotope
   static constexpr uint8_t MAX_Z{ 118 };
   /// Keep track of when we have gone from proton -> neutron rich
-  mutable std::array<bool, MAX_Z + 1> pnSide{};
+  mutable std::array<bool, MAX_Z + 1> neutron_rich{};
 
   /// The NUBASE table file path
   mutable std::filesystem::path NUBASE_masstable{};

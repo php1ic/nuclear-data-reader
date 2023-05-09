@@ -354,10 +354,10 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 
   if (data.decay == "stable")
     {
-      pnSide.at(data.Z) = true;
+      neutron_rich.at(data.Z) = true;
     }
 
-  data.setNeutronOrProtonRich(pnSide.at(data.Z));
+  data.setNeutronOrProtonRich(neutron_rich.at(data.Z));
 
   return data;
 }

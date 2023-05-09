@@ -426,7 +426,7 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     REQUIRE(nubase.pi == NUBASE::Parity::POSITIVE);
     REQUIRE(nubase.pi_exp == NUBASE::Measured::EXPERIMENTAL);
     REQUIRE_FALSE(nubase.decay.compare("stable"));
-    REQUIRE(table.pnSide.at(50));
+    REQUIRE(table.neutron_rich.at(50));
   }
 
 
