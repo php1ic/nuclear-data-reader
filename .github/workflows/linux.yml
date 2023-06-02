@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        compiler: [clang++-12, g++-11]
+        compiler: [clang++, g++]
         type: [Debug, Release]
 
     steps:
@@ -26,9 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # add a repository to get access to gcc v11
-          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-          sudo apt update && sudo apt install -y ninja-build ccache lcov gcc-11 g++-11 clang-12
+          sudo apt update && sudo apt install -y cmake ninja-build ccache lcov gcc g++ clang
 
       - name: Configure
         run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
@@ -40,22 +38,22 @@ jobs:
         run: cd ../Build && ctest -j2 -V
 
       - name: Generate coverage report
-        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++-11' }}
+        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         run: |
           cd ../Build
           #FIXME: gcov binary should be generic
-          lcov --directory . --capture --gcov-tool /usr/bin/gcov-11 --output-file coverage.info
+          lcov --directory . --capture --gcov-tool /usr/bin/gcov --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Upload coverage report to codecov
-        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++-11' }}
+        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         uses: codecov/codecov-action@v3
         with:
           file: ../Build/coverage.info
 
       - name: Upload coverage report to codacy
-        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++-11' }}
+        if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         # uses: codacy/codacy-coverage-reporter-action@master
         # with:
         #   project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
