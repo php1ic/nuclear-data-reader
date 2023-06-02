@@ -42,6 +42,13 @@ std::optional<uint16_t> Converter::SymbolToZ(const std::string_view symbol)
 }
 
 
+std::string Converter::FloatToNdp(const double number, const uint8_t numDP) noexcept
+{
+  return Converter::almost_equal(number, std::numeric_limits<double>::max()) ? "null"
+                                                                             : fmt::format("{:.{}f}", number, numDP);
+}
+
+
 std::chrono::duration<double> Converter::ToDuration(const double value, std::string_view unit) noexcept
 {
   return [=]() -> std::chrono::duration<double> {

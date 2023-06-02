@@ -16,8 +16,6 @@
 #include <string_view>
 #include <type_traits>
 
-#include <fmt/format.h>
-
 #include <algorithm>
 #include <array>
 #include <charconv>
@@ -66,51 +64,51 @@ public:
   using billionyears = std::chrono::duration<double, std::ratio<1000000000 * year, 1>>;
 
 
-/// FIXME: Masstable.hpp contains MAX_Z but if we include here we'll get cyclic includes
-/// If we don't cast, MSVC complains about converting types which causes compilation to fail.
-/// Neither gcc or clang have an issue, maybe they should?
-static constexpr std::array<std::pair<std::string_view, uint16_t>, 119> symbolZmap = {
-  { { "n", static_cast<uint16_t>(0) },    { "H", static_cast<uint16_t>(1) },    { "He", static_cast<uint16_t>(2) },
-    { "Li", static_cast<uint16_t>(3) },   { "Be", static_cast<uint16_t>(4) },   { "B", static_cast<uint16_t>(5) },
-    { "C", static_cast<uint16_t>(6) },    { "N", static_cast<uint16_t>(7) },    { "O", static_cast<uint16_t>(8) },
-    { "F", static_cast<uint16_t>(9) },    { "Ne", static_cast<uint16_t>(10) },  { "Na", static_cast<uint16_t>(11) },
-    { "Mg", static_cast<uint16_t>(12) },  { "Al", static_cast<uint16_t>(13) },  { "Si", static_cast<uint16_t>(14) },
-    { "P", static_cast<uint16_t>(15) },   { "S", static_cast<uint16_t>(16) },   { "Cl", static_cast<uint16_t>(17) },
-    { "Ar", static_cast<uint16_t>(18) },  { "K", static_cast<uint16_t>(19) },   { "Ca", static_cast<uint16_t>(20) },
-    { "Sc", static_cast<uint16_t>(21) },  { "Ti", static_cast<uint16_t>(22) },  { "V", static_cast<uint16_t>(23) },
-    { "Cr", static_cast<uint16_t>(24) },  { "Mn", static_cast<uint16_t>(25) },  { "Fe", static_cast<uint16_t>(26) },
-    { "Co", static_cast<uint16_t>(27) },  { "Ni", static_cast<uint16_t>(28) },  { "Cu", static_cast<uint16_t>(29) },
-    { "Zn", static_cast<uint16_t>(30) },  { "Ga", static_cast<uint16_t>(31) },  { "Ge", static_cast<uint16_t>(32) },
-    { "As", static_cast<uint16_t>(33) },  { "Se", static_cast<uint16_t>(34) },  { "Br", static_cast<uint16_t>(35) },
-    { "Kr", static_cast<uint16_t>(36) },  { "Rb", static_cast<uint16_t>(37) },  { "Sr", static_cast<uint16_t>(38) },
-    { "Y", static_cast<uint16_t>(39) },   { "Zr", static_cast<uint16_t>(40) },  { "Nb", static_cast<uint16_t>(41) },
-    { "Mo", static_cast<uint16_t>(42) },  { "Tc", static_cast<uint16_t>(43) },  { "Ru", static_cast<uint16_t>(44) },
-    { "Rh", static_cast<uint16_t>(45) },  { "Pd", static_cast<uint16_t>(46) },  { "Ag", static_cast<uint16_t>(47) },
-    { "Cd", static_cast<uint16_t>(48) },  { "In", static_cast<uint16_t>(49) },  { "Sn", static_cast<uint16_t>(50) },
-    { "Sb", static_cast<uint16_t>(51) },  { "Te", static_cast<uint16_t>(52) },  { "I", static_cast<uint16_t>(53) },
-    { "Xe", static_cast<uint16_t>(54) },  { "Cs", static_cast<uint16_t>(55) },  { "Ba", static_cast<uint16_t>(56) },
-    { "La", static_cast<uint16_t>(57) },  { "Ce", static_cast<uint16_t>(58) },  { "Pr", static_cast<uint16_t>(59) },
-    { "Nd", static_cast<uint16_t>(60) },  { "Pm", static_cast<uint16_t>(61) },  { "Sm", static_cast<uint16_t>(62) },
-    { "Eu", static_cast<uint16_t>(63) },  { "Gd", static_cast<uint16_t>(64) },  { "Tb", static_cast<uint16_t>(65) },
-    { "Dy", static_cast<uint16_t>(66) },  { "Ho", static_cast<uint16_t>(67) },  { "Er", static_cast<uint16_t>(68) },
-    { "Tm", static_cast<uint16_t>(69) },  { "Yb", static_cast<uint16_t>(70) },  { "Lu", static_cast<uint16_t>(71) },
-    { "Hf", static_cast<uint16_t>(72) },  { "Ta", static_cast<uint16_t>(73) },  { "W", static_cast<uint16_t>(74) },
-    { "Re", static_cast<uint16_t>(75) },  { "Os", static_cast<uint16_t>(76) },  { "Ir", static_cast<uint16_t>(77) },
-    { "Pt", static_cast<uint16_t>(78) },  { "Au", static_cast<uint16_t>(79) },  { "Hg", static_cast<uint16_t>(80) },
-    { "Tl", static_cast<uint16_t>(81) },  { "Pb", static_cast<uint16_t>(82) },  { "Bi", static_cast<uint16_t>(83) },
-    { "Po", static_cast<uint16_t>(84) },  { "At", static_cast<uint16_t>(85) },  { "Rn", static_cast<uint16_t>(86) },
-    { "Fr", static_cast<uint16_t>(87) },  { "Ra", static_cast<uint16_t>(88) },  { "Ac", static_cast<uint16_t>(89) },
-    { "Th", static_cast<uint16_t>(90) },  { "Pa", static_cast<uint16_t>(91) },  { "U", static_cast<uint16_t>(92) },
-    { "Np", static_cast<uint16_t>(93) },  { "Pu", static_cast<uint16_t>(94) },  { "Am", static_cast<uint16_t>(95) },
-    { "Cm", static_cast<uint16_t>(96) },  { "Bk", static_cast<uint16_t>(97) },  { "Cf", static_cast<uint16_t>(98) },
-    { "Es", static_cast<uint16_t>(99) },  { "Fm", static_cast<uint16_t>(100) }, { "Md", static_cast<uint16_t>(101) },
-    { "No", static_cast<uint16_t>(102) }, { "Lr", static_cast<uint16_t>(103) }, { "Rf", static_cast<uint16_t>(104) },
-    { "Db", static_cast<uint16_t>(105) }, { "Sg", static_cast<uint16_t>(106) }, { "Bh", static_cast<uint16_t>(107) },
-    { "Hs", static_cast<uint16_t>(108) }, { "Mt", static_cast<uint16_t>(109) }, { "Ds", static_cast<uint16_t>(110) },
-    { "Rg", static_cast<uint16_t>(111) }, { "Cn", static_cast<uint16_t>(112) }, { "Nh", static_cast<uint16_t>(113) },
-    { "Fl", static_cast<uint16_t>(114) }, { "Mc", static_cast<uint16_t>(115) }, { "Lv", static_cast<uint16_t>(116) },
-    { "Ts", static_cast<uint16_t>(117) }, { "Og", static_cast<uint16_t>(118) } }
-};
+  /// FIXME: Masstable.hpp contains MAX_Z but if we include here we'll get cyclic includes
+  /// If we don't cast, MSVC complains about converting types which causes compilation to fail.
+  /// Neither gcc or clang have an issue, maybe they should?
+  static constexpr std::array<std::pair<std::string_view, uint16_t>, 119> symbolZmap = {
+    { { "n", static_cast<uint16_t>(0) },    { "H", static_cast<uint16_t>(1) },    { "He", static_cast<uint16_t>(2) },
+      { "Li", static_cast<uint16_t>(3) },   { "Be", static_cast<uint16_t>(4) },   { "B", static_cast<uint16_t>(5) },
+      { "C", static_cast<uint16_t>(6) },    { "N", static_cast<uint16_t>(7) },    { "O", static_cast<uint16_t>(8) },
+      { "F", static_cast<uint16_t>(9) },    { "Ne", static_cast<uint16_t>(10) },  { "Na", static_cast<uint16_t>(11) },
+      { "Mg", static_cast<uint16_t>(12) },  { "Al", static_cast<uint16_t>(13) },  { "Si", static_cast<uint16_t>(14) },
+      { "P", static_cast<uint16_t>(15) },   { "S", static_cast<uint16_t>(16) },   { "Cl", static_cast<uint16_t>(17) },
+      { "Ar", static_cast<uint16_t>(18) },  { "K", static_cast<uint16_t>(19) },   { "Ca", static_cast<uint16_t>(20) },
+      { "Sc", static_cast<uint16_t>(21) },  { "Ti", static_cast<uint16_t>(22) },  { "V", static_cast<uint16_t>(23) },
+      { "Cr", static_cast<uint16_t>(24) },  { "Mn", static_cast<uint16_t>(25) },  { "Fe", static_cast<uint16_t>(26) },
+      { "Co", static_cast<uint16_t>(27) },  { "Ni", static_cast<uint16_t>(28) },  { "Cu", static_cast<uint16_t>(29) },
+      { "Zn", static_cast<uint16_t>(30) },  { "Ga", static_cast<uint16_t>(31) },  { "Ge", static_cast<uint16_t>(32) },
+      { "As", static_cast<uint16_t>(33) },  { "Se", static_cast<uint16_t>(34) },  { "Br", static_cast<uint16_t>(35) },
+      { "Kr", static_cast<uint16_t>(36) },  { "Rb", static_cast<uint16_t>(37) },  { "Sr", static_cast<uint16_t>(38) },
+      { "Y", static_cast<uint16_t>(39) },   { "Zr", static_cast<uint16_t>(40) },  { "Nb", static_cast<uint16_t>(41) },
+      { "Mo", static_cast<uint16_t>(42) },  { "Tc", static_cast<uint16_t>(43) },  { "Ru", static_cast<uint16_t>(44) },
+      { "Rh", static_cast<uint16_t>(45) },  { "Pd", static_cast<uint16_t>(46) },  { "Ag", static_cast<uint16_t>(47) },
+      { "Cd", static_cast<uint16_t>(48) },  { "In", static_cast<uint16_t>(49) },  { "Sn", static_cast<uint16_t>(50) },
+      { "Sb", static_cast<uint16_t>(51) },  { "Te", static_cast<uint16_t>(52) },  { "I", static_cast<uint16_t>(53) },
+      { "Xe", static_cast<uint16_t>(54) },  { "Cs", static_cast<uint16_t>(55) },  { "Ba", static_cast<uint16_t>(56) },
+      { "La", static_cast<uint16_t>(57) },  { "Ce", static_cast<uint16_t>(58) },  { "Pr", static_cast<uint16_t>(59) },
+      { "Nd", static_cast<uint16_t>(60) },  { "Pm", static_cast<uint16_t>(61) },  { "Sm", static_cast<uint16_t>(62) },
+      { "Eu", static_cast<uint16_t>(63) },  { "Gd", static_cast<uint16_t>(64) },  { "Tb", static_cast<uint16_t>(65) },
+      { "Dy", static_cast<uint16_t>(66) },  { "Ho", static_cast<uint16_t>(67) },  { "Er", static_cast<uint16_t>(68) },
+      { "Tm", static_cast<uint16_t>(69) },  { "Yb", static_cast<uint16_t>(70) },  { "Lu", static_cast<uint16_t>(71) },
+      { "Hf", static_cast<uint16_t>(72) },  { "Ta", static_cast<uint16_t>(73) },  { "W", static_cast<uint16_t>(74) },
+      { "Re", static_cast<uint16_t>(75) },  { "Os", static_cast<uint16_t>(76) },  { "Ir", static_cast<uint16_t>(77) },
+      { "Pt", static_cast<uint16_t>(78) },  { "Au", static_cast<uint16_t>(79) },  { "Hg", static_cast<uint16_t>(80) },
+      { "Tl", static_cast<uint16_t>(81) },  { "Pb", static_cast<uint16_t>(82) },  { "Bi", static_cast<uint16_t>(83) },
+      { "Po", static_cast<uint16_t>(84) },  { "At", static_cast<uint16_t>(85) },  { "Rn", static_cast<uint16_t>(86) },
+      { "Fr", static_cast<uint16_t>(87) },  { "Ra", static_cast<uint16_t>(88) },  { "Ac", static_cast<uint16_t>(89) },
+      { "Th", static_cast<uint16_t>(90) },  { "Pa", static_cast<uint16_t>(91) },  { "U", static_cast<uint16_t>(92) },
+      { "Np", static_cast<uint16_t>(93) },  { "Pu", static_cast<uint16_t>(94) },  { "Am", static_cast<uint16_t>(95) },
+      { "Cm", static_cast<uint16_t>(96) },  { "Bk", static_cast<uint16_t>(97) },  { "Cf", static_cast<uint16_t>(98) },
+      { "Es", static_cast<uint16_t>(99) },  { "Fm", static_cast<uint16_t>(100) }, { "Md", static_cast<uint16_t>(101) },
+      { "No", static_cast<uint16_t>(102) }, { "Lr", static_cast<uint16_t>(103) }, { "Rf", static_cast<uint16_t>(104) },
+      { "Db", static_cast<uint16_t>(105) }, { "Sg", static_cast<uint16_t>(106) }, { "Bh", static_cast<uint16_t>(107) },
+      { "Hs", static_cast<uint16_t>(108) }, { "Mt", static_cast<uint16_t>(109) }, { "Ds", static_cast<uint16_t>(110) },
+      { "Rg", static_cast<uint16_t>(111) }, { "Cn", static_cast<uint16_t>(112) }, { "Nh", static_cast<uint16_t>(113) },
+      { "Fl", static_cast<uint16_t>(114) }, { "Mc", static_cast<uint16_t>(115) }, { "Lv", static_cast<uint16_t>(116) },
+      { "Ts", static_cast<uint16_t>(117) }, { "Og", static_cast<uint16_t>(118) } }
+  };
 
   /**
    * Get the hash of a const char* so we can use a switch statement on std::string_view
@@ -282,16 +280,10 @@ static constexpr std::array<std::pair<std::string_view, uint16_t>, 119> symbolZm
    * \param number The number to convert
    * \param numDP The number of decimal points to include in the output string
    *
-   * \return A std:string of the input number, truncated to the required precision
+   * \return A std::string of the input number, truncated to the required precision
    * \return A std::string with contents "null" if number is std::numeric_limits<double>::max()
    */
-  template<typename T>
-    requires std::floating_point<T>
-  [[nodiscard]] static std::string FloatToNdp(const T number, const uint8_t numDP = 1) noexcept
-  {
-    return Converter::almost_equal(number, std::numeric_limits<T>::max()) ? "null"
-                                                                          : fmt::format("{:.{}f}", number, numDP);
-  }
+  [[nodiscard]] static std::string FloatToNdp(const double number, const uint8_t numDP = 1) noexcept;
 
   /**
    * Convert a numeric value and it's unit to a chrono::duration.
