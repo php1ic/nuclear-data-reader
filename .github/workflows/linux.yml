@@ -24,25 +24,27 @@ jobs:
         with:
           submodules: true
 
+      - name: Set build directory
+        id: build_dir
+        run: echo "DIR=../Build" >> "$GITHUB_OUTPUT"
+
       - name: Install dependencies
-        run: |
-          sudo apt update && sudo apt install -y cmake ninja-build ccache lcov gcc g++ clang
+        run: sudo apt update && sudo apt install -y cmake ninja-build ccache lcov gcc g++ clang
 
       - name: Configure
-        run: cmake -GNinja -H. -B../Build -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
+        run: cmake -GNinja -H. -B${{ steps.build_dir.outputs.DIR }} -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
 
       - name: Build
-        run: cmake --build ../Build
+        run: cmake --build ${{ steps.build_dir.outputs.DIR }}
 
       - name: Test
-        run: cd ../Build && ctest -j2 -V
+        run: ctest -j2 -V --test-dir ${{ steps.build_dir.outputs.DIR }}
 
       - name: Generate coverage report
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         run: |
-          cd ../Build
-          #FIXME: gcov binary should be generic
-          lcov --directory . --capture --gcov-tool /usr/bin/gcov --output-file coverage.info
+          cd ${{ steps.build_dir.outputs.DIR }}
+          lcov --directory . --capture --output-file coverage.info
           lcov --remove coverage.info '/usr/*' '*/tests/*' '*/external/*' --output-file coverage.info
           lcov --list coverage.info
 
@@ -50,14 +52,10 @@ jobs:
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
         uses: codecov/codecov-action@v3
         with:
-          file: ../Build/coverage.info
+          file: ${{ steps.build_dir.outputs.DIR }}/coverage.info
 
       - name: Upload coverage report to codacy
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
-        # uses: codacy/codacy-coverage-reporter-action@master
-        # with:
-        #   project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        #   coverage-reports: ./Build/coverage.info
         run: |
           export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r ../Build/coverage.info
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r ${{ steps.build_dir.outputs.DIR }}/coverage.info
