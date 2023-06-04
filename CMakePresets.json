@@ -35,7 +35,8 @@
             "hidden": true,
             "inherits": "base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "NDR_UNIT_TESTS": "ON"
             }
         },
         {
@@ -117,9 +118,25 @@
             }
         },
         {
+            "name": "gcc-Release",
+            "displayName": "GCC Release test step",
+            "configurePreset": "gcc-Release",
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
             "name": "clang-Debug",
             "displayName": "clang Debug test step",
             "configurePreset": "clang-Debug",
+            "execution": {
+                "jobs": 2
+            }
+        },
+        {
+            "name": "clang-Release",
+            "displayName": "clang Release test step",
+            "configurePreset": "clang-Release",
             "execution": {
                 "jobs": 2
             }
