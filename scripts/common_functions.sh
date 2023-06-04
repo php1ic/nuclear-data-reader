@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 # Define colours here and use in scripts, rather than
 # redefing in any all all scripts that need colour
 

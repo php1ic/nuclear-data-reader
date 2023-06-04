@@ -1,5 +1,3 @@
-# With the move to cmake, many of these could be removed, but lets leave them in
-
 # The build directory and everything it contains
 **/[Bb]uild
 
@@ -12,6 +10,9 @@ compile_commands.json
 include/nuclear-data-reader/version.hpp
 # We want the doxygen config file
 !docs/Doxyfile.in
+
+# output files from the run_all_presets.sh script
+cmake_output*.log
 
 # emacs related files
 *~
