@@ -1,5 +1,6 @@
 function(set_project_warnings project_name)
-  option(NDR_WARNINGS_AS_ERRORS "Treat Compiler warnings as errors" ON)
+  # The use of sub-modules makes this option frustrating to use, so default to OFF
+  option(NDR_WARNINGS_AS_ERRORS "Treat Compiler warnings as errors" OFF)
 
   # I don't currently have access to a windows machine to test these,
   # so rather than trial and error pushing to trigger appveyor and check

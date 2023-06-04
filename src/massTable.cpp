@@ -6,6 +6,7 @@
 
 #include <fmt/os.h>
 #include <fmt/ostream.h>
+#include <fmt/std.h>
 
 #include <algorithm>
 #include <array>
