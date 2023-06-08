@@ -156,12 +156,12 @@ namespace AME
     /**
      *
      */
-    [[nodiscard]] inline uint16_t getReaction_1_A(std::string_view line) const
+    [[nodiscard]] inline auto getReaction_1_A(std::string_view line) const
     {
       return Converter::StringToNum<uint16_t>(line, r1_position.START_R1_A, r1_position.END_R1_A);
     }
 
-    [[nodiscard]] inline uint16_t getReaction_2_A(std::string_view line) const
+    [[nodiscard]] inline auto getReaction_2_A(std::string_view line) const
     {
       return Converter::StringToNum<uint16_t>(line, r2_position.START_R2_A, r2_position.END_R2_A);
     }
@@ -169,12 +169,12 @@ namespace AME
     /**
      *
      */
-    [[nodiscard]] inline uint16_t getReaction_1_Z(std::string_view line) const
+    [[nodiscard]] inline auto getReaction_1_Z(std::string_view line) const
     {
       return Converter::StringToNum<uint16_t>(line, r1_position.START_R1_Z, r1_position.END_R1_Z);
     }
 
-    [[nodiscard]] inline uint16_t getReaction_2_Z(std::string_view line) const
+    [[nodiscard]] inline auto getReaction_2_Z(std::string_view line) const
     {
       return Converter::StringToNum<uint16_t>(line, r2_position.START_R2_Z, r2_position.END_R2_Z);
     }
