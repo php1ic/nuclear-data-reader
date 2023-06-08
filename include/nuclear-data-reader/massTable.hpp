@@ -27,7 +27,7 @@ public:
     neutron_rich.fill(false);
 
     // If a bad year is given, default to the latest
-    if (!checkValidYear())
+    if (!ValidYear())
       {
         year = valid_years.back();
       }
@@ -69,24 +69,6 @@ public:
   mutable std::vector<NUBASE::Data> nubaseDataTable;
   mutable std::vector<AME::Data> ameDataTable;
 
-  /**
-   * Set the year of the table who's data will be read
-   *
-   * \param The year table to use
-   *
-   * \return[TRUE] A valid year has been requested and thus set
-   * \return[FALSE] An invalid year has been requested so no change has been made
-   */
-  [[nodiscard]] inline bool setTableYear(const uint16_t _year) const noexcept
-  {
-    if (checkValidYear(_year))
-      {
-        year = _year;
-        return true;
-      }
-
-    return false;
-  }
 
   /**
    * Check that the given year corresponds to one that we have a mass table for
@@ -96,7 +78,7 @@ public:
    * \return[TRUE] A valid year
    * \return[FALSE] An invalid year
    */
-  [[nodiscard]] inline bool checkValidYear(const uint16_t _year) const
+  [[nodiscard]] inline bool ValidYear(const uint16_t _year) const
   {
     return (std::find(valid_years.cbegin(), valid_years.cend(), _year) != valid_years.cend());
   }
@@ -109,9 +91,25 @@ public:
    * \return[TRUE] A valid year
    * \return[FALSE] An invalid year
    */
-  [[nodiscard]] inline bool checkValidYear() const
+  [[nodiscard]] inline bool ValidYear() const { return ValidYear(year); }
+
+  /**
+   * Set the year of the table who's data will be read
+   *
+   * \param The year table to use
+   *
+   * \return[TRUE] A valid year has been requested and thus set
+   * \return[FALSE] An invalid year has been requested so no change has been made
+   */
+  [[nodiscard]] inline auto setTableYear(const uint16_t _year) const noexcept
   {
-    return (std::find(valid_years.cbegin(), valid_years.cend(), year) != valid_years.cend());
+    if (ValidYear(_year))
+      {
+        year = _year;
+        return true;
+      }
+
+    return false;
   }
 
   /**
