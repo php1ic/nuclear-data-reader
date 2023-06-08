@@ -11,8 +11,11 @@ include/nuclear-data-reader/version.hpp
 # We want the doxygen config file
 !docs/Doxyfile.in
 
-# output files from the run_all_presets.sh script
+# Output files from the run_all_presets.sh script
 cmake_output*.log
+
+# Output files from the example executable that uses the library
+masstable*.json
 
 # emacs related files
 *~
