@@ -7,10 +7,13 @@
 
 TEST_CASE("Construct an instance", "[MassTable]")
 {
-  SECTION("Construct with a valid year")
+  SECTION("Construct with the valid years")
   {
-    const MassTable table(2003);
-    REQUIRE(table.year == 2003);
+    for( const auto theYear : MassTable::valid_years)
+    {
+      const MassTable table(theYear);
+      REQUIRE(table.year == theYear);
+    }
   }
 
   SECTION("Construct with an invalid year")
