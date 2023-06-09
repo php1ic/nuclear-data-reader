@@ -15,6 +15,7 @@
 
 #include <cstdint>
 #include <filesystem>
+#include <optional>
 #include <regex>
 #include <vector>
 
@@ -71,27 +72,18 @@ public:
 
 
   /**
-   * Check that the given year corresponds to one that we have a mass table for
+   * Check that the given year corresponds to one that we have a mass table for. If no year
+   * is given, use the one currently stored in the `year` member variable
    *
-   * \param The year we want to check
+   * \param The year we want to check, or nothing
    *
    * \return[TRUE] A valid year
    * \return[FALSE] An invalid year
    */
-  [[nodiscard]] inline bool ValidYear(const uint16_t _year) const
+  [[nodiscard]] inline bool ValidYear(const std::optional<uint16_t> _year = std::nullopt) const
   {
-    return (std::find(valid_years.cbegin(), valid_years.cend(), _year) != valid_years.cend());
+    return std::find(valid_years.cbegin(), valid_years.cend(), _year ? _year.value() : year) != valid_years.cend();
   }
-
-  /**
-   * Check that the table year that has been set is when a table was actually released.
-   *
-   * \param Nothing
-   *
-   * \return[TRUE] A valid year
-   * \return[FALSE] An invalid year
-   */
-  [[nodiscard]] inline bool ValidYear() const { return ValidYear(year); }
 
   /**
    * Set the year of the table who's data will be read
