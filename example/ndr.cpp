@@ -5,7 +5,6 @@
 int main()
 {
   std::array<int, 7> years = { 1983, 1993, 1997, 2003, 2012, 2016, 2020 };
-  // std::array<int, 1> years = {1995};
 
   for (const auto year : years)
     {
