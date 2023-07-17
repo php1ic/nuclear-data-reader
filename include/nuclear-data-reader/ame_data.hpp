@@ -133,7 +133,7 @@ namespace AME
     mutable std::string full_data{};
 
     /**
-     * Set the neutron number
+     * Extract the neutron number
      *
      * \param Nothing
      *
