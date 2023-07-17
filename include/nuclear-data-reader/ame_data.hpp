@@ -139,7 +139,10 @@ namespace AME
      *
      * \return Nothing
      */
-    inline void setN() const noexcept { N = A - Z; }
+    inline void setN() const
+    {
+      N = Converter::StringToNum<uint16_t>(full_data, mass_position.START_N, mass_position.END_N);
+    }
 
     /**
      * Extract the mass number from the data file
@@ -148,9 +151,10 @@ namespace AME
      *
      * \return Nothing
      */
-    inline void setA() const
+    inline void setA(const uint16_t _year) const
     {
-      A = Converter::StringToNum<uint16_t>(full_data, mass_position.START_A, mass_position.END_A);
+      A = (_year == 1983) ? (N + Z)
+                          : Converter::StringToNum<uint16_t>(full_data, mass_position.START_A, mass_position.END_A);
     }
 
     /**
@@ -194,7 +198,7 @@ namespace AME
     /**
      * Extract the mass excess from a AME formatted line
      *
-     * \param Nothing 
+     * \param Nothing
      *
      * \return Nothing
      */

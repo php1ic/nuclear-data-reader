@@ -33,6 +33,15 @@ public:
         year = valid_years.back();
       }
 
+    // 1997 NUBASE is the same as 1995 AME (see README)
+    // We have decided that all files will live in the 1995 directory,
+    // but the user can still select the year 1997 without worry.
+    // FIXME: Print out a message about what's going on in this situation?
+    if (year == 1997)
+      {
+        year = 1995;
+      }
+
     line_length = (year < 2020) ? AME::LINE_LENGTH::PRE_2020 : AME::LINE_LENGTH::POST_2020;
   }
 
@@ -45,7 +54,7 @@ public:
   ~MassTable() = default;
 
   /// What years do we have data for
-  static constexpr std::array<uint16_t, 4> valid_years{ 2003, 2012, 2016, 2020 };
+  static constexpr std::array<uint16_t, 8> valid_years{ 1983, 1993, 1995, 1997, 2003, 2012, 2016, 2020 };
   /// Which year's table should we read
   mutable uint16_t year{};
   /// We expand the line to ensure it's long enough when reading the 3 AME files
@@ -105,6 +114,12 @@ public:
   }
 
   /**
+   *
+   *
+   **/
+  bool readAME() const;
+
+  /**
    * Combine the data from NUBASE and AME into a single instance by looking for common A & Z values
    *
    * \param How much info to print to screen if thinks don't go perfectly
@@ -141,10 +156,11 @@ public:
    * \return[TRUE] The line as been read correctly
    * \return[FALSE] The line has not been read correctly
    */
-  [[nodiscard]] bool parseAMEReactionOneFormat(const std::string& line) const;
+  [[nodiscard]] bool
+  parseAMEReactionOneFormat(const std::string& line, const uint16_t table_A, const uint16_t table_Z) const;
 
   /**
-   * Read a single line of the first AME reaction file (rct2) and update the appropriate instance of the isotope in the
+   * Read a single line of the second AME reaction file (rct2) and update the appropriate instance of the isotope in the
    * mass table
    *
    * \param The line to read
@@ -152,7 +168,8 @@ public:
    * \return[TRUE] The line as been read correctly
    * \return[FALSE] The line has not been read correctly
    */
-  [[nodiscard]] bool parseAMEReactionTwoFormat(const std::string& line) const;
+  [[nodiscard]] bool
+  parseAMEReactionTwoFormat(const std::string& line, const uint16_t table_A, const uint16_t table_Z) const;
 
   /**
    * Having read the reaction file, find the matching isotope in the mass table so we can update the values
@@ -163,8 +180,8 @@ public:
    * \return[PASS] The iterator to the appropriate isotope
    * \return[FAIL] The end() iterator
    */
-  [[nodiscard]] std::vector<AME::Data>::iterator getMatchingIsotope(const std::string& line,
-                                                                    const uint8_t reactionFile) const;
+  [[nodiscard]] std::vector<AME::Data>::iterator
+  getMatchingIsotope(const std::string& line, const uint16_t table_A, const uint16_t table_Z) const;
 
   /**
    * Fill the main container with the data that will be used to create the chart
