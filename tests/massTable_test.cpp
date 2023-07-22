@@ -11,8 +11,9 @@ TEST_CASE("Construct an instance", "[MassTable]")
   {
     for( auto theYear : MassTable::valid_years)
     {
-      if(theYear == 1997){ theYear = 1995; }
       const MassTable table(theYear);
+      // The constructor will change 1997 to 1995 so we need to manually alter the value so the check will pass
+      if(theYear == 1997){ theYear = 1995; }
       REQUIRE(table.year == theYear);
     }
   }
