@@ -87,28 +87,32 @@ bool MassTable::populateInternalMassTable()
   // There is always AME data
   readAME();
 
-  // There is only NUBASE data after 1995(1997)
-  bool combine = true;
-  if (year >= 1995)
+  // There is only NUBASE data after 1993
+  const auto attempt_combination = (year > LAST_YEAR_AME_ONLY);
+  const auto read_nubase         = attempt_combination ? readNUBASE(NUBASE_masstable) : false;
+
+  bool successful_combination = false;
+  if (attempt_combination && read_nubase)
     {
-      if (!readNUBASE(NUBASE_masstable))
+      successful_combination = mergeData();
+    }
+  else if (attempt_combination)
+    {
+      if (!read_nubase)
         {
-          fmt::print("Nuclear data has not been read, exiting...\n");
-          return false;
+          fmt::print("NUBASE data has not been read\n");
         }
 
-      combine = mergeData();
-    }
-  else
-    {
-      const auto nubase_data = NUBASE::Data("", 1993);
+      const auto nubase_data = NUBASE::Data("", LAST_YEAR_AME_ONLY);
       for (const auto& ame : ameDataTable)
         {
           fullDataTable.emplace_back(ame, nubase_data);
         }
+
+      successful_combination = true;
     }
 
-  return combine;
+  return successful_combination;
 }
 
 

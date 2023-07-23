@@ -9,13 +9,16 @@ TEST_CASE("Construct an instance", "[MassTable]")
 {
   SECTION("Construct with the valid years")
   {
-    for( auto theYear : MassTable::valid_years)
-    {
-      const MassTable table(theYear);
-      // The constructor will change 1997 to 1995 so we need to manually alter the value so the check will pass
-      if(theYear == 1997){ theYear = 1995; }
-      REQUIRE(table.year == theYear);
-    }
+    for (auto theYear : MassTable::valid_years)
+      {
+        const MassTable table(theYear);
+        // The constructor will change 1997 to 1995 so we need to manually alter the value so the check will pass
+        if (theYear == 1997)
+          {
+            theYear = 1995;
+          }
+        REQUIRE(table.year == theYear);
+      }
   }
 
   SECTION("Construct with an invalid year")
@@ -52,6 +55,48 @@ TEST_CASE("Alter the table year", "[MassTable]")
 
 TEST_CASE("Absolute paths are constructed", "[MassTable]")
 {
+  SECTION("1983 data")
+  {
+    constexpr int year = 1983;
+    const MassTable table(year);
+
+    table.setFilePaths();
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
+
+    // REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab03.asc").string());
+    REQUIRE(table.AME_masstable.string() == (root / "mass.mas83").string());
+    REQUIRE(table.AME_reaction_1.string() == (root / "rct1.mas83").string());
+    REQUIRE(table.AME_reaction_2.string() == (root / "rct2.mas83").string());
+  }
+
+  SECTION("1993 data")
+  {
+    constexpr int year = 1993;
+    const MassTable table(year);
+
+    table.setFilePaths();
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
+
+    // REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab03.asc").string());
+    REQUIRE(table.AME_masstable.string() == (root / "mass_exp.mas93").string());
+    REQUIRE(table.AME_reaction_1.string() == (root / "rct1_exp.mas93").string());
+    REQUIRE(table.AME_reaction_2.string() == (root / "rct2_exp.mas93").string());
+  }
+
+  SECTION("1995/1997 data")
+  {
+    constexpr int year = 1995;
+    const MassTable table(year);
+
+    table.setFilePaths();
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
+
+    REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab97.asc").string());
+    REQUIRE(table.AME_masstable.string() == (root / "mass_exp.mas95").string());
+    REQUIRE(table.AME_reaction_1.string() == (root / "rct1_exp.mas95").string());
+    REQUIRE(table.AME_reaction_2.string() == (root / "rct2_exp.mas95").string());
+  }
+
   SECTION("2003 data")
   {
     constexpr int year = 2003;

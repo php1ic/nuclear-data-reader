@@ -55,6 +55,8 @@ public:
 
   /// What years do we have data for
   static constexpr std::array<uint16_t, 8> valid_years{ 1983, 1993, 1995, 1997, 2003, 2012, 2016, 2020 };
+  /// Final year of AME only data
+  static constexpr uint16_t LAST_YEAR_AME_ONLY{ 1993 };
   /// Which year's table should we read
   mutable uint16_t year{};
   /// We expand the line to ensure it's long enough when reading the 3 AME files
