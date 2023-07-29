@@ -398,6 +398,7 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
 }
 
 
+// Should we return if the Z value is bad and ignore the rest of the line?
 NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 {
   NUBASE::Data data(line, year);
@@ -443,7 +444,10 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
       neutron_rich.at(data.Z) = true;
     }
 
-  data.setNeutronOrProtonRich(neutron_rich.at(data.Z));
+  if (data.symbol != "Xx")
+    {
+      data.setNeutronOrProtonRich(neutron_rich.at(data.Z));
+    }
 
   return data;
 }

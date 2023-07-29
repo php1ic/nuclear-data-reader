@@ -491,6 +491,19 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
 
     REQUIRE(nubase.year == 1934);
   }
+
+  SECTION("Bad Z value read")
+  {
+    MassTable table(2003);
+
+    // Manually alter Z value to be out of acceptable range
+    const std::string line{ "221 3000   221Fr   13278        5                              4.9    m 0.2    5/2-       "
+                            "   90 97Ch53d   A~100;B-=0.0048 15;14C=8.8e-11 11" };
+
+    const auto nubase = table.parseNUBASEFormat(line);
+
+    REQUIRE_THAT(nubase.symbol, Catch::Matchers::Matches("Xx"));
+  }
 }
 
 
