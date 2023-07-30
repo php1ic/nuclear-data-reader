@@ -6,16 +6,6 @@
 #include <fmt/format.h>
 
 
-// std::string Isotope::CSVHeader()
-//{
-//}
-
-
-// std::string Isotope::writeAsCSV(std::string_view sep) const
-//{
-//}
-
-
 std::string Isotope::writeAsJSON(const bool human_readable) const
 {
   return fmt::format("{{{0}"
@@ -63,9 +53,9 @@ std::string Isotope::writeAsJSON(const bool human_readable) const
                      "\"Year\":{42}{0}"
                      "}}",
                      human_readable ? "\n" : "",
-                     nubase.A,
-                     nubase.Z,
-                     nubase.N,
+                     ame.A,
+                     ame.Z,
+                     ame.N,
                      nubase.symbol,
                      nubase.decay,
                      (nubase.exp == NUBASE::Measured::EXPERIMENTAL) ? 0 : 1,

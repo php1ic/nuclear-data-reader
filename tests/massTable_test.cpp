@@ -9,11 +9,16 @@ TEST_CASE("Construct an instance", "[MassTable]")
 {
   SECTION("Construct with the valid years")
   {
-    for( const auto theYear : MassTable::valid_years)
-    {
-      const MassTable table(theYear);
-      REQUIRE(table.year == theYear);
-    }
+    for (auto theYear : MassTable::valid_years)
+      {
+        const MassTable table(theYear);
+        // The constructor will change 1997 to 1995 so we need to manually alter the value so the check will pass
+        if (theYear == 1997)
+          {
+            theYear = 1995;
+          }
+        REQUIRE(table.year == theYear);
+      }
   }
 
   SECTION("Construct with an invalid year")
@@ -50,6 +55,48 @@ TEST_CASE("Alter the table year", "[MassTable]")
 
 TEST_CASE("Absolute paths are constructed", "[MassTable]")
 {
+  SECTION("1983 data")
+  {
+    constexpr int year = 1983;
+    const MassTable table(year);
+
+    table.setFilePaths();
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
+
+    // REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab03.asc").string());
+    REQUIRE(table.AME_masstable.string() == (root / "mass.mas83").string());
+    REQUIRE(table.AME_reaction_1.string() == (root / "rct1.mas83").string());
+    REQUIRE(table.AME_reaction_2.string() == (root / "rct2.mas83").string());
+  }
+
+  SECTION("1993 data")
+  {
+    constexpr int year = 1993;
+    const MassTable table(year);
+
+    table.setFilePaths();
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
+
+    // REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab03.asc").string());
+    REQUIRE(table.AME_masstable.string() == (root / "mass_exp.mas93").string());
+    REQUIRE(table.AME_reaction_1.string() == (root / "rct1_exp.mas93").string());
+    REQUIRE(table.AME_reaction_2.string() == (root / "rct2_exp.mas93").string());
+  }
+
+  SECTION("1995/1997 data")
+  {
+    constexpr int year = 1995;
+    const MassTable table(year);
+
+    table.setFilePaths();
+    const std::filesystem::path root = std::filesystem::path{ NDR_DATA_PATH } / std::to_string(year);
+
+    REQUIRE(table.NUBASE_masstable.string() == (root / "nubtab97.asc").string());
+    REQUIRE(table.AME_masstable.string() == (root / "mass_exp.mas95").string());
+    REQUIRE(table.AME_reaction_1.string() == (root / "rct1_exp.mas95").string());
+    REQUIRE(table.AME_reaction_2.string() == (root / "rct2_exp.mas95").string());
+  }
+
   SECTION("2003 data")
   {
     constexpr int year = 2003;
@@ -221,8 +268,17 @@ TEST_CASE("Validate user input table year", "[MassTable]")
 
 TEST_CASE("Populate the internal mass table", "[MassTable]")
 {
-  MassTable table(2003);
-  REQUIRE(table.populateInternalMassTable());
+  SECTION("Before the first NUBASE table")
+  {
+    MassTable table(1993);
+    REQUIRE(table.populateInternalMassTable());
+  }
+
+  SECTION("After the first NUBASE table")
+  {
+    MassTable table(2003);
+    REQUIRE(table.populateInternalMassTable());
+  }
 }
 
 
@@ -254,7 +310,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
   SECTION("No existing mass table")
   {
     const MassTable table(2012);
-    const auto it = table.getMatchingIsotope("", 1);
+    const auto it = table.getMatchingIsotope("", 1, 1);
     REQUIRE(it == table.ameDataTable.end());
   }
 
@@ -268,7 +324,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
     ame.Z = 92;
     table.ameDataTable.emplace_back(ame);
 
-    const auto it = table.getMatchingIsotope(reaction_line, 1);
+    const auto it = table.getMatchingIsotope(reaction_line, 238, 92);
 
     REQUIRE(it != table.ameDataTable.end());
     REQUIRE(it->full_data.size() == 125);
@@ -284,7 +340,7 @@ TEST_CASE("Match up isotopes", "[MassTable]")
     ame.Z = 1;
     table.ameDataTable.emplace_back(ame);
 
-    const auto it = table.getMatchingIsotope(reaction_line, 1);
+    const auto it = table.getMatchingIsotope(reaction_line, 138, 64);
 
     REQUIRE(it == table.ameDataTable.end());
   }
@@ -302,12 +358,12 @@ TEST_CASE("Read a line from the first AME reaction file as a whole", "[MassTable
   const std::string reaction_line{ " 152 Tb  65   15756.30   40.69  10504.87   40.49   3153.38   41.32  -7115.94   "
                                    "42.43  -3354.08   40.02 -10036.92   40.17" };
 
-  REQUIRE_FALSE(table.parseAMEReactionOneFormat(reaction_line));
+  REQUIRE_FALSE(table.parseAMEReactionOneFormat(reaction_line, 152, 65));
 
   table.ameDataTable.back().A = 152;
   table.ameDataTable.back().Z = 65;
 
-  REQUIRE(table.parseAMEReactionOneFormat(reaction_line));
+  REQUIRE(table.parseAMEReactionOneFormat(reaction_line, 152, 65));
 
   const auto data = table.ameDataTable.back();
 
@@ -337,12 +393,12 @@ TEST_CASE("Read a line from the second AME reaction file as a whole", "[MassTabl
   const std::string reaction_line{ " 136 I   53    3780.98   49.91   8960.63  102.43   6537.65   72.59  13771.00   "
                                    "50.83   8309.36   55.39   5089.71   55.83" };
 
-  REQUIRE_FALSE(table.parseAMEReactionTwoFormat(reaction_line));
+  REQUIRE_FALSE(table.parseAMEReactionTwoFormat(reaction_line, 136, 53));
 
   table.ameDataTable.back().A = 136;
   table.ameDataTable.back().Z = 53;
 
-  REQUIRE(table.parseAMEReactionTwoFormat(reaction_line));
+  REQUIRE(table.parseAMEReactionTwoFormat(reaction_line, 136, 53));
 
   const auto data = table.ameDataTable.back();
 
@@ -367,9 +423,8 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
   {
     MassTable table(2003);
 
-    const std::string line{
-      "189 0810   189Tl  -24602       11                              2.3    m 0.2    (1/2+)        99           B+=100"
-    };
+    const std::string line{ "189 0810   189Tl  -24602       11                              2.3    m 0.2    (1/2+)   "
+                            "     99           B+=100" };
 
     const auto nubase = table.parseNUBASEFormat(line);
 
@@ -443,6 +498,19 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     const auto nubase = table.parseNUBASEFormat(line);
 
     REQUIRE(nubase.year == 1934);
+  }
+
+  SECTION("Bad Z value read")
+  {
+    MassTable table(2003);
+
+    // Manually alter Z value to be out of acceptable range
+    const std::string line{ "221 3000   221Fr   13278        5                              4.9    m 0.2    5/2-       "
+                            "   90 97Ch53d   A~100;B-=0.0048 15;14C=8.8e-11 11" };
+
+    const auto nubase = table.parseNUBASEFormat(line);
+
+    REQUIRE_THAT(nubase.symbol, Catch::Matchers::Matches("Xx"));
   }
 }
 

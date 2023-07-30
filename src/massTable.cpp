@@ -24,7 +24,33 @@ void MassTable::setFilePaths() const
 
   switch (year)
     {
-      default:
+      case 1983:
+        // No NUBASE table published this year
+        AME_masstable  = data_path / "mass.mas83";
+        AME_reaction_1 = data_path / "rct1.mas83";
+        AME_reaction_2 = data_path / "rct2.mas83";
+        break;
+      case 1993:
+        // No NUBASE table published this year
+        AME_masstable  = data_path / "mass_exp.mas93";
+        AME_reaction_1 = data_path / "rct1_exp.mas93";
+        AME_reaction_2 = data_path / "rct2_exp.mas93";
+        break;
+      case 1995:
+      case 1997:
+        // Quote from G. Audi in a conference proceedings from 2000. See README for link
+        //
+        // The most recently published mass table from the "Atomic Mass Evaluation" is of December 1995 (AME'95).
+        // Urgency in having the first NUBASE evaluation completed, delayed the planned update of an AME for
+        // 1997, since the two evaluators of the AME are also collaborators of NUBASE. The NUBASE evaluation was
+        // thus published for the first time in September 1997. In order to have consistency between the two
+        // tables, it was decided that the masses in NUBASE'97 should be exactly those from AME'95. The few cases
+        // for which new data required a change were only mentioned in the table and discussed in the accompanying text
+        NUBASE_masstable = data_path / "nubtab97.asc";
+        AME_masstable    = data_path / "mass_exp.mas95";
+        AME_reaction_1   = data_path / "rct1_exp.mas95";
+        AME_reaction_2   = data_path / "rct2_exp.mas95";
+        break;
       case 2003:
         NUBASE_masstable = data_path / "nubtab03.asc";
         AME_masstable    = data_path / "mass.mas03";
@@ -44,6 +70,7 @@ void MassTable::setFilePaths() const
         AME_reaction_2   = data_path / "rct2-16.txt";
         break;
       case 2020:
+      default:
         NUBASE_masstable = data_path / "nubase_1.mas20";
         AME_masstable    = data_path / "mass.mas20";
         AME_reaction_1   = data_path / "rct1.mas20";
@@ -57,13 +84,31 @@ bool MassTable::populateInternalMassTable()
 {
   setFilePaths();
 
-  // Read mass table
-  if (!readNUBASE(NUBASE_masstable))
+  // There is always AME data
+  readAME();
+
+  // There is only NUBASE data after 1993, but if the year is new enough, attempt to read NUBASE data
+  if (year > LAST_YEAR_AME_ONLY)
     {
-      fmt::print("Nuclear data has not been read, exiting...");
-      return false;
+      if (readNUBASE(NUBASE_masstable))
+        {
+          return mergeData();
+        }
+      fmt::print("NUBASE data has not been read\n");
     }
 
+  const auto nubase_data = NUBASE::Data("", LAST_YEAR_AME_ONLY);
+  for (const auto& ame : ameDataTable)
+    {
+      fullDataTable.emplace_back(ame, nubase_data);
+    }
+
+  return true;
+}
+
+
+bool MassTable::readAME() const
+{
   if (!readAMEMassFile(AME_masstable))
     {
       fmt::print("Values from AME were not read.\n");
@@ -79,7 +124,7 @@ bool MassTable::populateInternalMassTable()
       fmt::print("Reaction values from first file not read.\n");
     }
 
-  return mergeData();
+  return true;
 }
 
 
@@ -87,9 +132,9 @@ AME::Data MassTable::parseAMEMassFormat(const std::string& line) const
 {
   AME::Data data(line, year);
 
-  data.setA();
   data.setZ();
   data.setN();
+  data.setA(year);
 
   data.setMassExcess();
   data.setMassExcessError();
@@ -107,8 +152,8 @@ AME::Data MassTable::parseAMEMassFormat(const std::string& line) const
 }
 
 
-std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string& line,
-                                                               const uint8_t reactionFile) const
+std::vector<AME::Data>::iterator
+MassTable::getMatchingIsotope(const std::string& line, const uint16_t table_A, const uint16_t table_Z) const
 {
   // Check that the mass table has already been populated
   if (ameDataTable.empty())
@@ -117,21 +162,15 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
       return ameDataTable.end();
     }
 
-  const AME::Data data(line, year);
-
-  // A & Z are in the same place for both reaction files, but lets not assume they will be forever
-  const auto other_A = (reactionFile == 1) ? data.getReaction_1_A(line) : data.getReaction_2_A(line);
-  const auto other_Z = (reactionFile == 1) ? data.getReaction_1_Z(line) : data.getReaction_2_Z(line);
-
   // Look for the correct isotope in the existing data table
-  auto isotope = std::find_if(ameDataTable.begin(), ameDataTable.end(), [other_A, other_Z](const auto& ame) -> bool {
-    return (ame.A == other_A && ame.Z == other_Z);
+  auto isotope = std::find_if(ameDataTable.begin(), ameDataTable.end(), [table_A, table_Z](const auto& ame) -> bool {
+    return (ame.A == table_A && ame.Z == table_Z);
   });
 
   // Get out if it doesn't exist
   if (isotope == ameDataTable.end())
     {
-      fmt::print("**WARNING**: No matching mass data found for A={}, Z={}\n", other_A, other_Z);
+      fmt::print("**WARNING**: No matching mass data found for A={}, Z={}\n", table_A, table_Z);
       return ameDataTable.end();
     }
 
@@ -146,9 +185,9 @@ std::vector<AME::Data>::iterator MassTable::getMatchingIsotope(const std::string
 }
 
 
-bool MassTable::parseAMEReactionTwoFormat(const std::string& line) const
+bool MassTable::parseAMEReactionTwoFormat(const std::string& line, const uint16_t table_A, const uint16_t table_Z) const
 {
-  auto isotope = getMatchingIsotope(line, 2);
+  auto isotope = getMatchingIsotope(line, table_A, table_Z);
 
   if (isotope == ameDataTable.end())
     {
@@ -177,9 +216,9 @@ bool MassTable::parseAMEReactionTwoFormat(const std::string& line) const
 }
 
 
-bool MassTable::parseAMEReactionOneFormat(const std::string& line) const
+bool MassTable::parseAMEReactionOneFormat(const std::string& line, const uint16_t table_A, const uint16_t table_Z) const
 {
-  auto isotope = getMatchingIsotope(line, 1);
+  auto isotope = getMatchingIsotope(line, table_A, table_Z);
 
   if (isotope == ameDataTable.end())
     {
@@ -230,8 +269,15 @@ bool MassTable::readAMEMassFile(const std::filesystem::path& ameTable) const
   std::string line;
   while (std::getline(file, line) && line_number < data.mass_position.FOOTER)
     {
-      ameDataTable.emplace_back(parseAMEMassFormat(line));
       ++line_number;
+      // skip repeated header
+      if (year == uint16_t{ 1983 }
+          && (line.find("MASS EXCESS") != std::string::npos || line.find("(keV)") != std::string::npos))
+        {
+          continue;
+        }
+
+      ameDataTable.emplace_back(parseAMEMassFormat(line));
     }
 
   fmt::print("--> done\n");
@@ -259,10 +305,26 @@ bool MassTable::readAMEReactionFileOne(const std::filesystem::path& reactionFile
     }
 
   std::string line;
+  uint16_t current_A{ 1 };
   while (std::getline(file, line) && line_number < data.r1_position.R1_FOOTER)
     {
       ++line_number;
-      if (!parseAMEReactionOneFormat(line))
+      // skip repeated header
+      if (year == uint16_t{ 1983 } && (line.find("A  EL") != std::string::npos || line.starts_with("1")))
+        {
+          continue;
+        }
+
+      if (line.starts_with("0"))
+        {
+          current_A = data.getReaction_1_A(line);
+        }
+
+      const auto current_Z = data.getReaction_1_Z(line);
+
+      // std::cout << line << std::endl;
+      // std::cout << "Running: " << current_A << " | " << current_Z << std::endl;
+      if (!parseAMEReactionOneFormat(line, current_A, current_Z))
         {
           fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
         }
@@ -293,16 +355,30 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
     }
 
   std::string line;
+  uint16_t current_A{ 1 };
   while (std::getline(file, line) && line_number < data.r2_position.R2_FOOTER)
     {
       ++line_number;
+      // skip repeated header which only happens in the 2020 file (so far)
+      if (year == uint16_t{ 1983 } && (line.find("A  EL") != std::string::npos || line.starts_with("1")))
+        {
+          continue;
+        }
+
       // skip repeated header which only happens in the 2020 file (so far)
       if (year == uint16_t{ 2020 } && line.find("1 A  elt") != std::string::npos)
         {
           continue;
         }
 
-      if (!parseAMEReactionTwoFormat(line))
+      if (line.starts_with("0"))
+        {
+          current_A = data.getReaction_2_A(line);
+        }
+
+      const auto current_Z = data.getReaction_2_Z(line);
+
+      if (!parseAMEReactionTwoFormat(line, current_A, current_Z))
         {
           fmt::print("**WARNING**: No matching isotope found for\n{}\n", line);
         }
@@ -313,6 +389,7 @@ bool MassTable::readAMEReactionFileTwo(const std::filesystem::path& reactionFile
 }
 
 
+// Should we return if the Z value is bad and ignore the rest of the line?
 NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
 {
   NUBASE::Data data(line, year);
@@ -358,7 +435,10 @@ NUBASE::Data MassTable::parseNUBASEFormat(const std::string& line) const
       neutron_rich.at(data.Z) = true;
     }
 
-  data.setNeutronOrProtonRich(neutron_rich.at(data.Z));
+  if (data.symbol != "Xx")
+    {
+      data.setNeutronOrProtonRich(neutron_rich.at(data.Z));
+    }
 
   return data;
 }
@@ -435,30 +515,6 @@ bool MassTable::mergeData() const
   fmt::print("--> done\n");
   return true;
 }
-
-
-// bool MassTable::outputTableToCSV() const
-//{
-//  auto outfile = NUBASE_masstable;
-//  outfile.replace_extension(".csv");
-//
-//  fmt::print("New file: {}\n", outfile);
-//  std::ofstream out(outfile);
-//
-//  if (!out.is_open())
-//    {
-//      fmt::print("\n***ERROR***: {} couldn't be opened", outfile);
-//      return false;
-//    }
-//
-//  // fmt::print(out, "{}\n", Isotope::CSVHeader());
-//  // for (const auto& isotope : theTable)
-//  //  {
-//  //    fmt::print(out, "{}\n", isotope.writeAsCSV());
-//  //  }
-//
-//  return true;
-//}
 
 
 bool MassTable::outputTableToJSON() const

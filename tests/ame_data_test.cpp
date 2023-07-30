@@ -3,6 +3,7 @@
 #include <catch2/benchmark/catch_benchmark_all.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_all.hpp>
+#include <cstdint>
 
 // Lines from the files were picked at random with the `shuf` command
 // $ shuf -n1 FILE
@@ -15,8 +16,9 @@ TEST_CASE("A", "[AMEData]")
     {
       const std::string line{ "  34   85   51  136 Sb    x  -64879#       298#        8255#       2#    B-   9547#     "
                               "301#    135 930350#       320#" };
-      const AME::Data data(line, 2003);
-      data.setA();
+      const uint16_t year {2003};
+      const AME::Data data(line, year);
+      data.setA(year);
       REQUIRE(data.A == 136);
     }
 
@@ -24,8 +26,9 @@ TEST_CASE("A", "[AMEData]")
     {
       const std::string line{ "  39  129   90  219 Th   -a   14462.780      56.460      7683.7655     0.2578  B-  "
                               "-4120.4434    89.7010  219 015526.432      60.611" };
-      const AME::Data data(line, 2020);
-      data.setA();
+      const uint16_t year {2020};
+      const AME::Data data(line, year);
+      data.setA(year);
       REQUIRE(data.A == 219);
     }
   }
@@ -137,22 +140,18 @@ TEST_CASE("Calculate N", "[AMEData]")
 {
   SECTION("Pre 2020")
   {
-    const AME::Data data("", 2003);
-    data.A = 56;
-    data.Z = 23;
+    const AME::Data data("  24   81   57  138 La   +n  -86524.681      3.528     8375.164    0.026 B-   1043.841   10.363 137 907111.930      3.787", 2003);
     data.setN();
 
-    REQUIRE(data.N == 33);
+    REQUIRE(data.N == 81);
   }
 
   SECTION("Post 2020")
   {
-    const AME::Data data("", 2020);
-    data.A = 187;
-    data.Z = 80;
+    const AME::Data data("  59  169  110  279 Ds   -a  149024#        605#         7229#         2#      B-  -2697#       737#      279 159984#        649#", 2020);
     data.setN();
 
-    REQUIRE(data.N == 107);
+    REQUIRE(data.N == 169);
   }
 }
 
@@ -240,7 +239,7 @@ TEST_CASE("Relative mass excess error", "[AMEData]")
       };
       const AME::Data data(line, 2003);
       constexpr double min{ 1.0e-7 };
-      data.setA();
+      data.setA(2003);
       data.setZ();
       data.setMassExcess();
       data.setMassExcessError();
@@ -253,7 +252,7 @@ TEST_CASE("Relative mass excess error", "[AMEData]")
                               "-17338.0681     0.9999   12 000000.0         0.0" };
       const AME::Data data(line, 2020);
       constexpr double min{ 1.0e-7 };
-      data.setA();
+      data.setA(2003);
       data.setZ();
       data.setMassExcess();
       data.setMassExcessError();
@@ -1003,7 +1002,7 @@ TEST_CASE("Reading values", "[.Benchmark]")
 
     BENCHMARK_ADVANCED("Set a 16 bit unsigned int")(Catch::Benchmark::Chronometer meter)
     {
-      meter.measure([&data]() { data.setA(); });
+      meter.measure([&data]() { data.setA(2020); });
     };
   }
 }

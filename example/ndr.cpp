@@ -4,9 +4,9 @@
 
 int main()
 {
-  std::array<int, 4> years = { 2003, 2012, 2016, 2020 };
+  std::array<int, 7> years = { 1983, 1993, 1997, 2003, 2012, 2016, 2020 };
 
-  for (auto year : years)
+  for (const auto year : years)
     {
       auto table = MassTable(year);
 

@@ -12,12 +12,14 @@ namespace AME
     {
       if (_year < 2020)
         {
-          HEADER                   = 39;
+          HEADER                   = (_year <= 1995) ? (_year == 1983) ? 35 : 40 : 39;
           FOOTER                   = std::numeric_limits<uint16_t>::max();
           START_A                  = 16;
           END_A                    = 19;
           START_Z                  = 11;
           END_Z                    = 14;
+          START_N                  = 6;
+          END_N                    = 9;
           START_ME                 = 29;
           END_ME                   = 41;
           START_DME                = 42;
@@ -43,6 +45,8 @@ namespace AME
           END_A                    = 19;
           START_Z                  = 11;
           END_Z                    = 14;
+          START_N                  = 6;
+          END_N                    = 9;
           START_ME                 = 29;
           END_ME                   = 42;
           START_DME                = 43;
@@ -68,6 +72,8 @@ namespace AME
     mutable uint8_t END_A;
     mutable uint8_t START_Z;
     mutable uint8_t END_Z;
+    mutable uint8_t START_N;
+    mutable uint8_t END_N;
     mutable uint8_t START_ME;
     mutable uint8_t END_ME;
     mutable uint8_t START_DME;

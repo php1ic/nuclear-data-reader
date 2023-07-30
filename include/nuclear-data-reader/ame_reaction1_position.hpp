@@ -12,7 +12,7 @@ namespace AME
     {
       if (_year < 2020)
         {
-          R1_HEADER  = 39;
+          R1_HEADER  = (_year <= 1995) ? (_year == 1983) ? 30 : 40 : 39;
           R1_FOOTER  = std::numeric_limits<uint16_t>::max();
           START_R1_A = 1;
           END_R1_A   = 4;
