@@ -268,8 +268,17 @@ TEST_CASE("Validate user input table year", "[MassTable]")
 
 TEST_CASE("Populate the internal mass table", "[MassTable]")
 {
-  MassTable table(2003);
-  REQUIRE(table.populateInternalMassTable());
+  SECTION("Before the first NUBASE table")
+  {
+    MassTable table(1993);
+    REQUIRE(table.populateInternalMassTable());
+  }
+
+  SECTION("After the first NUBASE table")
+  {
+    MassTable table(2003);
+    REQUIRE(table.populateInternalMassTable());
+  }
 }
 
 
@@ -414,9 +423,8 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
   {
     MassTable table(2003);
 
-    const std::string line{
-      "189 0810   189Tl  -24602       11                              2.3    m 0.2    (1/2+)        99           B+=100"
-    };
+    const std::string line{ "189 0810   189Tl  -24602       11                              2.3    m 0.2    (1/2+)   "
+                            "     99           B+=100" };
 
     const auto nubase = table.parseNUBASEFormat(line);
 
