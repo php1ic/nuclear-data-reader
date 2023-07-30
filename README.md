@@ -22,7 +22,6 @@
 The Nuclear Data Reader is aimed at parsing and reading the various files that have been published related to atomic nuclear data.
 The format of the files is unique, and in constant flux, so takes some effort to parse.
 This project takes away the need to keep worry about those things and creates [json](https://www.json.org/) formatted files.
-The setup has been done for [csv](https://en.wikipedia.org/wiki/Comma-separated_values) formatted files, but is not yet implemented.
 
 No guarantee is supplied with regards to the accuracy of the data presented.
 Estimated values are included, please always refer to the original sources.

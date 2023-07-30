@@ -6,16 +6,6 @@
 #include <fmt/format.h>
 
 
-// std::string Isotope::CSVHeader()
-//{
-//}
-
-
-// std::string Isotope::writeAsCSV(std::string_view sep) const
-//{
-//}
-
-
 std::string Isotope::writeAsJSON(const bool human_readable) const
 {
   return fmt::format("{{{0}"

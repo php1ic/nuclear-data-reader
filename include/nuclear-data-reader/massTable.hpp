@@ -234,15 +234,6 @@ public:
   [[nodiscard]] bool readNUBASE(const std::filesystem::path& nubaseTable);
 
   /**
-   * Convert ... singular file format to csv
-   *
-   * \param Nothing
-   *
-   * \return Nothing
-   */
-  // [[nodiscard]] bool outputTableToCSV() const;
-
-  /**
    * Convert ... singular file format to json
    *
    * \param Nothing

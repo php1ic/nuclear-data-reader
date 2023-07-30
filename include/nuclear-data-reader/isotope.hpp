@@ -40,23 +40,6 @@ public:
   // All of the NUBASE data
   mutable NUBASE::Data nubase;
 
-  /**
-   * Output all of the data as a csv string
-   *
-   * \param The string to separate values by [default = ","]
-   *
-   * \return All of the members separated by the given separator
-   */
-  //[[nodiscard]] std::string writeAsCSV(std::string_view sep = ",") const;
-
-  /**
-   * Output the header describing the string returned from Isotope::writeAsCSV()
-   *
-   * \param Nothing
-   *
-   * \return A descriptive string of all member variables
-   */
-  //[[nodiscard]] static std::string CSVHeader();
 
   /**
    * Output all of the data as a json string
