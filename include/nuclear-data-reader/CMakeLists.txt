@@ -10,6 +10,7 @@ set(HEADERS
   massTable.hpp
   nubase_data.hpp
   nubase_line_position.hpp
+  number.hpp
   version.hpp
   )
 
