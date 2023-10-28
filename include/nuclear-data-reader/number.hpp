@@ -2,20 +2,22 @@
  *
  * \class Number
  *
- * \brief Storage class for a value/measurement and it's error
+ * \brief Storage class for a value/measurement and it's uncertainty
  *
  * Here is a longer description
  */
 #ifndef NUMBER_HPP
 #define NUMBER_HPP
 
+#include <cmath>
 #include <optional>
 
 class Number
 {
 public:
-  Number(double _value, double _uncertainty) : value(_value), uncertainty(_uncertainty) {}
-  explicit Number(double _value) : value(_value) {}
+  Number() = default;
+  explicit Number(double _amount) : amount(_amount) {}
+  Number(double _amount, double _uncertainty) : amount(_amount), uncertainty(_uncertainty) {}
 
   Number(const Number&)     = default;
   Number(Number&&) noexcept = default;
@@ -23,13 +25,14 @@ public:
   Number& operator=(const Number&)     = default;
   Number& operator=(Number&&) noexcept = default;
 
-  auto operator<=>(const Number& rhs) const { return (value <=> rhs.value); }
+  auto operator<=>(const Number& rhs) const { return (amount <=> rhs.amount); }
 
   ~Number() = default;
 
 
-  // What is the recorded value of the number
-  mutable double value{};
+  // What is the recorded amount of the number
+  // 'amount' is not a good name, but 'value' is already taken by std::optional
+  mutable double amount{};
   // Is there an uncertainty associated with the number
   mutable std::optional<double> uncertainty{};
 
@@ -43,7 +46,7 @@ public:
    */
   [[nodiscard]] inline auto relativeUncertainty() const
   {
-    return uncertainty ? std::optional<double>{ uncertainty.value() / value } : uncertainty;
+    return uncertainty ? std::optional<double>{ std::fabs(uncertainty.value() / amount) } : uncertainty;
   }
 };
 

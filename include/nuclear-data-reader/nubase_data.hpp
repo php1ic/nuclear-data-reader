@@ -11,6 +11,7 @@
 
 #include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/nubase_line_position.hpp"
+#include "nuclear-data-reader/number.hpp"
 #include <string_view>
 
 #include <algorithm>
@@ -107,9 +108,7 @@ namespace NUBASE
     mutable uint16_t year{ DEFAULT_YEAR };
 
     /// Mass excess from the NUBASE table
-    mutable double mass_excess{ 0.1 };
-    /// Error on the mass excess from the NUBASE table
-    mutable double dmass_excess{ 1.0e4 };
+    mutable Number mass_excess{};
     /// Spin parity of the isotope
     mutable double J{ 100.0 };
 
@@ -186,7 +185,7 @@ namespace NUBASE
      */
     inline void setMassExcess() const
     {
-      mass_excess = Converter::StringToNum<double>(full_data, position.START_ME, position.END_ME);
+      mass_excess.amount = Converter::StringToNum<double>(full_data, position.START_ME, position.END_ME);
     }
 
     /**
@@ -198,7 +197,7 @@ namespace NUBASE
      */
     inline void setMassExcessError() const
     {
-      dmass_excess = Converter::StringToNum<double>(full_data, position.START_DME, position.END_DME);
+      mass_excess.uncertainty.emplace(Converter::StringToNum<double>(full_data, position.START_DME, position.END_DME));
     }
 
     /**
