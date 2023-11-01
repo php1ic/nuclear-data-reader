@@ -64,7 +64,7 @@ public:
   using billionyears = std::chrono::duration<double, std::ratio<1000000000 * year, 1>>;
 
   // Lambda function to cast as required and avoid copy paste errors if we ever need larger values
-  static constexpr auto DRY_cast = [](int value) mutable { return static_cast<uint16_t>(value); };
+  static constexpr auto DRY_cast = [](const int value) mutable { return static_cast<uint16_t>(value); };
 
   /// FIXME: Masstable.hpp contains MAX_Z but if we include here we'll get cyclic includes.
   /// If we don't cast, MSVC complains about converting types which causes compilation to fail.
