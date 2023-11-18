@@ -14,8 +14,7 @@ double AME::Data::getRelativeMassExcessError(const double min_allowed) const
       mass_excess.amount = 0.0001;
     }
 
-  const auto rel = mass_excess.relativeUncertainty().value();
-  return std::max(rel, min_allowed);
+  return std::max(mass_excess.relativeUncertainty().value(), min_allowed);
 }
 
 
