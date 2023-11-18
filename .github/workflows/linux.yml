@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        compiler: [clang++, g++]
+        compiler: [clang++-15, g++]
         type: [Debug, Release]
 
     steps:
@@ -29,7 +29,7 @@ jobs:
         run: echo "DIR=../Build" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
-        run: sudo apt update && sudo apt install -y cmake ninja-build ccache lcov gcc g++ clang
+        run: sudo apt update && sudo apt install -y cmake ninja-build ccache lcov gcc g++ clang-15
 
       - name: Configure
         run: cmake -GNinja -H. -B${{ steps.build_dir.outputs.DIR }} -DNDR_UNIT_TESTS=ON -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DNDR_CODE_COVERAGE=ON
