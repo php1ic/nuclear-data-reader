@@ -63,51 +63,43 @@ public:
   using millionyears = std::chrono::duration<double, std::ratio<1000000 * year, 1>>;
   using billionyears = std::chrono::duration<double, std::ratio<1000000000 * year, 1>>;
 
+  // Lambda function to cast as required and avoid copy paste errors if we ever need larger values
+  static constexpr auto DRY_cast = [](const int value) mutable { return static_cast<uint16_t>(value); };
 
-  /// FIXME: Masstable.hpp contains MAX_Z but if we include here we'll get cyclic includes
+  /// FIXME: Masstable.hpp contains MAX_Z but if we include here we'll get cyclic includes.
   /// If we don't cast, MSVC complains about converting types which causes compilation to fail.
   /// Neither gcc or clang have an issue, maybe they should?
   static constexpr std::array<std::pair<std::string_view, uint16_t>, 119> symbolZmap = {
-    { { "n", static_cast<uint16_t>(0) },    { "H", static_cast<uint16_t>(1) },    { "He", static_cast<uint16_t>(2) },
-      { "Li", static_cast<uint16_t>(3) },   { "Be", static_cast<uint16_t>(4) },   { "B", static_cast<uint16_t>(5) },
-      { "C", static_cast<uint16_t>(6) },    { "N", static_cast<uint16_t>(7) },    { "O", static_cast<uint16_t>(8) },
-      { "F", static_cast<uint16_t>(9) },    { "Ne", static_cast<uint16_t>(10) },  { "Na", static_cast<uint16_t>(11) },
-      { "Mg", static_cast<uint16_t>(12) },  { "Al", static_cast<uint16_t>(13) },  { "Si", static_cast<uint16_t>(14) },
-      { "P", static_cast<uint16_t>(15) },   { "S", static_cast<uint16_t>(16) },   { "Cl", static_cast<uint16_t>(17) },
-      { "Ar", static_cast<uint16_t>(18) },  { "K", static_cast<uint16_t>(19) },   { "Ca", static_cast<uint16_t>(20) },
-      { "Sc", static_cast<uint16_t>(21) },  { "Ti", static_cast<uint16_t>(22) },  { "V", static_cast<uint16_t>(23) },
-      { "Cr", static_cast<uint16_t>(24) },  { "Mn", static_cast<uint16_t>(25) },  { "Fe", static_cast<uint16_t>(26) },
-      { "Co", static_cast<uint16_t>(27) },  { "Ni", static_cast<uint16_t>(28) },  { "Cu", static_cast<uint16_t>(29) },
-      { "Zn", static_cast<uint16_t>(30) },  { "Ga", static_cast<uint16_t>(31) },  { "Ge", static_cast<uint16_t>(32) },
-      { "As", static_cast<uint16_t>(33) },  { "Se", static_cast<uint16_t>(34) },  { "Br", static_cast<uint16_t>(35) },
-      { "Kr", static_cast<uint16_t>(36) },  { "Rb", static_cast<uint16_t>(37) },  { "Sr", static_cast<uint16_t>(38) },
-      { "Y", static_cast<uint16_t>(39) },   { "Zr", static_cast<uint16_t>(40) },  { "Nb", static_cast<uint16_t>(41) },
-      { "Mo", static_cast<uint16_t>(42) },  { "Tc", static_cast<uint16_t>(43) },  { "Ru", static_cast<uint16_t>(44) },
-      { "Rh", static_cast<uint16_t>(45) },  { "Pd", static_cast<uint16_t>(46) },  { "Ag", static_cast<uint16_t>(47) },
-      { "Cd", static_cast<uint16_t>(48) },  { "In", static_cast<uint16_t>(49) },  { "Sn", static_cast<uint16_t>(50) },
-      { "Sb", static_cast<uint16_t>(51) },  { "Te", static_cast<uint16_t>(52) },  { "I", static_cast<uint16_t>(53) },
-      { "Xe", static_cast<uint16_t>(54) },  { "Cs", static_cast<uint16_t>(55) },  { "Ba", static_cast<uint16_t>(56) },
-      { "La", static_cast<uint16_t>(57) },  { "Ce", static_cast<uint16_t>(58) },  { "Pr", static_cast<uint16_t>(59) },
-      { "Nd", static_cast<uint16_t>(60) },  { "Pm", static_cast<uint16_t>(61) },  { "Sm", static_cast<uint16_t>(62) },
-      { "Eu", static_cast<uint16_t>(63) },  { "Gd", static_cast<uint16_t>(64) },  { "Tb", static_cast<uint16_t>(65) },
-      { "Dy", static_cast<uint16_t>(66) },  { "Ho", static_cast<uint16_t>(67) },  { "Er", static_cast<uint16_t>(68) },
-      { "Tm", static_cast<uint16_t>(69) },  { "Yb", static_cast<uint16_t>(70) },  { "Lu", static_cast<uint16_t>(71) },
-      { "Hf", static_cast<uint16_t>(72) },  { "Ta", static_cast<uint16_t>(73) },  { "W", static_cast<uint16_t>(74) },
-      { "Re", static_cast<uint16_t>(75) },  { "Os", static_cast<uint16_t>(76) },  { "Ir", static_cast<uint16_t>(77) },
-      { "Pt", static_cast<uint16_t>(78) },  { "Au", static_cast<uint16_t>(79) },  { "Hg", static_cast<uint16_t>(80) },
-      { "Tl", static_cast<uint16_t>(81) },  { "Pb", static_cast<uint16_t>(82) },  { "Bi", static_cast<uint16_t>(83) },
-      { "Po", static_cast<uint16_t>(84) },  { "At", static_cast<uint16_t>(85) },  { "Rn", static_cast<uint16_t>(86) },
-      { "Fr", static_cast<uint16_t>(87) },  { "Ra", static_cast<uint16_t>(88) },  { "Ac", static_cast<uint16_t>(89) },
-      { "Th", static_cast<uint16_t>(90) },  { "Pa", static_cast<uint16_t>(91) },  { "U", static_cast<uint16_t>(92) },
-      { "Np", static_cast<uint16_t>(93) },  { "Pu", static_cast<uint16_t>(94) },  { "Am", static_cast<uint16_t>(95) },
-      { "Cm", static_cast<uint16_t>(96) },  { "Bk", static_cast<uint16_t>(97) },  { "Cf", static_cast<uint16_t>(98) },
-      { "Es", static_cast<uint16_t>(99) },  { "Fm", static_cast<uint16_t>(100) }, { "Md", static_cast<uint16_t>(101) },
-      { "No", static_cast<uint16_t>(102) }, { "Lr", static_cast<uint16_t>(103) }, { "Rf", static_cast<uint16_t>(104) },
-      { "Db", static_cast<uint16_t>(105) }, { "Sg", static_cast<uint16_t>(106) }, { "Bh", static_cast<uint16_t>(107) },
-      { "Hs", static_cast<uint16_t>(108) }, { "Mt", static_cast<uint16_t>(109) }, { "Ds", static_cast<uint16_t>(110) },
-      { "Rg", static_cast<uint16_t>(111) }, { "Cn", static_cast<uint16_t>(112) }, { "Nh", static_cast<uint16_t>(113) },
-      { "Fl", static_cast<uint16_t>(114) }, { "Mc", static_cast<uint16_t>(115) }, { "Lv", static_cast<uint16_t>(116) },
-      { "Ts", static_cast<uint16_t>(117) }, { "Og", static_cast<uint16_t>(118) } }
+    { { "n", DRY_cast(0) },    { "H", DRY_cast(1) },    { "He", DRY_cast(2) },   { "Li", DRY_cast(3) },
+      { "Be", DRY_cast(4) },   { "B", DRY_cast(5) },    { "C", DRY_cast(6) },    { "N", DRY_cast(7) },
+      { "O", DRY_cast(8) },    { "F", DRY_cast(9) },    { "Ne", DRY_cast(10) },  { "Na", DRY_cast(11) },
+      { "Mg", DRY_cast(12) },  { "Al", DRY_cast(13) },  { "Si", DRY_cast(14) },  { "P", DRY_cast(15) },
+      { "S", DRY_cast(16) },   { "Cl", DRY_cast(17) },  { "Ar", DRY_cast(18) },  { "K", DRY_cast(19) },
+      { "Ca", DRY_cast(20) },  { "Sc", DRY_cast(21) },  { "Ti", DRY_cast(22) },  { "V", DRY_cast(23) },
+      { "Cr", DRY_cast(24) },  { "Mn", DRY_cast(25) },  { "Fe", DRY_cast(26) },  { "Co", DRY_cast(27) },
+      { "Ni", DRY_cast(28) },  { "Cu", DRY_cast(29) },  { "Zn", DRY_cast(30) },  { "Ga", DRY_cast(31) },
+      { "Ge", DRY_cast(32) },  { "As", DRY_cast(33) },  { "Se", DRY_cast(34) },  { "Br", DRY_cast(35) },
+      { "Kr", DRY_cast(36) },  { "Rb", DRY_cast(37) },  { "Sr", DRY_cast(38) },  { "Y", DRY_cast(39) },
+      { "Zr", DRY_cast(40) },  { "Nb", DRY_cast(41) },  { "Mo", DRY_cast(42) },  { "Tc", DRY_cast(43) },
+      { "Ru", DRY_cast(44) },  { "Rh", DRY_cast(45) },  { "Pd", DRY_cast(46) },  { "Ag", DRY_cast(47) },
+      { "Cd", DRY_cast(48) },  { "In", DRY_cast(49) },  { "Sn", DRY_cast(50) },  { "Sb", DRY_cast(51) },
+      { "Te", DRY_cast(52) },  { "I", DRY_cast(53) },   { "Xe", DRY_cast(54) },  { "Cs", DRY_cast(55) },
+      { "Ba", DRY_cast(56) },  { "La", DRY_cast(57) },  { "Ce", DRY_cast(58) },  { "Pr", DRY_cast(59) },
+      { "Nd", DRY_cast(60) },  { "Pm", DRY_cast(61) },  { "Sm", DRY_cast(62) },  { "Eu", DRY_cast(63) },
+      { "Gd", DRY_cast(64) },  { "Tb", DRY_cast(65) },  { "Dy", DRY_cast(66) },  { "Ho", DRY_cast(67) },
+      { "Er", DRY_cast(68) },  { "Tm", DRY_cast(69) },  { "Yb", DRY_cast(70) },  { "Lu", DRY_cast(71) },
+      { "Hf", DRY_cast(72) },  { "Ta", DRY_cast(73) },  { "W", DRY_cast(74) },   { "Re", DRY_cast(75) },
+      { "Os", DRY_cast(76) },  { "Ir", DRY_cast(77) },  { "Pt", DRY_cast(78) },  { "Au", DRY_cast(79) },
+      { "Hg", DRY_cast(80) },  { "Tl", DRY_cast(81) },  { "Pb", DRY_cast(82) },  { "Bi", DRY_cast(83) },
+      { "Po", DRY_cast(84) },  { "At", DRY_cast(85) },  { "Rn", DRY_cast(86) },  { "Fr", DRY_cast(87) },
+      { "Ra", DRY_cast(88) },  { "Ac", DRY_cast(89) },  { "Th", DRY_cast(90) },  { "Pa", DRY_cast(91) },
+      { "U", DRY_cast(92) },   { "Np", DRY_cast(93) },  { "Pu", DRY_cast(94) },  { "Am", DRY_cast(95) },
+      { "Cm", DRY_cast(96) },  { "Bk", DRY_cast(97) },  { "Cf", DRY_cast(98) },  { "Es", DRY_cast(99) },
+      { "Fm", DRY_cast(100) }, { "Md", DRY_cast(101) }, { "No", DRY_cast(102) }, { "Lr", DRY_cast(103) },
+      { "Rf", DRY_cast(104) }, { "Db", DRY_cast(105) }, { "Sg", DRY_cast(106) }, { "Bh", DRY_cast(107) },
+      { "Hs", DRY_cast(108) }, { "Mt", DRY_cast(109) }, { "Ds", DRY_cast(110) }, { "Rg", DRY_cast(111) },
+      { "Cn", DRY_cast(112) }, { "Nh", DRY_cast(113) }, { "Fl", DRY_cast(114) }, { "Mc", DRY_cast(115) },
+      { "Lv", DRY_cast(116) }, { "Ts", DRY_cast(117) }, { "Og", DRY_cast(118) } }
   };
 
   /**

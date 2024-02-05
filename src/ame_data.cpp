@@ -11,10 +11,10 @@ double AME::Data::getRelativeMassExcessError(const double min_allowed) const
   // The value we set does not matter as the error on the value is also 0.0 so relative error is guaranteed to be 0.0
   if (A == 12 && Z == 6)
     {
-      mass_excess = 0.0001;
+      mass_excess.amount = 0.0001;
     }
 
-  return std::max(std::fabs(dmass_excess / mass_excess), min_allowed);
+  return std::max(mass_excess.relativeUncertainty().value(), min_allowed);
 }
 
 

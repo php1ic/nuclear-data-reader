@@ -13,6 +13,7 @@
 #include "nuclear-data-reader/ame_reaction1_position.hpp"
 #include "nuclear-data-reader/ame_reaction2_position.hpp"
 #include "nuclear-data-reader/converter.hpp"
+#include "nuclear-data-reader/number.hpp"
 
 #include <cstdint>
 #include <string>
@@ -54,80 +55,48 @@ namespace AME
 
     /// Is the isotope experimental or extrapolated/theoretical
     mutable Measured exp{ Measured::EXPERIMENTAL };
+
     /// The mass number
     mutable uint16_t A{ 0 };
     /// The proton number
     mutable uint16_t Z{ 0 };
     /// The neutron number
     mutable uint16_t N{ 0 };
+
     /// Mass excess from the AME table
-    mutable double mass_excess{ 0.1 };
-    /// Error on the mass excess from the AME table
-    mutable double dmass_excess{ 1.0e4 };
+    mutable Number mass_excess{};
     /// Binding energy per A
-    mutable double binding_energy_per_A{ 0.0 };
-    /// Error on inding energy per A
-    mutable double dbinding_energy_per_A{ 0.0 };
+    mutable Number binding_energy_per_A{};
     /// Beta decay energy
-    mutable double beta_decay_energy{ 0.0 };
-    /// Error on beta decay energy
-    mutable double dbeta_decay_energy{ 0.0 };
+    mutable Number beta_decay_energy{};
     /// Atomic mass
-    mutable double atomic_mass{ 0.0 };
-    /// Error on atomic mass
-    mutable double datomic_mass{ 0.0 };
+    mutable Number atomic_mass{};
     /// One neutron separation energy
-    mutable double s_n{ 0.0 };
-    /// Error on the one neutron separation energy
-    mutable double ds_n{ 0.0 };
+    mutable Number s_n{};
     /// Two neutron separation energy
-    mutable double s_2n{ 0.0 };
-    /// Error on the two neutron separation energy
-    mutable double ds_2n{ 0.0 };
+    mutable Number s_2n{};
     /// One proton separation energy
-    mutable double s_p{ 0.0 };
-    /// Error on the one proton separation energy
-    mutable double ds_p{ 0.0 };
+    mutable Number s_p{};
     /// Two proton separation energy
-    mutable double s_2p{ 0.0 };
-    /// Error on the two proton separtion energy
-    mutable double ds_2p{ 0.0 };
+    mutable Number s_2p{};
     ///
-    mutable double dV_pn{ 0.0 };
-    ///
-    mutable double ddV_pn{ 0.0 };
+    mutable Number dV_pn{};
     /// Q-alpha value
-    mutable double q_a{ 0.0 };
-    /// Error on Q-alpha
-    mutable double dq_a{ 0.0 };
+    mutable Number q_a{};
     /// Q 2 beta minus
-    mutable double q_2bm{ 0.0 };
-    /// Error on Q 2 beta minus
-    mutable double dq_2bm{ 0.0 };
+    mutable Number q_2bm{};
     /// Not sure what this is
-    mutable double q_ep{ 0.0 };
-    ///
-    mutable double dq_ep{ 0.0 };
+    mutable Number q_ep{};
     /// Q beta minus, n
-    mutable double q_bm_n{ 0.0 };
-    /// Error on Q beta minus, n
-    mutable double dq_bm_n{ 0.0 };
+    mutable Number q_bm_n{};
     /// Q value for 4 beta minus
-    mutable double q_4bm{ 0.0 };
-    /// Error on Q value for 4 beta minus
-    mutable double dq_4bm{ 0.0 };
+    mutable Number q_4bm{};
     /// Q value for d alpha reaction
-    mutable double q_da{ 0.0 };
-    /// Error on Q value for d alpha reaction
-    mutable double dq_da{ 0.0 };
+    mutable Number q_da{};
     /// Q value for p alpha reaction
-    mutable double q_pa{ 0.0 };
-    /// Error on Q value for p alpha reaction
-    mutable double dq_pa{ 0.0 };
+    mutable Number q_pa{};
     /// Q value for n alpha reaction
-    mutable double q_na{ 0.0 };
-    /// Error on Q value for n alpha reaction
-    mutable double dq_na{ 0.0 };
+    mutable Number q_na{};
 
     /// The entire line for the isotope from the data file
     mutable std::string full_data{};
@@ -204,7 +173,7 @@ namespace AME
      */
     inline void setMassExcess() const
     {
-      mass_excess = Converter::StringToNum<double>(full_data, mass_position.START_ME, mass_position.END_ME);
+      mass_excess.amount = Converter::StringToNum<double>(full_data, mass_position.START_ME, mass_position.END_ME);
     }
 
     /**
@@ -216,7 +185,8 @@ namespace AME
      */
     inline void setMassExcessError() const
     {
-      dmass_excess = Converter::StringToNum<double>(full_data, mass_position.START_DME, mass_position.END_DME);
+      mass_excess.uncertainty.emplace(
+          Converter::StringToNum<double>(full_data, mass_position.START_DME, mass_position.END_DME));
     }
 
     /**
@@ -256,7 +226,7 @@ namespace AME
      */
     inline void setBindingEnergyPerA() const
     {
-      binding_energy_per_A =
+      binding_energy_per_A.amount =
           Converter::StringToNum<double>(full_data, mass_position.START_BE_PER_A, mass_position.END_BE_PER_A);
     }
 
@@ -269,8 +239,8 @@ namespace AME
      */
     inline void setBindingEnergyPerAError() const
     {
-      dbinding_energy_per_A =
-          Converter::StringToNum<double>(full_data, mass_position.START_DBE_PER_A, mass_position.END_DBE_PER_A);
+      binding_energy_per_A.uncertainty.emplace(
+          Converter::StringToNum<double>(full_data, mass_position.START_DBE_PER_A, mass_position.END_DBE_PER_A));
     }
 
     /**
@@ -282,7 +252,7 @@ namespace AME
      */
     inline void setBetaDecayEnergy() const
     {
-      beta_decay_energy = Converter::StringToNum<double>(
+      beta_decay_energy.amount = Converter::StringToNum<double>(
           full_data, mass_position.START_BETA_DECAY_ENERGY, mass_position.END_BETA_DECAY_ENERGY);
     }
 
@@ -295,8 +265,8 @@ namespace AME
      */
     inline void setBetaDecayEnergyError() const
     {
-      dbeta_decay_energy = Converter::StringToNum<double>(
-          full_data, mass_position.START_DBETA_DECAY_ENERGY, mass_position.END_DBETA_DECAY_ENERGY);
+      beta_decay_energy.uncertainty.emplace(Converter::StringToNum<double>(
+          full_data, mass_position.START_DBETA_DECAY_ENERGY, mass_position.END_DBETA_DECAY_ENERGY));
     }
 
     /**
@@ -308,7 +278,8 @@ namespace AME
      */
     inline void setAtomicMass() const
     {
-      atomic_mass = Converter::StringToNum<double>(full_data, mass_position.START_MICRO_U, mass_position.END_MICRO_U);
+      atomic_mass.amount =
+          Converter::StringToNum<double>(full_data, mass_position.START_MICRO_U, mass_position.END_MICRO_U);
     }
 
     /**
@@ -320,8 +291,8 @@ namespace AME
      */
     inline void setAtomicMassError() const
     {
-      datomic_mass =
-          Converter::StringToNum<double>(full_data, mass_position.START_MICRO_DU, mass_position.END_MICRO_DU);
+      atomic_mass.uncertainty.emplace(
+          Converter::StringToNum<double>(full_data, mass_position.START_MICRO_DU, mass_position.END_MICRO_DU));
     }
 
     /**
@@ -333,7 +304,7 @@ namespace AME
      */
     inline void setTwoNeutronSeparationEnergy() const
     {
-      s_2n = Converter::StringToNum<double>(full_data, r1_position.START_S2N, r1_position.END_S2N);
+      s_2n.amount = Converter::StringToNum<double>(full_data, r1_position.START_S2N, r1_position.END_S2N);
     }
 
     /**
@@ -345,7 +316,7 @@ namespace AME
      */
     inline void setTwoNeutronSeparationEnergyError() const
     {
-      ds_2n = Converter::StringToNum<double>(full_data, r1_position.START_DS2N, r1_position.END_DS2N);
+      s_2n.uncertainty.emplace(Converter::StringToNum<double>(full_data, r1_position.START_DS2N, r1_position.END_DS2N));
     }
 
     /**
@@ -357,7 +328,7 @@ namespace AME
      */
     inline void setTwoProtonSeparationEnergy() const
     {
-      s_2p = Converter::StringToNum<double>(full_data, r1_position.START_S2P, r1_position.END_S2P);
+      s_2p.amount = Converter::StringToNum<double>(full_data, r1_position.START_S2P, r1_position.END_S2P);
     }
 
     /**
@@ -369,7 +340,7 @@ namespace AME
      */
     inline void setTwoProtonSeparationEnergyError() const
     {
-      ds_2p = Converter::StringToNum<double>(full_data, r1_position.START_DS2P, r1_position.END_DS2P);
+      s_2p.uncertainty.emplace(Converter::StringToNum<double>(full_data, r1_position.START_DS2P, r1_position.END_DS2P));
     }
 
     /**
@@ -381,7 +352,7 @@ namespace AME
      */
     inline void setQAlphaEnergy() const
     {
-      q_a = Converter::StringToNum<double>(full_data, r1_position.START_QA, r1_position.END_QA);
+      q_a.amount = Converter::StringToNum<double>(full_data, r1_position.START_QA, r1_position.END_QA);
     }
 
     /**
@@ -393,7 +364,7 @@ namespace AME
      */
     inline void setQAlphaEnergyError() const
     {
-      dq_a = Converter::StringToNum<double>(full_data, r1_position.START_DQA, r1_position.END_DQA);
+      q_a.uncertainty.emplace(Converter::StringToNum<double>(full_data, r1_position.START_DQA, r1_position.END_DQA));
     }
 
     /**
@@ -405,7 +376,7 @@ namespace AME
      */
     inline void setQDoubleBetaMinusEnergy() const
     {
-      q_2bm = Converter::StringToNum<double>(full_data, r1_position.START_Q2B, r1_position.END_Q2B);
+      q_2bm.amount = Converter::StringToNum<double>(full_data, r1_position.START_Q2B, r1_position.END_Q2B);
     }
 
     /**
@@ -417,7 +388,8 @@ namespace AME
      */
     inline void setQDoubleBetaMinusEnergyError() const
     {
-      dq_2bm = Converter::StringToNum<double>(full_data, r1_position.START_DQ2B, r1_position.END_DQ2B);
+      q_2bm.uncertainty.emplace(
+          Converter::StringToNum<double>(full_data, r1_position.START_DQ2B, r1_position.END_DQ2B));
     }
 
     /**
@@ -429,7 +401,7 @@ namespace AME
      */
     inline void setQEpsilonPEnergy() const
     {
-      q_ep = Converter::StringToNum<double>(full_data, r1_position.START_QEP, r1_position.END_QEP);
+      q_ep.amount = Converter::StringToNum<double>(full_data, r1_position.START_QEP, r1_position.END_QEP);
     }
 
     /**
@@ -441,7 +413,7 @@ namespace AME
      */
     inline void setQEpsilonPEnergyError() const
     {
-      dq_ep = Converter::StringToNum<double>(full_data, r1_position.START_DQEP, r1_position.END_DQEP);
+      q_ep.uncertainty.emplace(Converter::StringToNum<double>(full_data, r1_position.START_DQEP, r1_position.END_DQEP));
     }
 
     /**
@@ -453,7 +425,7 @@ namespace AME
      */
     inline void setQBetaMinusNEnergy() const
     {
-      q_bm_n = Converter::StringToNum<double>(full_data, r1_position.START_QBN, r1_position.END_QBN);
+      q_bm_n.amount = Converter::StringToNum<double>(full_data, r1_position.START_QBN, r1_position.END_QBN);
     }
 
     /**
@@ -465,7 +437,8 @@ namespace AME
      */
     inline void setQBetaMinusNEnergyError() const
     {
-      dq_bm_n = Converter::StringToNum<double>(full_data, r1_position.START_DQBN, r1_position.END_DQBN);
+      q_bm_n.uncertainty.emplace(
+          Converter::StringToNum<double>(full_data, r1_position.START_DQBN, r1_position.END_DQBN));
     }
 
     /**
@@ -477,7 +450,7 @@ namespace AME
      */
     inline void setOneNeutronSeparationEnergy() const
     {
-      s_n = Converter::StringToNum<double>(full_data, r2_position.START_SN, r2_position.END_SN);
+      s_n.amount = Converter::StringToNum<double>(full_data, r2_position.START_SN, r2_position.END_SN);
     }
 
     /**
@@ -489,7 +462,7 @@ namespace AME
      */
     inline void setOneNeutronSeparationEnergyError() const
     {
-      ds_n = Converter::StringToNum<double>(full_data, r2_position.START_DSN, r2_position.END_DSN);
+      s_n.uncertainty.emplace(Converter::StringToNum<double>(full_data, r2_position.START_DSN, r2_position.END_DSN));
     }
 
     /**
@@ -501,7 +474,7 @@ namespace AME
      */
     inline void setOneProtonSeparationEnergy() const
     {
-      s_p = Converter::StringToNum<double>(full_data, r2_position.START_SP, r2_position.END_SP);
+      s_p.amount = Converter::StringToNum<double>(full_data, r2_position.START_SP, r2_position.END_SP);
     }
 
     /**
@@ -513,7 +486,7 @@ namespace AME
      */
     inline void setOneProtonSeparationEnergyError() const
     {
-      ds_p = Converter::StringToNum<double>(full_data, r2_position.START_DSP, r2_position.END_DSP);
+      s_p.uncertainty.emplace(Converter::StringToNum<double>(full_data, r2_position.START_DSP, r2_position.END_DSP));
     }
 
     /**
@@ -525,7 +498,7 @@ namespace AME
      */
     inline void setQQuadrupleBetaMinusEnergy() const
     {
-      q_4bm = Converter::StringToNum<double>(full_data, r2_position.START_Q4B, r2_position.END_Q4B);
+      q_4bm.amount = Converter::StringToNum<double>(full_data, r2_position.START_Q4B, r2_position.END_Q4B);
     }
 
     /**
@@ -537,7 +510,8 @@ namespace AME
      */
     inline void setQQuadrupleBetaMinusEnergyError() const
     {
-      dq_4bm = Converter::StringToNum<double>(full_data, r2_position.START_DQ4B, r2_position.END_DQ4B);
+      q_4bm.uncertainty.emplace(
+          Converter::StringToNum<double>(full_data, r2_position.START_DQ4B, r2_position.END_DQ4B));
     }
 
     /**
@@ -549,7 +523,7 @@ namespace AME
      */
     inline void setQDAlphaEnergy() const
     {
-      q_da = Converter::StringToNum<double>(full_data, r2_position.START_QDA, r2_position.END_QDA);
+      q_da.amount = Converter::StringToNum<double>(full_data, r2_position.START_QDA, r2_position.END_QDA);
     }
 
     /**
@@ -561,7 +535,7 @@ namespace AME
      */
     inline void setQDAlphaEnergyError() const
     {
-      dq_da = Converter::StringToNum<double>(full_data, r2_position.START_DQDA, r2_position.END_DQDA);
+      q_da.uncertainty.emplace(Converter::StringToNum<double>(full_data, r2_position.START_DQDA, r2_position.END_DQDA));
     }
 
     /**
@@ -573,7 +547,7 @@ namespace AME
      */
     inline void setQPAlphaEnergy() const
     {
-      q_pa = Converter::StringToNum<double>(full_data, r2_position.START_QPA, r2_position.END_QPA);
+      q_pa.amount = Converter::StringToNum<double>(full_data, r2_position.START_QPA, r2_position.END_QPA);
     }
 
     /**
@@ -585,7 +559,7 @@ namespace AME
      */
     inline void setQPAlphaEnergyError() const
     {
-      dq_pa = Converter::StringToNum<double>(full_data, r2_position.START_DQPA, r2_position.END_DQPA);
+      q_pa.uncertainty.emplace(Converter::StringToNum<double>(full_data, r2_position.START_DQPA, r2_position.END_DQPA));
     }
 
     /**
@@ -597,7 +571,7 @@ namespace AME
      */
     inline void setQNAlphaEnergy() const
     {
-      q_na = Converter::StringToNum<double>(full_data, r2_position.START_QNA, r2_position.END_QNA);
+      q_na.amount = Converter::StringToNum<double>(full_data, r2_position.START_QNA, r2_position.END_QNA);
     }
 
     /**
@@ -609,7 +583,7 @@ namespace AME
      */
     inline void setQNAlphaEnergyError() const
     {
-      dq_na = Converter::StringToNum<double>(full_data, r2_position.START_DQNA, r2_position.END_DQNA);
+      q_na.uncertainty.emplace(Converter::StringToNum<double>(full_data, r2_position.START_DQNA, r2_position.END_DQNA));
     }
   };
 } // namespace AME

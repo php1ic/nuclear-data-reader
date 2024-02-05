@@ -294,14 +294,14 @@ TEST_CASE("Read a line from the AME mass table as a whole", "[MassTable]")
   REQUIRE(data.A == 31);
   REQUIRE(data.Z == 11);
   REQUIRE(data.N == 20);
-  REQUIRE(data.mass_excess == Catch::Approx(12654.768));
-  REQUIRE(data.dmass_excess == Catch::Approx(211.321));
-  REQUIRE(data.binding_energy_per_A == Catch::Approx(7385.492));
-  REQUIRE(data.dbinding_energy_per_A == Catch::Approx(6.817));
-  REQUIRE(data.beta_decay_energy == Catch::Approx(15872.148));
-  REQUIRE(data.dbeta_decay_energy == Catch::Approx(211.668));
-  REQUIRE(data.atomic_mass == Catch::Approx(13585.452));
-  REQUIRE(data.datomic_mass == Catch::Approx(226.862));
+  REQUIRE(data.mass_excess.amount == Catch::Approx(12654.768));
+  REQUIRE(data.mass_excess.uncertainty.value() == Catch::Approx(211.321));
+  REQUIRE(data.binding_energy_per_A.amount == Catch::Approx(7385.492));
+  REQUIRE(data.binding_energy_per_A.uncertainty.value() == Catch::Approx(6.817));
+  REQUIRE(data.beta_decay_energy.amount == Catch::Approx(15872.148));
+  REQUIRE(data.beta_decay_energy.uncertainty.value() == Catch::Approx(211.668));
+  REQUIRE(data.atomic_mass.amount == Catch::Approx(13585.452));
+  REQUIRE(data.atomic_mass.uncertainty.value() == Catch::Approx(226.862));
 }
 
 
@@ -367,18 +367,18 @@ TEST_CASE("Read a line from the first AME reaction file as a whole", "[MassTable
 
   const auto data = table.ameDataTable.back();
 
-  REQUIRE(data.s_2n == Catch::Approx(15756.30));
-  REQUIRE(data.ds_2n == Catch::Approx(40.69));
-  REQUIRE(data.s_2p == Catch::Approx(10504.87));
-  REQUIRE(data.ds_2p == Catch::Approx(40.49));
-  REQUIRE(data.q_a == Catch::Approx(3153.38));
-  REQUIRE(data.dq_a == Catch::Approx(41.32));
-  REQUIRE(data.q_2bm == Catch::Approx(-7115.94));
-  REQUIRE(data.dq_2bm == Catch::Approx(42.43));
-  REQUIRE(data.q_ep == Catch::Approx(-3354.08));
-  REQUIRE(data.dq_ep == Catch::Approx(40.02));
-  REQUIRE(data.q_bm_n == Catch::Approx(-10036.92));
-  REQUIRE(data.dq_bm_n == Catch::Approx(40.17));
+  REQUIRE(data.s_2n.amount == Catch::Approx(15756.30));
+  REQUIRE(data.s_2n.uncertainty.value() == Catch::Approx(40.69));
+  REQUIRE(data.s_2p.amount == Catch::Approx(10504.87));
+  REQUIRE(data.s_2p.uncertainty.value() == Catch::Approx(40.49));
+  REQUIRE(data.q_a.amount == Catch::Approx(3153.38));
+  REQUIRE(data.q_a.uncertainty.value() == Catch::Approx(41.32));
+  REQUIRE(data.q_2bm.amount == Catch::Approx(-7115.94));
+  REQUIRE(data.q_2bm.uncertainty.value() == Catch::Approx(42.43));
+  REQUIRE(data.q_ep.amount == Catch::Approx(-3354.08));
+  REQUIRE(data.q_ep.uncertainty.value() == Catch::Approx(40.02));
+  REQUIRE(data.q_bm_n.amount == Catch::Approx(-10036.92));
+  REQUIRE(data.q_bm_n.uncertainty.value() == Catch::Approx(40.17));
 }
 
 
@@ -402,18 +402,18 @@ TEST_CASE("Read a line from the second AME reaction file as a whole", "[MassTabl
 
   const auto data = table.ameDataTable.back();
 
-  REQUIRE(data.s_n == Catch::Approx(3780.98));
-  REQUIRE(data.ds_n == Catch::Approx(49.91));
-  REQUIRE(data.s_p == Catch::Approx(8960.63));
-  REQUIRE(data.ds_p == Catch::Approx(102.43));
-  REQUIRE(data.q_4bm == Catch::Approx(6537.65));
-  REQUIRE(data.dq_4bm == Catch::Approx(72.59));
-  REQUIRE(data.q_da == Catch::Approx(13771.00));
-  REQUIRE(data.dq_da == Catch::Approx(50.83));
-  REQUIRE(data.q_pa == Catch::Approx(8309.36));
-  REQUIRE(data.dq_pa == Catch::Approx(55.39));
-  REQUIRE(data.q_na == Catch::Approx(5089.71));
-  REQUIRE(data.dq_na == Catch::Approx(55.83));
+  REQUIRE(data.s_n.amount == Catch::Approx(3780.98));
+  REQUIRE(data.s_n.uncertainty.value() == Catch::Approx(49.91));
+  REQUIRE(data.s_p.amount == Catch::Approx(8960.63));
+  REQUIRE(data.s_p.uncertainty.value() == Catch::Approx(102.43));
+  REQUIRE(data.q_4bm.amount == Catch::Approx(6537.65));
+  REQUIRE(data.q_4bm.uncertainty.value() == Catch::Approx(72.59));
+  REQUIRE(data.q_da.amount == Catch::Approx(13771.00));
+  REQUIRE(data.q_da.uncertainty.value() == Catch::Approx(50.83));
+  REQUIRE(data.q_pa.amount == Catch::Approx(8309.36));
+  REQUIRE(data.q_pa.uncertainty.value() == Catch::Approx(55.39));
+  REQUIRE(data.q_na.amount == Catch::Approx(5089.71));
+  REQUIRE(data.q_na.uncertainty.value() == Catch::Approx(55.83));
 }
 
 
@@ -433,8 +433,8 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     REQUIRE(nubase.N == 108);
     REQUIRE_THAT(nubase.symbol, Catch::Matchers::Matches("Tl"));
     REQUIRE(nubase.level == 0);
-    REQUIRE(nubase.mass_excess == Catch::Approx(-24602.0));
-    REQUIRE(nubase.dmass_excess == Catch::Approx(11.0));
+    REQUIRE(nubase.mass_excess.amount == Catch::Approx(-24602.0));
+    REQUIRE(nubase.mass_excess.uncertainty.value() == Catch::Approx(11.0));
     REQUIRE_THAT(nubase.halflife_unit, Catch::Matchers::Matches("m"));
     REQUIRE(nubase.hl == Converter::minutes{ 2.3 });
     REQUIRE(nubase.hl_error == Converter::minutes{ 0.2 });
@@ -474,8 +474,8 @@ TEST_CASE("Read the NUBASE format", "[MassTable]")
     REQUIRE(nubase.N == 74);
     REQUIRE_THAT(nubase.symbol, Catch::Matchers::Matches("Sn"));
     REQUIRE(nubase.level == 0);
-    REQUIRE(nubase.mass_excess == Catch::Approx(-88236.8));
-    REQUIRE(nubase.dmass_excess == Catch::Approx(1.4));
+    REQUIRE(nubase.mass_excess.amount == Catch::Approx(-88236.8));
+    REQUIRE(nubase.mass_excess.uncertainty.value() == Catch::Approx(1.4));
     REQUIRE_THAT(nubase.halflife_unit, Catch::Matchers::Matches(""));
     REQUIRE(nubase.hl == Converter::seconds{ 1.0e24 });
     REQUIRE(nubase.hl_error == Converter::seconds{ 1.0 });
@@ -563,17 +563,17 @@ TEST_CASE("Output a json file", "[MassTable]")
   // We are just testing that the code runs, there is no check it does what we want it to do
   MassTable table(2016);
   NUBASE::Data nubase_1("", 2016);
-  nubase_1.A           = 50;
-  nubase_1.Z           = 25;
-  nubase_1.mass_excess = 123.456;
+  nubase_1.A                  = 50;
+  nubase_1.Z                  = 25;
+  nubase_1.mass_excess.amount = 123.456;
   table.nubaseDataTable.emplace_back(nubase_1);
   AME::Data ame_1("", 2012);
-  ame_1.A           = 50;
-  ame_1.Z           = 25;
-  ame_1.mass_excess = 124.689;
+  ame_1.A                  = 50;
+  ame_1.Z                  = 25;
+  ame_1.mass_excess.amount = 124.689;
   table.ameDataTable.emplace_back(ame_1);
 
-  [[maybe_unused]] const auto i = table.mergeData();
+  [[maybe_unused]] const auto merged = table.mergeData();
 
   REQUIRE(table.outputTableToJSON());
 }

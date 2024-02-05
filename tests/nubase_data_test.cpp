@@ -1130,7 +1130,7 @@ TEST_CASE("Read mass excess", "[NUBASEData]")
 
     gs03_isotope.setMassExcess();
 
-    REQUIRE(gs03_isotope.mass_excess == Catch::Approx(-64980.8));
+    REQUIRE(gs03_isotope.mass_excess.amount == Catch::Approx(-64980.8));
   }
 
   SECTION("Post 2020")
@@ -1141,7 +1141,7 @@ TEST_CASE("Read mass excess", "[NUBASEData]")
 
     gs20_isotope.setMassExcess();
 
-    REQUIRE(gs20_isotope.mass_excess == Catch::Approx(3019.893));
+    REQUIRE(gs20_isotope.mass_excess.amount == Catch::Approx(3019.893));
   }
 }
 
@@ -1154,7 +1154,7 @@ TEST_CASE("Read mass excess error", "[NUBASEData]")
                               "     01          1967 B+=100",
                               2003);
     gs03_isotope.setMassExcessError();
-    REQUIRE(gs03_isotope.dmass_excess == Catch::Approx(9));
+    REQUIRE(gs03_isotope.mass_excess.uncertainty.value() == Catch::Approx(9));
   }
 
   SECTION("Post 2020")
@@ -1163,7 +1163,7 @@ TEST_CASE("Read mass excess error", "[NUBASEData]")
                               "5/2-*         98          1954 B-=100",
                               2020);
     gs20_isotope.setMassExcessError();
-    REQUIRE(gs20_isotope.dmass_excess == Catch::Approx(1.5));
+    REQUIRE(gs20_isotope.mass_excess.uncertainty.value() == Catch::Approx(1.5));
   }
 }
 
