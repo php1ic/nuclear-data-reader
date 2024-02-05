@@ -14,21 +14,21 @@
 #define CONVERTER_HPP
 
 #include <string_view>
-#include <type_traits>
+#include <system_error>
 
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <charconv>
 #include <chrono>
 #include <cmath>
-#include <concepts>
+#include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <optional>
 #include <ratio>
 #include <string>
 #include <utility>
-#include <vector>
 
 
 class Converter
@@ -290,7 +290,7 @@ public:
 
 
 /// string literal to force the hashing of the string
-[[nodiscard]] constexpr inline auto operator"" _sh(const char* the_string, size_t /*unused*/)
+[[nodiscard]] constexpr inline auto operator"" _sh(const char* the_string, [[maybe_unused]] std::size_t unused)
 {
   return Converter::string_hash(the_string);
 }

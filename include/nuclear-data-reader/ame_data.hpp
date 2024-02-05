@@ -14,9 +14,11 @@
 #include "nuclear-data-reader/ame_reaction2_position.hpp"
 #include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/number.hpp"
+#include <string_view>
 
 #include <cstdint>
 #include <string>
+#include <utility>
 
 namespace AME
 {

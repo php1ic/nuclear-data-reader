@@ -1,7 +1,7 @@
 #include "nuclear-data-reader/ame_data.hpp"
 
 #include <algorithm>
-#include <cmath>
+#include <string>
 
 double AME::Data::getRelativeMassExcessError(const double min_allowed) const
 {
@@ -14,6 +14,8 @@ double AME::Data::getRelativeMassExcessError(const double min_allowed) const
       mass_excess.amount = 0.0001;
     }
 
+  // Optional access is check in function so silence the linter for that specific check
+  // NOLINTNEXTLINE (bugprone-unchecked-optional-access)
   return std::max(mass_excess.relativeUncertainty().value(), min_allowed);
 }
 

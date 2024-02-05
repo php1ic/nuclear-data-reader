@@ -19,6 +19,7 @@
 #include <cstdint>
 #include <limits>
 #include <string>
+#include <utility>
 #include <vector>
 
 
@@ -137,6 +138,8 @@ namespace NUBASE
      */
     struct State
     {
+      // They are easily swappable, but sometimes that's just the way it is.
+      // NOLINTNEXTLINE (bugprone-easily-swappable-parameters)
       State(const uint8_t _level, const double _energy, const double _error) :
           level(_level), energy(_energy), error(_error)
       {

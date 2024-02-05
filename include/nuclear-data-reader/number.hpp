@@ -17,6 +17,8 @@ class Number
 public:
   Number() = default;
   explicit Number(double _amount) : amount(_amount) {}
+  // They are easily swappable, but sometimes that's just the way it is.
+  // NOLINTNEXTLINE (bugprone-easily-swappable-parameters)
   Number(double _amount, double _uncertainty) : amount(_amount), uncertainty(_uncertainty) {}
 
   Number(const Number&)     = default;

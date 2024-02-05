@@ -1,11 +1,13 @@
 #include "nuclear-data-reader/massTable.hpp"
 
+#include "nuclear-data-reader/ame_data.hpp"
 #include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
 
+#include <fmt/core.h>
+#include <fmt/format.h>
 #include <fmt/os.h>
-#include <fmt/ostream.h>
 #include <fmt/std.h>
 
 #include <algorithm>
@@ -13,10 +15,11 @@
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
+#include <ios>
 #include <iterator>
 #include <limits>
-#include <sstream>
 #include <string>
+#include <vector>
 
 void MassTable::setFilePaths() const
 {

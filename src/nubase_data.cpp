@@ -1,13 +1,19 @@
 #include "nuclear-data-reader/nubase_data.hpp"
 
+#include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/nubase_line_position.hpp"
 #include <string_view>
 
-#include <fmt/format.h>
+#include <fmt/core.h>
 
 #include <algorithm>
+#include <array>
+#include <cctype>
 #include <cmath>
-#include <cstdint>
+#include <cstdio>
+#include <optional>
+#include <string>
+#include <vector>
 
 
 double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
@@ -21,6 +27,8 @@ double NUBASE::Data::getRelativeMassExcessError(const double min_allowed) const
       mass_excess.amount = 0.0001;
     }
 
+  // Optional access is check in function so silence the linter for that specific check
+  // NOLINTNEXTLINE (bugprone-unchecked-optional-access)
   return std::max(mass_excess.relativeUncertainty().value(), min_allowed);
 }
 
@@ -322,6 +330,8 @@ void NUBASE::Data::setNeutronOrProtonRich(const bool is_neutron_rich) const noex
         break;
       case 61:
         rich = (A <= 144) ? NUBASE::Richness::PROTON : NUBASE::Richness::NEUTRON;
+        break;
+      default: // Default case to silence the linter (and it's probably good practice)
         break;
     }
 }

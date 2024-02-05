@@ -3,7 +3,9 @@
 #include "nuclear-data-reader/converter.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
 
-#include <fmt/format.h>
+#include <fmt/core.h>
+
+#include <string>
 
 
 std::string Isotope::writeAsJSON(const bool human_readable) const
