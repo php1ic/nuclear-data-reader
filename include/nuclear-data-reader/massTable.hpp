@@ -13,9 +13,12 @@
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
 
+#include <fmt/core.h>
+
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <cstdio>
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -38,9 +41,9 @@ public:
     // 1997 NUBASE is the same as 1995 AME (see README)
     // We have decided that all files will live in the 1995 directory,
     // but the user can still select the year 1997 without worry.
-    // FIXME: Print out a message about what's going on in this situation?
     if (year == 1997)
       {
+        fmt::print(stderr, "**WARNING**: The 1997 data is the same as the 1995 data so setting the year to 1995.\n");
         year = 1995;
       }
 
