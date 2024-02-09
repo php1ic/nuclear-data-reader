@@ -50,7 +50,7 @@ jobs:
 
       - name: Upload coverage report to codecov
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: ${{ steps.build_dir.outputs.DIR }}/coverage.info
 
