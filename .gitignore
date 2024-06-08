@@ -16,6 +16,7 @@ cmake_output*.log
 
 # Output files from the example executable that uses the library
 masstable*.json
+masstable*.csv
 
 # emacs related files
 *~

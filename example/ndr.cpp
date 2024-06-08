@@ -12,7 +12,8 @@ int main()
 
       if (table.populateInternalMassTable())
         {
-          [[maybe_unused]] auto ignore = table.outputTableToJSON();
+          [[maybe_unused]] auto json_ignore = table.outputTableToJSON();
+          [[maybe_unused]] auto csv_ignore  = table.outputTableToCSV();
         }
     }
 

@@ -7,6 +7,94 @@
 
 #include <string>
 
+std::string Isotope::writeAsCSV() const
+{
+  // One item per line as I find it simpler to use
+  return fmt::format("{0},"
+                     "{1},"
+                     "{2},"
+                     "{3},"
+                     "{4},"
+                     "{5},"
+                     "{6},"
+                     "{7},"
+                     "{8},"
+                     "{9},"
+                     "{10:.3e},"
+                     "{11},"
+                     "{12},"
+                     "{13},"
+                     "{14},"
+                     "{15},"
+                     "{16},"
+                     "{17},"
+                     "{18},"
+                     "{19},"
+                     "{20},"
+                     "{21},"
+                     "{22},"
+                     "{23},"
+                     "{24},"
+                     "{25},"
+                     "{26},"
+                     "{27},"
+                     "{28},"
+                     "{29},"
+                     "{30},"
+                     "{31},"
+                     "{32},"
+                     "{33},"
+                     "{34},"
+                     "{35},"
+                     "{36},"
+                     "{37},"
+                     "{38},"
+                     "{39},"
+                     "{40},"
+                     "{41}",
+                     ame.A,
+                     ame.Z,
+                     ame.N,
+                     nubase.symbol,
+                     nubase.decay,
+                     (nubase.exp == NUBASE::Measured::EXPERIMENTAL) ? 0 : 1,
+                     Converter::FloatToNdp(nubase.mass_excess.amount, NDP),
+                     Converter::FloatToNdp(nubase.mass_excess.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.mass_excess.amount, NDP),
+                     Converter::FloatToNdp(ame.mass_excess.uncertainty.value_or(-1.0), NDP),
+                     nubase.hl.count(),
+                     Converter::FloatToNdp(ame.s_n.amount, NDP),
+                     Converter::FloatToNdp(ame.s_n.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.s_p.amount, NDP),
+                     Converter::FloatToNdp(ame.s_p.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.s_2n.amount, NDP),
+                     Converter::FloatToNdp(ame.s_2n.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.s_2p.amount, NDP),
+                     Converter::FloatToNdp(ame.s_2p.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.binding_energy_per_A.amount, NDP),
+                     Converter::FloatToNdp(ame.binding_energy_per_A.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.atomic_mass.amount, NDP),
+                     Converter::FloatToNdp(ame.atomic_mass.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.beta_decay_energy.amount, NDP),
+                     Converter::FloatToNdp(ame.beta_decay_energy.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_a.amount, NDP),
+                     Converter::FloatToNdp(ame.q_a.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_2bm.amount, NDP),
+                     Converter::FloatToNdp(ame.q_2bm.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_ep.amount, NDP),
+                     Converter::FloatToNdp(ame.q_ep.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_bm_n.amount, NDP),
+                     Converter::FloatToNdp(ame.q_bm_n.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_4bm.amount, NDP),
+                     Converter::FloatToNdp(ame.q_4bm.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_da.amount, NDP),
+                     Converter::FloatToNdp(ame.q_da.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_pa.amount, NDP),
+                     Converter::FloatToNdp(ame.q_pa.uncertainty.value_or(-1.0), NDP),
+                     Converter::FloatToNdp(ame.q_na.amount, NDP),
+                     Converter::FloatToNdp(ame.q_na.uncertainty.value_or(-1.0), NDP),
+                     nubase.year);
+}
 
 std::string Isotope::writeAsJSON(const bool human_readable) const
 {

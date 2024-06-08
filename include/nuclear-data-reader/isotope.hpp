@@ -40,15 +40,76 @@ public:
   // All of the NUBASE data
   mutable NUBASE::Data nubase;
 
+  /**
+   * Output all of the data as a csv string
+   *
+   * \param Nothing
+   *
+   * \return All of the members in csv format
+   */
+  [[nodiscard]] std::string writeAsCSV() const;
 
   /**
    * Output all of the data as a json string
    *
-   * \param Nothing
+   * \param A boolean flag to set if new lines are used within a json unit to make it human readable
    *
-   * \return All of the members in the format of a json ... unit
+   * \return All of the members in the format of a json unit
    */
   [[nodiscard]] std::string writeAsJSON(const bool human_readable = true) const;
+
+  /**
+   * Create the header line to be used when writing as a csv
+   *
+   * \param Nothing
+   *
+   * \return The variables names in csv formatted string
+   */
+  [[nodiscard]] static std::string writeCSVHeader()
+  {
+    return std::string("A,"
+                       "Z,"
+                       "N,"
+                       "Symbol,"
+                       "Decay,"
+                       "Experimental,"
+                       "NubaseMassExcess,"
+                       "ErrorNubaseMassExcess,"
+                       "AMEMassExcess,"
+                       "ErrorAMEMassExcess,"
+                       "HalfLife,"
+                       "SingleNeutronSeparationEnergy,"
+                       "ErrorSingleNeutronSeparationEnergy,"
+                       "SingleProtonSeparationEnergy,"
+                       "ErrorSingleProtonSeparationEnergy,"
+                       "DoubleNeutronSeparationEnergy,"
+                       "ErrorDoubleNeutronSeparationEnergy,"
+                       "DoubleProtonSeparationEnergy,"
+                       "ErrorDoubleProtonSeparationEnergy,"
+                       "BindingEnergyPerA,"
+                       "ErrorBindingEnergyPerA,"
+                       "AtomicMass,"
+                       "ErrorAtomicMass,"
+                       "BetaDecayEnergy,"
+                       "ErrorBetaDecayEnergy,"
+                       "QAlpha,"
+                       "ErrorQAlpha,"
+                       "Q2B-,"
+                       "ErrorQ2B-,"
+                       "Qepsilon_p,"
+                       "ErrorQepsilon_p,"
+                       "QB-n,"
+                       "ErrorQB-n,"
+                       "Q4B-,"
+                       "ErrorQ4B-,"
+                       "QdAlpha,"
+                       "ErrorQdAlpha,"
+                       "QpAlpha,"
+                       "ErrorQpAlpha,"
+                       "QnAlpha,"
+                       "ErrorQnAlpha,"
+                       "Year");
+  }
 };
 
 #endif // ISOTOPE_HPP

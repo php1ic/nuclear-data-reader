@@ -4,7 +4,7 @@
  *
  * \brief Read the mass table
  *
- * Read and store the deatils from the necessary mass table file
+ * Read and store the details from the necessary mass table file
  */
 #ifndef MASSTABLE_HPP
 #define MASSTABLE_HPP
@@ -12,8 +12,6 @@
 #include "nuclear-data-reader/ame_data.hpp"
 #include "nuclear-data-reader/isotope.hpp"
 #include "nuclear-data-reader/nubase_data.hpp"
-
-#include <fmt/core.h>
 
 #include <algorithm>
 #include <array>
@@ -43,7 +41,7 @@ public:
     // but the user can still select the year 1997 without worry.
     if (year == 1997)
       {
-        fmt::print(stderr, "**WARNING**: The 1997 data is the same as the 1995 data so setting the year to 1995.\n");
+        // fmt::print(stderr, "**WARNING**: The 1997 data is the same as the 1995 data so setting the year to 1995.\n");
         year = 1995;
       }
 
@@ -239,13 +237,22 @@ public:
   [[nodiscard]] bool readNUBASE(const std::filesystem::path& nubaseTable);
 
   /**
-   * Convert ... singular file format to json
+   * Convert singular file format to json
    *
    * \param Nothing
    *
    * \return Nothing
    */
   [[nodiscard]] bool outputTableToJSON() const;
+
+  /**
+   * Convert singular file format to csv
+   *
+   * \param Nothing
+   *
+   * \return Nothing
+   */
+  [[nodiscard]] bool outputTableToCSV() const;
 };
 
 #endif // MASSTABLE_HPP

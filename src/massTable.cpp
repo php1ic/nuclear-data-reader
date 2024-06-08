@@ -524,7 +524,7 @@ bool MassTable::outputTableToJSON() const
 {
   const auto outfile = fmt::format("masstable_{}.json", year);
 
-  fmt::print("New file: {}\n", outfile);
+  fmt::print("New json formatted file: {}\n", outfile);
   auto out = fmt::output_file(outfile);
 
   out.print("[\n");
@@ -534,6 +534,24 @@ bool MassTable::outputTableToJSON() const
       out.print("{}{}", isotope->writeAsJSON(), (isotope != std::prev(fullDataTable.end(), 1)) ? ",\n" : "");
     }
   out.print("\n]\n");
+
+  return true;
+}
+
+
+bool MassTable::outputTableToCSV() const
+{
+  const auto outfile = fmt::format("masstable_{}.csv", year);
+
+  fmt::print("New csv formatted file: {}\n", outfile);
+  auto out = fmt::output_file(outfile);
+
+  out.print("{}\n", Isotope::writeCSVHeader());
+
+  for (const auto& isotope : fullDataTable)
+    {
+      out.print("{}\n", isotope.writeAsCSV());
+    }
 
   return true;
 }
