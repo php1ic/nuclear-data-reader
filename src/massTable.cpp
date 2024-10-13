@@ -119,12 +119,12 @@ bool MassTable::readAME() const
 
   if (!readAMEReactionFileOne(AME_reaction_1))
     {
-      fmt::print("Reaction values from first file not read.\n");
+      fmt::print("Reaction values from first AME file not read.\n");
     }
 
   if (!readAMEReactionFileTwo(AME_reaction_2))
     {
-      fmt::print("Reaction values from first file not read.\n");
+      fmt::print("Reaction values from second AME file not read.\n");
     }
 
   return true;
