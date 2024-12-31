@@ -53,6 +53,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: ${{ steps.build_dir.outputs.DIR }}/coverage.info
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload coverage report to codacy
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
