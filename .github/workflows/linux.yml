@@ -50,9 +50,9 @@ jobs:
 
       - name: Upload coverage report to codecov
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
-          file: ${{ steps.build_dir.outputs.DIR }}/coverage.info
+          files: ${{ steps.build_dir.outputs.DIR }}/coverage.info
 
       - name: Upload coverage report to codacy
         if: ${{ matrix.type == 'Debug' && matrix.compiler == 'g++' }}
